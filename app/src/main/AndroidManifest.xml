@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AProfile"></activity>
+        <activity android:name=".AEventCollection" />
         <activity android:name="group24.oplevelserbekaemperensomhed.AEventSwiper">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
