@@ -10,4 +10,6 @@ class AEventSwiper : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.aeventswiper)
     }
+
+
 }
