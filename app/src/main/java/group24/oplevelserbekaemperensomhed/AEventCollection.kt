@@ -1,4 +1,4 @@
-package Group24.oplevelserbekaemperensomhed
+package group24.oplevelserbekaemperensomhed
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
