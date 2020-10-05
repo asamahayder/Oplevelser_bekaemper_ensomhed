@@ -11,15 +11,15 @@
         android:exported="true"
         android:theme="@style/AppTheme">
         <activity android:name=".AProfileEdit"></activity>
-        <activity android:name=".AProfile" />
-        <activity android:name=".AEventCollection" />
-        <activity android:name=".AEventSwiper">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".AProfile">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+        <activity android:name=".AEventCollection"></activity>
+        <activity android:name=".AEventSwiper"></activity>
     </application>
 
 </manifest>

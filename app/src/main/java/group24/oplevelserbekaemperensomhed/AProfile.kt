@@ -22,7 +22,10 @@ class AProfile : AppCompatActivity() {
 
 
         editProfileButton.setOnClickListener { v ->
-            Intent(this, AProfileEdit::class.java)
+            val intent = Intent(this, AProfileEdit::class.java)
+
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }
 }
