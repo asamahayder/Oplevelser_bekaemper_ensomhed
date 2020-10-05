@@ -1,2 +1,2 @@
 rootProject.name='Oplevelser bekæmper ensomhed'
-include ':app', ':cardstackview', ':sample'
+include ':app'
