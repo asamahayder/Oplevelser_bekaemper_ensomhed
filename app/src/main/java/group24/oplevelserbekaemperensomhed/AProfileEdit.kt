@@ -1,11 +1,11 @@
-package Group24.oplevelserbekaemperensomhed
+package group24.oplevelserbekaemperensomhed
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class AEventCollection : AppCompatActivity() {
+class AProfileEdit : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.aeventcollection)
+        setContentView(R.layout.aprofileedit)
     }
 }

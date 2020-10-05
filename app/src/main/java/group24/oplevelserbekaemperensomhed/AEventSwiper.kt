@@ -1,6 +1,5 @@
 package group24.oplevelserbekaemperensomhed
 
-import Group24.oplevelserbekaemperensomhed.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="Group24.oplevelserbekaemperensomhed">
+    package="group24.oplevelserbekaemperensomhed">
 
     <application
         android:allowBackup="true"
@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AProfile"></activity>
+        <activity android:name=".AProfileEdit"></activity>
+        <activity android:name=".AProfile" />
         <activity android:name=".AEventCollection" />
-        <activity android:name="group24.oplevelserbekaemperensomhed.AEventSwiper">
+        <activity android:name=".AEventSwiper">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
