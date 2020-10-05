@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed.Data;
+package group24.oplevelserbekaemperensomhed.data;
 
 import java.util.ArrayList;
 
