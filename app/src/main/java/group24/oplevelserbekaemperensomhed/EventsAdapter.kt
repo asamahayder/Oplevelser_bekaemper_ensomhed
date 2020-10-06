@@ -28,7 +28,7 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
         }
     }
 
-    fun setProfiles(events: List<Event>) {
+    fun setEvents(events: List<Event>) {
         this.events = events
         notifyDataSetChanged()
     }

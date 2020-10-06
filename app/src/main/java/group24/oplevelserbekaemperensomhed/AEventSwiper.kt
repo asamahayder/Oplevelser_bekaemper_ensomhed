@@ -1,18 +1,20 @@
 package group24.oplevelserbekaemperensomhed
 
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yuyakaido.android.cardstackview.*
 import group24.oplevelserbekaemperensomhed.data.DummyData
 import kotlinx.android.synthetic.main.aeventswiper.*
-import java.util.*
 
 
 class AEventSwiper : AppCompatActivity(), CardStackListener {
@@ -22,6 +24,9 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
     private lateinit var cardStackView: CardStackView
     private lateinit var rewindButton: FloatingActionButton
     private lateinit var profileButton: FloatingActionButton
+    private lateinit var infoTextView: TextView
+    private lateinit var infoTextArrow: ImageView
+    private var currentPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +52,12 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
         }
 
         val dummyData = DummyData()
-        adapter.setProfiles(dummyData.list)
+        adapter.setEvents(dummyData.list)
 
         cardStackView = findViewById(R.id.stack_view)
         rewindButton = findViewById(R.id.rewind_action_button)
+        infoTextView = findViewById(R.id.infoTextView)
+        infoTextArrow = findViewById(R.id.infoTextArrow)
         rewindButton.setOnClickListener{
             val setting = RewindAnimationSetting.Builder()
                 .setDirection(Direction.Left)
@@ -70,6 +77,11 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardDisappeared(view: View?, position: Int) {
+        if (position == layoutManager.itemCount-1){
+            infoTextView.visibility = View.INVISIBLE
+            infoTextArrow.visibility = View.INVISIBLE
+        }
+        setInfoAndArrowVisibility(position)
 
     }
 
@@ -78,12 +90,10 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
 
     override fun onCardSwiped(direction: Direction?) {
         if (direction == Direction.Top){
-            val currentPosition = cardStackView.top
             val intent = Intent(this, AEventInfo::class.java)
             intent.putExtra("position", currentPosition)
             startActivity(intent)
         }
-
 
 
     }
@@ -93,6 +103,9 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardAppeared(view: View?, position: Int) {
+        infoTextView.visibility = View.VISIBLE
+        infoTextArrow.visibility = View.VISIBLE
+        currentPosition = position
         if (position == 0){
             rewindButton.visibility = View.INVISIBLE
         }else{
@@ -103,5 +116,15 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
 
     override fun onCardRewound() {
 
+    }
+
+    fun setInfoAndArrowVisibility(position: Int){
+        if (position == layoutManager.childCount+1){
+            infoTextView.visibility = View.INVISIBLE
+            infoTextArrow.visibility = View.INVISIBLE
+        }else{
+            infoTextView.visibility = View.VISIBLE
+            infoTextArrow.visibility = View.VISIBLE
+        }
     }
 }
