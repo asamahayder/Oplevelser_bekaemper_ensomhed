@@ -27,7 +27,7 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Edit Profile"
             android:textSize="24sp"
@@ -252,7 +252,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="City"
+                    android:text="Address"
                     android:textColor="#000000"
                     android:paddingTop="16dp"
                     android:textSize="18sp"
@@ -266,7 +266,7 @@
                     app:cardCornerRadius="8dp">
 
                     <EditText
-                        android:id="@+id/aprofileedit_cityText"
+                        android:id="@+id/aprofileedit_addressText"
                         android:layout_width="match_parent"
                         android:layout_height="28dp"
                         android:hint="e.g. Copenhagen"
