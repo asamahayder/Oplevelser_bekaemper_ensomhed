@@ -26,6 +26,7 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
     private lateinit var profileButton: FloatingActionButton
     private lateinit var infoTextView: TextView
     private lateinit var infoTextArrow: ImageView
+    private lateinit var settingsButton: FloatingActionButton
     private var currentPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +72,12 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
         profileButton = findViewById(R.id.profile_action_button);
         profileButton.setOnClickListener {
             var intent = Intent(this, AProfile::class.java)
+            startActivity(intent)
+        }
+
+        settingsButton = findViewById(R.id.settings_action_button)
+        settingsButton.setOnClickListener {
+            var intent = Intent(this, Indstillinger::class.java)
             startActivity(intent)
         }
 
