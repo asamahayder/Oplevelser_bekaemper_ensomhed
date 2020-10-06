@@ -1,7 +1,7 @@
 package group24.oplevelserbekaemperensomhed
 
-import group24.oplevelserbekaemperensomhed.Data.DateDTO
-import group24.oplevelserbekaemperensomhed.Data.UserDTO
+import group24.oplevelserbekaemperensomhed.data.DateDTO
+import group24.oplevelserbekaemperensomhed.data.UserDTO
 
 data class Event (
     val eventCreator: UserDTO,

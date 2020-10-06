@@ -7,11 +7,8 @@ import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.yuyakaido.android.cardstackview.*
-import group24.oplevelserbekaemperensomhed.Data.DummyData
+import group24.oplevelserbekaemperensomhed.data.DummyData
 import kotlinx.android.synthetic.main.aeventswiper.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class AEventSwiper : AppCompatActivity(), CardStackListener {
