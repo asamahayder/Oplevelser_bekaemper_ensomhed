@@ -38,7 +38,7 @@ class AProfile : AppCompatActivity() {
             "Pernille",
             22,
             "Torshavn",
-            "Stripper",
+            "full time pandekage",
             "Harvard",
             "Hej med dig, kan du også godt lde pandekager?!\n" +
                     "Hvis du kan, pls kom og spis pandekager med mig på mit event k?\n" +

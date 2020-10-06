@@ -16,6 +16,7 @@
         <activity android:name=".AProfileEdit" />
         <activity android:name=".AProfile" />
         <activity android:name=".AEventCollection" />
+        <activity android:name=".Indstillinger"></activity>
         <activity android:name=".AEventSwiper">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
