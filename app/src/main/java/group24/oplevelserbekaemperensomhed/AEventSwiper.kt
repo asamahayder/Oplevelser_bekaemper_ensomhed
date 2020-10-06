@@ -1,20 +1,27 @@
 package group24.oplevelserbekaemperensomhed
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yuyakaido.android.cardstackview.*
 import group24.oplevelserbekaemperensomhed.data.DummyData
 import kotlinx.android.synthetic.main.aeventswiper.*
+import java.util.*
 
 
 class AEventSwiper : AppCompatActivity(), CardStackListener {
 
     private val adapter = EventsAdapter()
     private lateinit var layoutManager: CardStackLayoutManager
+    private lateinit var cardStackView: CardStackView
+    private lateinit var rewindButton: FloatingActionButton
+    private lateinit var profileButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +32,10 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
             setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
             setOverlayInterpolator(LinearInterpolator())
             setStackFrom(StackFrom.Top)
+            setMaxDegree(0.0f)
+
+            setDirections(listOf(Direction.Top, Direction.Right, Direction.Left))
+
         }
 
         stack_view.layoutManager = layoutManager
@@ -35,21 +46,27 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
             }
         }
 
-        //This fetches the girl-profiles
-        /*TinderAPI().getProfiles().enqueue(object : Callback<List<Profile>> {
-            override fun onFailure(call: Call<List<Profile>>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<List<Profile>>, response: Response<List<Profile>>) {
-                response.body()?.let {
-                    adapter.setProfiles(it)
-                }
-            }
-        })*/
-
         val dummyData = DummyData()
         adapter.setProfiles(dummyData.list)
+
+        cardStackView = findViewById(R.id.stack_view)
+        rewindButton = findViewById(R.id.rewind_action_button)
+        rewindButton.setOnClickListener{
+            val setting = RewindAnimationSetting.Builder()
+                .setDirection(Direction.Left)
+                .setDuration(Duration.Normal.duration)
+                .setInterpolator(DecelerateInterpolator())
+                .build()
+            layoutManager.setRewindAnimationSetting(setting)
+            cardStackView.rewind()
+        }
+
+        profileButton = findViewById(R.id.profile_action_button);
+        profileButton.setOnClickListener {
+            var intent = Intent(this, AProfile::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onCardDisappeared(view: View?, position: Int) {
@@ -57,10 +74,17 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardDragging(direction: Direction?, ratio: Float) {
-
     }
 
     override fun onCardSwiped(direction: Direction?) {
+        if (direction == Direction.Top){
+            val currentPosition = cardStackView.top
+            val intent = Intent(this, AEventInfo::class.java)
+            intent.putExtra("position", currentPosition)
+            startActivity(intent)
+        }
+
+
 
     }
 
@@ -69,6 +93,11 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardAppeared(view: View?, position: Int) {
+        if (position == 0){
+            rewindButton.visibility = View.INVISIBLE
+        }else{
+            rewindButton.visibility = View.VISIBLE
+        }
 
     }
 
