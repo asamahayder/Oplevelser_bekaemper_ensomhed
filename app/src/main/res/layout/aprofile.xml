@@ -200,7 +200,7 @@
 
                     <TextView
                         android:id="@+id/aprofile_occupation"
-                        android:text="Software Develoiper"
+                        android:text="Software Developer"
                         android:textSize="14sp"
                         android:textColor="#ffffff"
                         android:layout_width="match_parent"
