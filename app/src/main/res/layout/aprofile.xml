@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,99 +9,109 @@
     android:background="@color/colorPrimary">
 
     <LinearLayout
-        android:id="@+id/aprofile_pfp"
         android:layout_width="match_parent"
-        android:layout_height="500sp"
-        android:orientation="vertical"
-        android:background="@color/colorAccent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:background="@drawable/pfp_gradient_top2bot"
+            android:id="@+id/aprofile_pfp"
             android:layout_width="match_parent"
-            android:layout_height="55sp"
-            android:gravity="center_horizontal">
+            android:layout_height="500dp"
+            android:orientation="vertical"
+            android:background="@color/colorAccent">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_baseline_edit_28" />
-        </LinearLayout>
+            <LinearLayout
+                android:background="@drawable/pfp_gradient_top2bot"
+                android:layout_width="match_parent"
+                android:layout_height="55sp"
+                android:gravity="center_horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/aprofile_editProfileButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    app:srcCompat="@drawable/ic_baseline_edit_28"
+                    android:focusable="true" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55sp"
-                android:layout_gravity="bottom"
-                android:orientation="vertical"
-                android:paddingLeft="16sp"
-                android:paddingRight="16sp"
-                android:background="@drawable/pfp_gradient_bot2top">
-
-                <TextView
-                    android:id="@+id/aprofile_name"
-                    android:text="Mads, 22"
-                    android:textSize="23sp"
-                    android:textColor="#ffffff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </TextView>
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="2dp"
-                    android:paddingLeft="5dp">
+                    android:layout_height="55sp"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingLeft="16sp"
+                    android:paddingRight="16sp"
+                    android:background="@drawable/pfp_gradient_bot2top">
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#ffffff"
-                        android:layout_marginRight="7sp"/>
+                    <TextView
+                        android:id="@+id/aprofile_name"
+                        android:text="Mads, 22"
+                        android:textSize="23sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </TextView>
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="5dp">
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#ffffff"
+                            android:layout_marginRight="7sp"/>
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
 
-                    <View
-                        android:layout_width="40sp"
-                        android:layout_height="4dp"
-                        android:background="#7E7878"
-                        android:layout_marginRight="7sp"/>
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="4dp"
+                            android:background="#7E7878"
+                            android:layout_marginRight="7sp"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -109,113 +119,113 @@
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:paddingLeft="16sp"
-        android:paddingRight="16sp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="19sp">
-
-            <ImageView
-                android:id="@+id/aprofile_addressIcon"
-                android:layout_width="15sp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_baseline_location_on_15">
-            </ImageView>
-
-            <TextView
-                android:id="@+id/aprofile_address"
-                android:text="København NV"
-                android:textSize="14sp"
-                android:textColor="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="12sp">
-
-            </TextView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="19sp">
-
-            <ImageView
-                android:id="@+id/aprofile_occupationIcon"
-                android:layout_width="15sp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_baseline_work_15">
-            </ImageView>
-
-            <TextView
-                android:id="@+id/aprofile_occupation"
-                android:text="Software Develoiper"
-                android:textSize="14sp"
-                android:textColor="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="12sp">
-
-            </TextView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="19sp">
-
-            <ImageView
-                android:id="@+id/aprofile_educationIcon"
-                android:layout_width="15sp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_baseline_school_15">
-            </ImageView>
-
-            <TextView
-                android:id="@+id/aprofile_education"
-                android:text="DTU"
-                android:textSize="14sp"
-                android:textColor="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="12sp">
-
-            </TextView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:paddingLeft="16sp"
+            android:paddingRight="16sp"
             android:layout_height="wrap_content"
-            android:paddingTop="30sp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/aprofile_bioTitle"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="19sp">
+
+                <ImageView
+                    android:id="@+id/aprofile_addressIcon"
+                    android:layout_width="15sp"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_baseline_location_on_15">
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/aprofile_address"
+                    android:text="København NV"
+                    android:textSize="14sp"
+                    android:textColor="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="12sp">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="19sp">
+
+                <ImageView
+                    android:id="@+id/aprofile_occupationIcon"
+                    android:layout_width="15sp"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_baseline_work_15">
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/aprofile_occupation"
+                    android:text="Software Develoiper"
+                    android:textSize="14sp"
+                    android:textColor="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="12sp">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="19sp">
+
+                <ImageView
+                    android:id="@+id/aprofile_educationIcon"
+                    android:layout_width="15sp"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_baseline_school_15">
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/aprofile_education"
+                    android:text="DTU"
+                    android:textSize="14sp"
+                    android:textColor="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="12sp">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Om Mads"
-                android:textColor="#ffffff"
-                android:textSize="15sp"
-                android:textStyle="bold"></TextView>
+                android:paddingTop="30sp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/aprofile_bio"
-                android:text="Hej jeg hedder mads og jeg kan godt lide pandekager pls give me more pls"
-                android:textSize="12sp"
-                android:textColor="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </TextView>
+                <TextView
+                    android:id="@+id/aprofile_bioTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Om Mads"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/aprofile_bio"
+                    android:text="Hej jeg hedder mads og jeg kan godt lide pandekager pls give me more pls"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </TextView>
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
