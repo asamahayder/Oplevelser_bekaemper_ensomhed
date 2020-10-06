@@ -5,7 +5,7 @@
     <data>
         <variable
             name="event"
-            type="group24.oplevelserbekaemperensomhed.Data.Event" />
+            type="group24.oplevelserbekaemperensomhed.Event" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

@@ -6,10 +6,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.yuyakaido.android.cardstackview.CardStackLayoutManager
-import com.yuyakaido.android.cardstackview.CardStackListener
-import com.yuyakaido.android.cardstackview.Direction
-import com.yuyakaido.android.cardstackview.SwipeableMethod
+import com.yuyakaido.android.cardstackview.*
 import group24.oplevelserbekaemperensomhed.Data.DummyData
 import kotlinx.android.synthetic.main.aeventswiper.*
 import retrofit2.Call
@@ -30,6 +27,7 @@ class AEventSwiper : AppCompatActivity(), CardStackListener {
         layoutManager = CardStackLayoutManager(this, this).apply {
             setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
             setOverlayInterpolator(LinearInterpolator())
+            setStackFrom(StackFrom.Top)
         }
 
         stack_view.layoutManager = layoutManager

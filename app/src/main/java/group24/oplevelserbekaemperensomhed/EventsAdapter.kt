@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import group24.oplevelserbekaemperensomhed.Data.Event
-import group24.oplevelserbekaemperensomhed.databinding.CardViewProfileBinding
+import group24.oplevelserbekaemperensomhed.databinding.CardViewEventBinding
 
 class EventsAdapter : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
 
@@ -34,7 +33,7 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class EventViewHolder(val binding: CardViewProfileBinding) :
+    inner class EventViewHolder(val binding: CardViewEventBinding) :
         RecyclerView.ViewHolder(binding.root)
 
 }
