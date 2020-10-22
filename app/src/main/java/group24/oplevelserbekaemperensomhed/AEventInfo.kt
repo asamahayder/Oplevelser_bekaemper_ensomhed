@@ -2,14 +2,12 @@ package group24.oplevelserbekaemperensomhed
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.facebook.drawee.view.SimpleDraweeView
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.DummyData
 import kotlinx.android.synthetic.main.a_event_info.*
-import org.w3c.dom.Text
 
 lateinit var dummyData: DummyData
 lateinit var eventNameTextView: TextView
