@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed
+package group24.oplevelserbekaemperensomhed.profile
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
 import com.squareup.picasso.Picasso
+import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import kotlinx.android.synthetic.main.aprofile.*
 
 class AProfile : AppCompatActivity() {
+
+    private lateinit var mPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +56,12 @@ class AProfile : AppCompatActivity() {
 
     private fun initializeView() {
 
+        mPager = findViewById(R.id.aprofile_viewpager)
+        val pagerAdapter = ProfilePicSliderPagerAdapter(supportFragmentManager)
+        mPager.adapter = pagerAdapter
+
         val editProfileButton: ImageView = aprofile_editProfileButton
         val backButton: ImageView = aprofile_backButton
-        val pfp: ImageView = aprofile_pfp
 
         val profileTexts = ArrayList<TextView>()
         val icons = ArrayList<ImageView>()
@@ -89,7 +96,7 @@ class AProfile : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
 
-        initializeProfileInfo(userData, profileTexts, icons, lines, pfp)
+        initializeProfileInfo(userData, profileTexts, icons, lines)
     }
 
     @SuppressLint("SetTextI18n")
@@ -97,8 +104,7 @@ class AProfile : AppCompatActivity() {
         userData: UserDTO?,
         textViews: ArrayList<TextView>,
         icons: ArrayList<ImageView>,
-        lines: ArrayList<View>,
-        pfp: ImageView
+        lines: ArrayList<View>
     ) {
 
         if (userData != null) {
@@ -107,7 +113,7 @@ class AProfile : AppCompatActivity() {
                 textViews[0].text = userData.name
                 if (userData.age != null) {
                     val text = userData.name + ", " + userData.age
-                    textViews.get(0).text = text
+                    textViews[0].text = text
                 }
             } else {
                 textViews[0].text = "Name, Age"
@@ -116,22 +122,22 @@ class AProfile : AppCompatActivity() {
             handleIconTextViews(userData, textViews, icons)
 
             if (userData.about != null) {
-                textViews.get(4).text = userData.about
+                textViews[4].text = userData.about
             } else {
-                textViews.get(4).text = ""
+                textViews[4].text = ""
             }
 
             if (userData.profilePictures != null) {
-                var amountOfPfps = userData.profilePictures!!.size
+                val amountOfPfps = userData.profilePictures!!.size
 
-                for (i in amountOfPfps..7) {
-                    lines.get(i).visibility = View.INVISIBLE
-                }
-                Picasso.get()
-                    .load(userData.profilePictures!!.get(0))
-                    .resize(200,200)
-                    .centerCrop()
-                    .into(pfp)
+//                for (i in amountOfPfps..7) {
+//                    lines[i].visibility = View.INVISIBLE
+//                }
+//                Picasso.get()
+//                    .load(userData.profilePictures!![0])
+//                    .resize(200,200)
+//                    .centerCrop()
+//                    .into(pfp)
             }
         }
     }
@@ -146,60 +152,60 @@ class AProfile : AppCompatActivity() {
         if (userData.education != null) eTxt = true
 
         if (aTxt && oTxt && eTxt) {
-            textViews.get(1).text = userData.address
-            icons.get(0).setImageResource(R.drawable.ic_baseline_location_on_15)
-            textViews.get(2).text = userData.occupation
-            icons.get(1).setImageResource(R.drawable.ic_baseline_work_15)
-            textViews.get(3).text = userData.education
-            icons.get(2).setImageResource(R.drawable.ic_baseline_school_15)
+            textViews[1].text = userData.address
+            icons[0].setImageResource(R.drawable.ic_baseline_location_on_15)
+            textViews[2].text = userData.occupation
+            icons[1].setImageResource(R.drawable.ic_baseline_work_15)
+            textViews[3].text = userData.education
+            icons[2].setImageResource(R.drawable.ic_baseline_school_15)
         }
         if (!aTxt && oTxt && eTxt) {
-            textViews.get(1).text = userData.occupation
-            icons.get(0).setImageResource(R.drawable.ic_baseline_work_15)
-            textViews.get(2).text = userData.education
-            icons.get(1).setImageResource(R.drawable.ic_baseline_school_15)
-            textViews.get(3).text = ""
-            icons.get(2).visibility = View.GONE
+            textViews[1].text = userData.occupation
+            icons[0].setImageResource(R.drawable.ic_baseline_work_15)
+            textViews[2].text = userData.education
+            icons[1].setImageResource(R.drawable.ic_baseline_school_15)
+            textViews[3].text = ""
+            icons[2].visibility = View.GONE
         }
         if (!aTxt && !oTxt && eTxt) {
-            textViews.get(1).text = userData.education
-            icons.get(0).setImageResource(R.drawable.ic_baseline_school_15)
-            textViews.get(2).text = ""
-            icons.get(1).visibility = View.GONE
-            textViews.get(3).text = ""
-            icons.get(2).visibility = View.GONE
+            textViews[1].text = userData.education
+            icons[0].setImageResource(R.drawable.ic_baseline_school_15)
+            textViews[2].text = ""
+            icons[1].visibility = View.GONE
+            textViews[3].text = ""
+            icons[2].visibility = View.GONE
         }
         if (aTxt && !oTxt && eTxt) {
-            textViews.get(1).text = userData.address
-            icons.get(0).setImageResource(R.drawable.ic_baseline_location_on_15)
-            textViews.get(2).text = userData.education
-            icons.get(1).setImageResource(R.drawable.ic_baseline_school_15)
-            textViews.get(3).text = ""
-            icons.get(2).visibility = View.GONE
+            textViews[1].text = userData.address
+            icons[0].setImageResource(R.drawable.ic_baseline_location_on_15)
+            textViews[2].text = userData.education
+            icons[1].setImageResource(R.drawable.ic_baseline_school_15)
+            textViews[3].text = ""
+            icons[2].visibility = View.GONE
         }
         if (aTxt && oTxt && !eTxt) {
-            textViews.get(1).text = userData.address
-            icons.get(0).setImageResource(R.drawable.ic_baseline_location_on_15)
-            textViews.get(2).text = userData.occupation
-            icons.get(1).setImageResource(R.drawable.ic_baseline_work_15)
-            textViews.get(3).text = ""
-            icons.get(2).visibility = View.GONE
+            textViews[1].text = userData.address
+            icons[0].setImageResource(R.drawable.ic_baseline_location_on_15)
+            textViews[2].text = userData.occupation
+            icons[1].setImageResource(R.drawable.ic_baseline_work_15)
+            textViews[3].text = ""
+            icons[2].visibility = View.GONE
         }
         if (aTxt && !oTxt && !eTxt) {
-            textViews.get(1).text = userData.address
-            icons.get(0).setImageResource(R.drawable.ic_baseline_location_on_15)
-            textViews.get(2).text = ""
-            icons.get(1).visibility = View.GONE
-            textViews.get(3).text = ""
-            icons.get(2).visibility = View.GONE
+            textViews[1].text = userData.address
+            icons[0].setImageResource(R.drawable.ic_baseline_location_on_15)
+            textViews[2].text = ""
+            icons[1].visibility = View.GONE
+            textViews[3].text = ""
+            icons[2].visibility = View.GONE
         }
         if (!aTxt && !oTxt && !eTxt) {
-            textViews.get(1).text = ""
-            icons.get(0).visibility = View.GONE
-            textViews.get(2).text = ""
-            icons.get(1).visibility = View.GONE
-            textViews.get(3).text = ""
-            icons.get(2).visibility = View.GONE
+            textViews[1].text = ""
+            icons[0].visibility = View.GONE
+            textViews[2].text = ""
+            icons[1].visibility = View.GONE
+            textViews[3].text = ""
+            icons[2].visibility = View.GONE
         }
     }
 }

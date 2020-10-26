@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    tools:context=".AProfile"
+    tools:context=".profile.AProfile"
     android:background="@color/colorPrimary">
 
     <ScrollView
@@ -23,130 +23,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="500dp">
 
-                <FrameLayout
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/aprofile_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp">
+                    android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/aprofile_pfp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/pfp_image1">
-
-                    </ImageView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55sp"
-                            android:layout_gravity="bottom"
-                            android:orientation="vertical"
-                            android:paddingLeft="16sp"
-                            android:paddingRight="16sp"
-                            android:background="@drawable/pfp_gradient_bot2top">
-
-                            <TextView
-                                android:id="@+id/aprofile_nameAge"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mads, 22"
-                                android:textColor="#ffffff"
-                                android:textSize="23sp" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:paddingTop="2dp"
-                                android:paddingStart="5dp">
-
-                                <View
-                                    android:id="@+id/aprofile_line1"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#ffffff"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line2"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line3"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line4"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line5"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line6"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line7"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line8"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </FrameLayout>
+                </androidx.viewpager.widget.ViewPager>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="55sp"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingLeft="16sp"
+                    android:paddingRight="16sp"
+                    android:background="@drawable/pfp_gradient_bot2top">
 
-                    <View
-                        android:id="@+id/aprofile_pressLeft"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                    </View>
-
-                    <View
-                        android:id="@+id/aprofile_pressRight"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                    </View>
+                    <TextView
+                        android:id="@+id/aprofile_nameAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mads, 22"
+                        android:textColor="#ffffff"
+                        android:textSize="23sp" />
 
                 </LinearLayout>
 

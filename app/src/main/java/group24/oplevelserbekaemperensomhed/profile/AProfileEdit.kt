@@ -1,7 +1,8 @@
-package group24.oplevelserbekaemperensomhed
+package group24.oplevelserbekaemperensomhed.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import kotlinx.android.synthetic.main.aprofileedit.*

@@ -13,6 +13,7 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yuyakaido.android.cardstackview.*
 import group24.oplevelserbekaemperensomhed.data.DummyData
+import group24.oplevelserbekaemperensomhed.profile.AProfile
 import kotlinx.android.synthetic.main.aeventswiper.*
 
 

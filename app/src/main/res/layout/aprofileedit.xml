@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    tools:context="group24.oplevelserbekaemperensomhed.AProfileEdit"
+    tools:context="group24.oplevelserbekaemperensomhed.profile.AProfileEdit"
     android:background="@color/colorEditBackground">
 
     <LinearLayout

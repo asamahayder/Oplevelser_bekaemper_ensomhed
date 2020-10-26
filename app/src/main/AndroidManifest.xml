@@ -13,8 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="group24.oplevelserbekaemperensomhed.AEventInfo"></activity>
-        <activity android:name="group24.oplevelserbekaemperensomhed.AProfileEdit" />
-        <activity android:name="group24.oplevelserbekaemperensomhed.AProfile" />
+        <activity android:name="group24.oplevelserbekaemperensomhed.profile.AProfileEdit" />
+        <activity android:name="group24.oplevelserbekaemperensomhed.profile.AProfile" />
         <activity android:name="group24.oplevelserbekaemperensomhed.AEventCollection" />
         <activity android:name="group24.oplevelserbekaemperensomhed.Indstillinger"></activity>
         <activity android:name="group24.oplevelserbekaemperensomhed.AEventSwiper">
