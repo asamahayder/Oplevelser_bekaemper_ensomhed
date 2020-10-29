@@ -3,12 +3,19 @@ package group24.oplevelserbekaemperensomhed.profile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ProfilePicSliderPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-    override fun getCount(): Int = 5
+class ProfilePicSliderPagerAdapter(
+    fm: FragmentManager,
+    val pfpURLs: ArrayList<String>) : FragmentStatePagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment = FProfilePics()
+    override fun getCount(): Int {
+        return pfpURLs.size
+    }
+
+    override fun getItem(position: Int): Fragment {
+        val fragment: Fragment = FProfilePics(pfpURLs[position])
+        return fragment
+    }
 
 }

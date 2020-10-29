@@ -31,76 +31,6 @@
                     android:paddingRight="16sp"
                     android:background="@drawable/pfp_gradient_bot2top">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#ffffff"
-                        android:textSize="23sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingTop="2dp"
-                        android:paddingStart="5dp">
-
-                        <View
-                            android:id="@+id/aprofile_line1"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#ffffff"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line2"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line3"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line4"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line5"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line6"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line7"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                        <View
-                            android:id="@+id/aprofile_line8"
-                            android:layout_width="40dp"
-                            android:layout_height="4dp"
-                            android:background="#7E7878"
-                            android:layout_marginRight="7sp"/>
-
-                    </LinearLayout>
-
             </LinearLayout>
 
         </FrameLayout>
@@ -111,7 +41,7 @@
             android:orientation="horizontal">
 
             <View
-                android:id="@+id/aprofile_pressLeft"
+                android:id="@+id/fprofile_pressLeft"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -119,7 +49,7 @@
             </View>
 
             <View
-                android:id="@+id/aprofile_pressRight"
+                android:id="@+id/fprofile_pressRight"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">

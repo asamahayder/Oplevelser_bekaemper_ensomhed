@@ -30,7 +30,7 @@ class AProfileEdit : AppCompatActivity() {
         }
         saveButton.setOnClickListener { v ->
             if (userData == null) {
-                userData = UserDTO(null,null,null,null,null,null,null,null,null)
+                userData = UserDTO(null,null,null,null,null,null,null,null,ArrayList())
             }
             if (!bioText.text.isEmpty()) {
                 userData!!.about = bioText.text.toString()

@@ -2,22 +2,30 @@ package group24.oplevelserbekaemperensomhed.profile
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.INVISIBLE
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.squareup.picasso.Picasso
+import com.google.android.material.tabs.TabLayout
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import kotlinx.android.synthetic.main.aprofile.*
+import kotlin.math.roundToInt
+
 
 class AProfile : AppCompatActivity() {
 
     private lateinit var mPager: ViewPager
+    private lateinit var mTablayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +46,8 @@ class AProfile : AppCompatActivity() {
         val eventsByUser = ArrayList<EventDTO>()
         val listOfPfps = ArrayList<String>()
         listOfPfps.add("https://alchetron.com/cdn/albrecht-thaer-3a110342-8ee9-462c-ade0-41fcadf6d35-resize-750.jpg")
+        listOfPfps.add("https://www.thestatesman.com/wp-content/uploads/2017/08/1493458748-beauty-face-517.jpg")
+        listOfPfps.add("https://goop.com/wp-content/uploads/2020/06/Mask-Group-2.png")
         LocalData.userData = UserDTO(
             "Pernille",
             22,
@@ -51,14 +61,30 @@ class AProfile : AppCompatActivity() {
                     "asdasdasda\nsdad ost ost lololo\n asdadasdasd",
             "Woman",
             eventsByUser,
-            listOfPfps)
+            listOfPfps
+        )
     }
 
     private fun initializeView() {
+        val userData = LocalData.userData
 
         mPager = findViewById(R.id.aprofile_viewpager)
-        val pagerAdapter = ProfilePicSliderPagerAdapter(supportFragmentManager)
+        mTablayout = findViewById(R.id.aprofile_tablayout)
+        mTablayout.setupWithViewPager(mPager, true)
+        mTablayout.setTabTextColors(Color.RED, Color.WHITE);
+        val pagerAdapter = ProfilePicSliderPagerAdapter(supportFragmentManager, userData!!.profilePictures)
         mPager.adapter = pagerAdapter
+
+        if (mTablayout.tabCount == 1) {
+            mTablayout.visibility = INVISIBLE
+        }
+
+        for (i in 0 until mTablayout.getTabCount()) {
+            val tab = (mTablayout.getChildAt(0) as ViewGroup).getChildAt(i)
+            val p = tab.layoutParams as MarginLayoutParams
+            p.setMargins(0, 0, 10, 0)
+            tab.requestLayout()
+        }
 
         val editProfileButton: ImageView = aprofile_editProfileButton
         val backButton: ImageView = aprofile_backButton
@@ -66,8 +92,6 @@ class AProfile : AppCompatActivity() {
         val profileTexts = ArrayList<TextView>()
         val icons = ArrayList<ImageView>()
         val lines = ArrayList<View>()
-
-        val userData = LocalData.userData
 
         profileTexts.add(aprofile_nameAge)
         profileTexts.add(aprofile_address)
@@ -97,6 +121,11 @@ class AProfile : AppCompatActivity() {
         }
 
         initializeProfileInfo(userData, profileTexts, icons, lines)
+    }
+
+    fun dpToPx(dp: Int): Int {
+        val displayMetrics: DisplayMetrics = resources.displayMetrics
+        return (dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
     }
 
     @SuppressLint("SetTextI18n")
@@ -142,7 +171,11 @@ class AProfile : AppCompatActivity() {
         }
     }
 
-    private fun handleIconTextViews(userData: UserDTO, textViews: ArrayList<TextView>, icons: ArrayList<ImageView>) {
+    private fun handleIconTextViews(
+        userData: UserDTO,
+        textViews: ArrayList<TextView>,
+        icons: ArrayList<ImageView>
+    ) {
         var aTxt = false
         var oTxt = false
         var eTxt = false

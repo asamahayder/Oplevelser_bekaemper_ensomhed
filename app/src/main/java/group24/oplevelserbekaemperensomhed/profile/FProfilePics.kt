@@ -5,14 +5,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import com.squareup.picasso.Picasso
 import group24.oplevelserbekaemperensomhed.R
 
-class FProfilePics : Fragment() {
+class FProfilePics(val s: String?) : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fprofilepics, container, false)
+    public lateinit var pfpPicture: ImageView
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fprofilepics, container, false)
+        initializeView(view)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initializeView(view)
+    }
+
+    private fun initializeView(view: View) {
+        pfpPicture = view.findViewById(R.id.fprofile_pfp)
+        if (s != null) {
+            Picasso.get()
+                .load(s)
+                .fit()
+                .centerCrop()
+                .into(pfpPicture)
+        }
+    }
 
 }
