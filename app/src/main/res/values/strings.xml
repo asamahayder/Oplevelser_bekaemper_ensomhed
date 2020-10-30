@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Oplevelser bekæmper ensomhed</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appName">Eventer</string>
+
+    <string name="facebook_app_id">395988721785201</string>
+    <string name="fb_login_protocol_scheme">fb395988721785201</string>
+
 
 </resources>
