@@ -12,12 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="group24.oplevelserbekaemperensomhed.AEventInfo"></activity>
-        <activity android:name="group24.oplevelserbekaemperensomhed.profile.AProfileEdit" />
-        <activity android:name="group24.oplevelserbekaemperensomhed.profile.AProfile" />
-        <activity android:name="group24.oplevelserbekaemperensomhed.AEventCollection" />
-        <activity android:name="group24.oplevelserbekaemperensomhed.Indstillinger"></activity>
-        <activity android:name="group24.oplevelserbekaemperensomhed.AEventSwiper">
+        <activity android:name=".login.ASignUp"></activity>
+        <activity android:name=".login.ALogin" />
+        <activity android:name=".AEventInfo" />
+        <activity android:name=".profile.AProfileEdit" />
+        <activity android:name=".profile.AProfile" />
+        <activity android:name=".AEventCollection" />
+        <activity android:name=".Indstillinger" />
+        <activity android:name=".AEventSwiper">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
