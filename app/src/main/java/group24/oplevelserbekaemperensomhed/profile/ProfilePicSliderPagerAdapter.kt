@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
 
+@Suppress("DEPRECATION")
 class ProfilePicSliderPagerAdapter(
     fm: FragmentManager,
     val pfpURLs: ArrayList<String>) : FragmentStatePagerAdapter(fm) {

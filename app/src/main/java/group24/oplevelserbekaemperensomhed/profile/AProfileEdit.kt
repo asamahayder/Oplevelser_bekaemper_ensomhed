@@ -25,10 +25,10 @@ class AProfileEdit : AppCompatActivity() {
         val jobText = aprofileedit_jobText
         val educationText = aprofileedit_educationText
 
-        backButton.setOnClickListener { v ->
+        backButton.setOnClickListener { _ ->
             finish()
         }
-        saveButton.setOnClickListener { v ->
+        saveButton.setOnClickListener { _ ->
             if (userData == null) {
                 userData = UserDTO(null,null,null,null,null,null,null,null,ArrayList())
             }

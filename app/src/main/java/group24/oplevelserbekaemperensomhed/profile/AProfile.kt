@@ -109,31 +109,26 @@ class AProfile : AppCompatActivity() {
             lines.add(view)
         }
 
-        editProfileButton.setOnClickListener { v ->
+        editProfileButton.setOnClickListener { _ ->
             val intent = Intent(this, AProfileEdit::class.java)
 
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        backButton.setOnClickListener { v ->
+        backButton.setOnClickListener { _ ->
             finish()
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
 
-        initializeProfileInfo(userData, profileTexts, icons, lines)
-    }
-
-    fun dpToPx(dp: Int): Int {
-        val displayMetrics: DisplayMetrics = resources.displayMetrics
-        return (dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
+        initializeProfileInfo(userData, profileTexts, icons)
     }
 
     @SuppressLint("SetTextI18n")
     private fun initializeProfileInfo(
         userData: UserDTO?,
         textViews: ArrayList<TextView>,
-        icons: ArrayList<ImageView>,
-        lines: ArrayList<View>
+        icons: ArrayList<ImageView> //,
+//      lines: ArrayList<View>
     ) {
 
         if (userData != null) {
@@ -156,9 +151,9 @@ class AProfile : AppCompatActivity() {
                 textViews[4].text = ""
             }
 
-            if (userData.profilePictures != null) {
-                val amountOfPfps = userData.profilePictures!!.size
-
+//          if (userData.profilePictures != null) {
+//              val amountOfPfps = userData.profilePictures.size
+//
 //                for (i in amountOfPfps..7) {
 //                    lines[i].visibility = View.INVISIBLE
 //                }
@@ -167,7 +162,7 @@ class AProfile : AppCompatActivity() {
 //                    .resize(200,200)
 //                    .centerCrop()
 //                    .into(pfp)
-            }
+//          }
         }
     }
 
