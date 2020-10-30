@@ -30,7 +30,6 @@ class AProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.aprofile)
-        setupDummyData()
         initializeView()
     }
 
@@ -40,29 +39,6 @@ class AProfile : AppCompatActivity() {
     }
 
     private fun updateProfile() {
-    }
-
-    private fun setupDummyData() {
-        val eventsByUser = ArrayList<EventDTO>()
-        val listOfPfps = ArrayList<String>()
-        listOfPfps.add("https://alchetron.com/cdn/albrecht-thaer-3a110342-8ee9-462c-ade0-41fcadf6d35-resize-750.jpg")
-        listOfPfps.add("https://www.thestatesman.com/wp-content/uploads/2017/08/1493458748-beauty-face-517.jpg")
-        listOfPfps.add("https://goop.com/wp-content/uploads/2020/06/Mask-Group-2.png")
-        LocalData.userData = UserDTO(
-            "Pernille",
-            22,
-            "Torshavn",
-            "full time pandekage",
-            "Harvard",
-            "Hej med dig, kan du også godt lde pandekager?!\n" +
-                    "Hvis du kan, pls kom og spis pandekager med mig på mit event k?\n" +
-                    "Insert text\n\nTest test test\n" +
-                    "olololololololo" +
-                    "asdasdasda\nsdad ost ost lololo\n asdadasdasd",
-            "Woman",
-            eventsByUser,
-            listOfPfps
-        )
     }
 
     private fun initializeView() {
