@@ -44,7 +44,6 @@
             android:id="@+id/alogin_twitterButton"
             android:layout_width="320dp"
             android:layout_height="35dp"
-            android:src="@mipmap/ic_twitter"
             android:background="@drawable/loginbutton_shape"
             android:layout_gravity="center_horizontal"/>
         <ImageButton
