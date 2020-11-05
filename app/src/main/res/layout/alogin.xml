@@ -33,14 +33,41 @@
             android:textColor="@color/colorEditBackground"
             android:textSize="15sp"/>
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/alogin_fbLoginButton"
-            android:layout_width="wrap_content"
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/alogin_twitterButton"
+            android:layout_width="320dp"
+            android:layout_height="35dp"
+            android:src="@mipmap/ic_twitter"
+            android:background="@drawable/loginbutton_shape"
+            android:layout_gravity="center_horizontal"/>
+        <ImageButton
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
+            android:layout_gravity="center_horizontal"/>
+        <ImageButton
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/alogin_fbLoginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
