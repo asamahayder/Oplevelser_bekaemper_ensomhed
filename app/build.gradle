@@ -40,6 +40,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.firebase:firebase-auth:20.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     // Asama Dependencies
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.2.0-alpha05'

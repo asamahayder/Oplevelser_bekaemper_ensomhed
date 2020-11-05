@@ -11,7 +11,7 @@ import group24.oplevelserbekaemperensomhed.R
 
 class FProfilePics(val s: String?) : Fragment() {
 
-    public lateinit var pfpPicture: ImageView
+    private lateinit var pfpPicture: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fprofilepics, container, false)

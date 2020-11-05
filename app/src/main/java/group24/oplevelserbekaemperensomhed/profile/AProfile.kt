@@ -33,6 +33,9 @@ class AProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.aprofile)
         initializeView()
+        updateProfile()
+        handlePfpSlider()
+        handleActivityChanges()
     }
 
     override fun onResume() {
@@ -41,7 +44,6 @@ class AProfile : AppCompatActivity() {
     }
 
     private fun initializeView() {
-
         profileTexts.add(aprofile_nameAge)
         profileTexts.add(aprofile_address)
         profileTexts.add(aprofile_occupation)
@@ -50,10 +52,6 @@ class AProfile : AppCompatActivity() {
         icons.add(aprofile_addressIcon)
         icons.add(aprofile_occupationIcon)
         icons.add(aprofile_educationIcon)
-
-        updateProfile()
-        handlePfpSlider()
-        handleActivityChanges()
     }
 
     private fun handleActivityChanges() {
@@ -78,7 +76,7 @@ class AProfile : AppCompatActivity() {
         mTablayout.setupWithViewPager(mPager, true)
         mTablayout.setTabTextColors(Color.RED, Color.WHITE);
         val pagerAdapter =
-            ProfilePicSliderPagerAdapter(supportFragmentManager, userData!!.profilePictures)
+            ProfilePicSliderPagerAdapter(supportFragmentManager, userData.profilePictures)
         mPager.adapter = pagerAdapter
 
         if (mTablayout.tabCount == 1) {
@@ -101,7 +99,7 @@ class AProfile : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun handleProfileInfo() {
-        if (userData?.name != null) {
+        if (userData.name != null) {
             profileTexts[0].text = userData.name
             if (userData.age != null) {
                 val text = userData.name + ", " + userData.age
