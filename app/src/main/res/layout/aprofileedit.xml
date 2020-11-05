@@ -62,7 +62,7 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="16dp"
                     android:paddingLeft="16dp"
@@ -77,7 +77,7 @@
                         <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginEnd="5dp"
                             app:cardCornerRadius="10dp">
 
                             <ImageView
@@ -298,7 +298,7 @@
                         android:id="@+id/aprofileedit_jobText"
                         android:layout_width="match_parent"
                         android:layout_height="28dp"
-                        android:hint="Stripper"
+                        android:hint="e.g. Software Developer"
                         android:gravity="top"
                         android:maxLength="37"
                         android:background="#ffff">
@@ -327,7 +327,7 @@
                         android:id="@+id/aprofileedit_educationText"
                         android:layout_width="match_parent"
                         android:layout_height="28dp"
-                        android:hint="DTU"
+                        android:hint="e.g. DTU"
                         android:gravity="top"
                         android:maxLength="37"
                         android:background="#ffff">

@@ -2,6 +2,8 @@ package group24.oplevelserbekaemperensomhed.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.ImageView
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
@@ -16,7 +18,7 @@ class AProfileEdit : AppCompatActivity() {
 
     private fun initializeView() {
 
-        var userData = LocalData.userData
+        val userData = LocalData.userData
 
         val backButton = aprofileedit_backButton
         val saveButton = aprofileedit_saveButton
@@ -25,24 +27,71 @@ class AProfileEdit : AppCompatActivity() {
         val jobText = aprofileedit_jobText
         val educationText = aprofileedit_educationText
 
-        backButton.setOnClickListener { v ->
+        handleSavedUserInfo(userData, bioText, addressText, jobText, educationText)
+
+        handleActivityChanges(
+            backButton,
+            saveButton,
+            userData,
+            bioText,
+            addressText,
+            jobText,
+            educationText
+        )
+    }
+
+    private fun handleSavedUserInfo(
+        userData: UserDTO?,
+        bioText: EditText,
+        addressText: EditText,
+        jobText: EditText,
+        educationText: EditText
+    ) {
+        if (userData != null) {
+            if (userData.about != null) {
+                bioText.setText(userData.about)
+            }
+            if (userData.address != null) {
+                addressText.setText(userData.address)
+            }
+            if (userData.occupation != null) {
+                jobText.setText(userData.occupation)
+            }
+            if (userData.education != null) {
+                educationText.setText(userData.education)
+            }
+        }
+    }
+
+    private fun handleActivityChanges(
+        backButton: ImageView,
+        saveButton: ImageView,
+        userData: UserDTO?,
+        bioText: EditText,
+        addressText: EditText,
+        jobText: EditText,
+        educationText: EditText
+    ) {
+        var userData1 = userData
+        backButton.setOnClickListener { _ ->
             finish()
         }
-        saveButton.setOnClickListener { v ->
-            if (userData == null) {
-                userData = UserDTO(null,null,null,null,null,null,null,null,ArrayList())
+        saveButton.setOnClickListener { _ ->
+            if (userData1 == null) {
+                userData1 =
+                    UserDTO(null, null, null, null, null, null, null, null, ArrayList<String>())
             }
             if (!bioText.text.isEmpty()) {
-                userData!!.about = bioText.text.toString()
+                userData1!!.about = bioText.text.toString()
             }
             if (!addressText.text.isEmpty()) {
-                userData!!.address = addressText.text.toString()
+                userData1!!.address = addressText.text.toString()
             }
             if (!jobText.text.isEmpty()) {
-                userData!!.occupation = jobText.text.toString()
+                userData1!!.occupation = jobText.text.toString()
             }
             if (!educationText.text.isEmpty()) {
-                userData!!.education = educationText.text.toString()
+                userData1!!.education = educationText.text.toString()
             }
             finish()
         }
