@@ -1,7 +1,10 @@
 package group24.oplevelserbekaemperensomhed.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import kotlin.collections.ArrayList
 
+@Parcelize
 data class UserDTO     //mangler evt.
 //interests
 //Social media integration (Instagram, facebook_common friends)
@@ -15,4 +18,4 @@ data class UserDTO     //mangler evt.
     var gender: String?,
     var eventsCreatedByUser: ArrayList<EventDTO>?,
     var profilePictures: ArrayList<String>?
-)
+):Parcelable
