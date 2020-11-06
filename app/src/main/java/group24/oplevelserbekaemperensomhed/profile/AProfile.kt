@@ -83,7 +83,7 @@ class AProfile : AppCompatActivity() {
             mTablayout.visibility = INVISIBLE
         }
 
-        for (i in 0 until mTablayout.getTabCount()) {
+        for (i in 0 until mTablayout.tabCount) {
             val tab = (mTablayout.getChildAt(0) as ViewGroup).getChildAt(i)
             val p = tab.layoutParams as MarginLayoutParams
             p.setMargins(0, 0, 10, 0)

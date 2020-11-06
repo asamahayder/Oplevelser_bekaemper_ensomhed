@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import group24.oplevelserbekaemperensomhed.AEventSwiper
+import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 
 
@@ -160,7 +161,7 @@ class ALogin : AppCompatActivity() {
             startActivity(
                 Intent(
                     applicationContext,
-                    AEventSwiper::class.java
+                    MainActivity::class.java
                 )
             )
         }
