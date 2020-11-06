@@ -13,15 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".AEventInfo" />
+        <activity android:name=".AProfileEdit" />
+        <activity android:name=".AProfile" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AEventInfo" />
-        <activity android:name=".AProfileEdit" />
-        <activity android:name=".AProfile" />
         <activity android:name=".AEventCollection" />
         <activity android:name=".Indstillinger" />
         <activity android:name=".AEventSwiper">
