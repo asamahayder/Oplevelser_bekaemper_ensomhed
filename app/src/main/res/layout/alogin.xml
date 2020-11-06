@@ -38,35 +38,93 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingBottom="40dp"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/alogin_twitterButton"
-            android:layout_width="320dp"
-            android:layout_height="35dp"
-            android:background="@drawable/loginbutton_shape"
-            android:layout_gravity="center_horizontal"/>
-        <ImageButton
-            android:layout_width="320dp"
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
-        <ImageButton
-            android:layout_width="320dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal">
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/alogin_fbButton_widget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                />
+
+            <ImageButton
+                android:id="@+id/alogin_fbButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/facebook"
+                android:contentDescription="Sign with to Facebook button" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="Sign up with Facebook"
+                android:textColor="#ffff"
+                android:textSize="20sp"
+                android:layout_marginBottom="5dp"/>
+
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/twitter"
+                android:contentDescription="Sign in with twitter button" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="Sign up with Twitter"
+                android:textColor="#ffff"
+                android:textSize="20sp"
+                android:layout_marginBottom="5dp"/>
+
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/alogin_gButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/google"
+                android:contentDescription="Sign with to google button" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="Sign up with Google"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_marginBottom="5dp"/>
+
+        </FrameLayout>
 
     </LinearLayout>
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/alogin_fbLoginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

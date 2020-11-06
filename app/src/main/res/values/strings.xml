@@ -1,8 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="appName">Eventer</string>
 
     <string name="facebook_app_id">395988721785201</string>
     <string name="fb_login_protocol_scheme">fb395988721785201</string>
+    <string name="web_client_id" tools:ignore="TypographyDashes">108906695141-1c4lrac2b9kn7r4tbobah363l16rltbq.apps.googleusercontent.com</string>
 
 
 </resources>
