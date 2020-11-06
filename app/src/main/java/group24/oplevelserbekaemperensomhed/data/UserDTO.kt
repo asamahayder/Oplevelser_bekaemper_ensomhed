@@ -17,5 +17,5 @@ data class UserDTO     //mangler evt.
     var about: String?,
     var gender: String?,
     var eventsCreatedByUser: ArrayList<EventDTO>?,
-    var profilePictures: ArrayList<String>?
+    var profilePictures: ArrayList<String>
 ):Parcelable

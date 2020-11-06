@@ -5,12 +5,16 @@ import java.util.ArrayList;
 public class DummyData {
 
     ArrayList<EventDTO> eventList = new ArrayList<>();
+    LocalData localData = LocalData.INSTANCE;
 
     public DummyData() {
         ArrayList<EventDTO> events = new ArrayList<>();
         ArrayList<String> pfps = new ArrayList<>();
-
+        pfps.add("https://alchetron.com/cdn/albrecht-thaer-3a110342-8ee9-462c-ade0-41fcadf6d35-resize-750.jpg");
+        pfps.add("https://www.thestatesman.com/wp-content/uploads/2017/08/1493458748-beauty-face-517.jpg");
+        pfps.add("https://goop.com/wp-content/uploads/2020/06/Mask-Group-2.png");
         UserDTO user = new UserDTO("Asama", 23, "Danmark", "Student", "DTU", "Just a random dude", "Male", events, pfps);
+        localData.setUserData(user);
         ArrayList<UserDTO> participants = new ArrayList<>();
         participants.add(user);
         EventDTO event1 = new EventDTO(user, participants, "Come and grab something to eat with us", "Group Dinner", new DateDTO(8,8,2020),"Food", "Denmark", "5-15$","https://www.tasteofhome.com/wp-content/uploads/2018/01/One-Pot-Dinner_EXPS_OPBZ18_10388_E06_07_2b-1-696x696.jpg");
