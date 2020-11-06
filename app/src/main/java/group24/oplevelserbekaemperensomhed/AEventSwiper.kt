@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import group24.oplevelserbekaemperensomhed.data.DummyData
 import group24.oplevelserbekaemperensomhed.data.EventDTO
+import group24.oplevelserbekaemperensomhed.profile.AProfile
 
 
 class AEventSwiper : AppCompatActivity(), EventItemClickListener {
