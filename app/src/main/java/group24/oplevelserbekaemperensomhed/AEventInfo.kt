@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import com.facebook.drawee.view.SimpleDraweeView
+import com.squareup.picasso.Picasso
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.DummyData
 import kotlinx.android.synthetic.main.a_event_info.*
@@ -15,8 +15,8 @@ lateinit var eventPlaceTextView: TextView
 lateinit var eventPriceTextView: TextView
 lateinit var eventTimeTextView: TextView
 lateinit var eventBioTextView: TextView
-lateinit var eventImage: SimpleDraweeView
 lateinit var eventBackButton: ImageView
+lateinit var eventImage: ImageView
 
 class AEventInfo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,12 +48,11 @@ class AEventInfo : AppCompatActivity() {
 
         eventBioTextView.text = event.eventDescription
 
-        eventImage.setImageURI(event.pictureURL)
+        Picasso.get().load(event.pictureURL).into(eventImage)
 
         aevent_info_backButton.setOnClickListener {
             finish()
         }
-
 
     }
 }

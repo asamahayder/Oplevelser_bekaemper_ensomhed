@@ -1,4 +1,14 @@
-<resources>
-    <string name="app_name">Oplevelser bekæmper ensomhed</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="appName">Eventer</string>
+
+    <!--Bottom nav bar names-->
+    <string name="nav_bar_home">Home</string>
+    <string name="nav_bar_search">Search</string>
+    <string name="nav_bar_list">List</string>
+    <string name="nav_bar_profile">Profile</string>
+
+    <string name="facebook_app_id">395988721785201</string>
+    <string name="fb_login_protocol_scheme">fb395988721785201</string>
+    <string name="web_client_id" tools:ignore="TypographyDashes">108906695141-1c4lrac2b9kn7r4tbobah363l16rltbq.apps.googleusercontent.com</string>
 
 </resources>

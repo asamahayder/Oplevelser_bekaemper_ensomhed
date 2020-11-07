@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "108906695141",
+    "firebase_url": "https://eventer-e749c.firebaseio.com",
+    "project_id": "eventer-e749c",
+    "storage_bucket": "eventer-e749c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108906695141:android:2136e0e220f2ae7b73870c",
+        "android_client_info": {
+          "package_name": "group24.oplevelserbekaemperensomhed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108906695141-1c4lrac2b9kn7r4tbobah363l16rltbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvON-2u-4Xjlvz2pN-s6aOtvKFreqghV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108906695141-1c4lrac2b9kn7r4tbobah363l16rltbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
