@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "108906695141",
-    "firebase_url": "https://eventer-e749c.firebaseio.com",
-    "project_id": "eventer-e749c",
-    "storage_bucket": "eventer-e749c.appspot.com"
+    "project_number": "600976782032",
+    "firebase_url": "https://eventer-64352.firebaseio.com",
+    "project_id": "eventer-64352",
+    "storage_bucket": "eventer-64352.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:108906695141:android:2136e0e220f2ae7b73870c",
+        "mobilesdk_app_id": "1:600976782032:android:a10476f4bb6b11adfda4d5",
         "android_client_info": {
           "package_name": "group24.oplevelserbekaemperensomhed"
         }
       },
       "oauth_client": [
         {
-          "client_id": "108906695141-1c4lrac2b9kn7r4tbobah363l16rltbq.apps.googleusercontent.com",
+          "client_id": "600976782032-b2ja5o8kv8v45rjt7tv8jh1519sed1c0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "group24.oplevelserbekaemperensomhed",
+            "certificate_hash": "a115292fb52149c8f0b4754db01bf92547925a0c"
+          }
+        },
+        {
+          "client_id": "600976782032-monv8jfj002b5bf1mfh9lg470e35jvdq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCvON-2u-4Xjlvz2pN-s6aOtvKFreqghV8"
+          "current_key": "AIzaSyDUwkNv3lmgnANbJC09i-RiYGTlxdDXqyk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "108906695141-1c4lrac2b9kn7r4tbobah363l16rltbq.apps.googleusercontent.com",
+              "client_id": "600976782032-monv8jfj002b5bf1mfh9lg470e35jvdq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
