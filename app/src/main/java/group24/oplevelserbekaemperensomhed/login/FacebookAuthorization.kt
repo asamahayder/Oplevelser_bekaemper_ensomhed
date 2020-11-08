@@ -2,12 +2,10 @@ package group24.oplevelserbekaemperensomhed.login
 
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-import com.facebook.FacebookSdk
 import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
@@ -16,11 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.AEventSwiper
 import group24.oplevelserbekaemperensomhed.R
 
-class FacebookAuthorization(val aLogin: ALogin, val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
+class FacebookAuthorization(private val aLogin: ALogin, private val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
 
     lateinit var callBackManager: CallbackManager
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var fbLoginButton_widget : LoginButton
+    private lateinit var fb_button_widget : LoginButton
 
     init {
         configure()
@@ -30,15 +28,14 @@ class FacebookAuthorization(val aLogin: ALogin, val newActivity: Class<AEventSwi
         Log.d(TAG, "FacebookAuthorization: configuring")
         firebaseAuth = FirebaseAuth.getInstance()
         callBackManager = CallbackManager.Factory.create()
-        FacebookSdk.sdkInitialize(aLogin.applicationContext)
-        fbLoginButton_widget = aLogin.findViewById(R.id.alogin_fbButton_widget)
-        fbLoginButton_widget.setReadPermissions(readPermissions)
-        fbLoginButton_widget.loginBehavior = LoginBehavior.WEB_ONLY
+        fb_button_widget = aLogin.findViewById(R.id.alogin_fbButton_widget)
+        fb_button_widget.setPermissions(readPermissions)
+        fb_button_widget.loginBehavior = LoginBehavior.WEB_ONLY
         signInOutCallback()
     }
 
     private fun signInOutCallback() {
-        fbLoginButton_widget.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
+        fb_button_widget.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
                 Log.d(TAG, "FacebookAuthorization: callback succeeded")
                 firebaseAuthWithFacebook(result)
@@ -73,11 +70,11 @@ class FacebookAuthorization(val aLogin: ALogin, val newActivity: Class<AEventSwi
             }
     }
 
-    public fun signIn() {
-        fbLoginButton_widget.performClick()
+    fun signIn() {
+        fb_button_widget.performClick()
     }
 
-    public fun signOut() {
+    fun signOut() {
         firebaseAuth.signOut()
     }
 

@@ -11,7 +11,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import group24.oplevelserbekaemperensomhed.AEventSwiper
 import group24.oplevelserbekaemperensomhed.R
 
-class GoogleAuthorization(val aLogin: ALogin, val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
+class GoogleAuthorization(private val aLogin: ALogin, private val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
 
     val RC_SIGN_IN = 404
 
@@ -32,18 +32,18 @@ class GoogleAuthorization(val aLogin: ALogin, val newActivity: Class<AEventSwipe
         gsc = GoogleSignIn.getClient(aLogin, gso)
     }
 
-    public fun signIn() {
+    fun signIn() {
         Log.d(TAG, "GoogleAuthorization: signing in")
         val signInIntent = gsc.signInIntent
         aLogin.startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    public fun signOut() {
+    fun signOut() {
         Log.d(TAG, "GoogleAuthorization: signing out")
         firebaseAuth.signOut()
     }
 
-    public fun firebaseAuthWithGoogle(idToken: String) {
+    fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(aLogin) { task ->
