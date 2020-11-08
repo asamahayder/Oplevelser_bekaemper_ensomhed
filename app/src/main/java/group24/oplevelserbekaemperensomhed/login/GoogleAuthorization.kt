@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import group24.oplevelserbekaemperensomhed.AEventSwiper
 import group24.oplevelserbekaemperensomhed.R
 
-class GoogleAuthorization(val aLogin: ALogin) : AppCompatActivity() {
+class GoogleAuthorization(val aLogin: ALogin, val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
 
     val RC_SIGN_IN = 404
 
@@ -49,11 +48,11 @@ class GoogleAuthorization(val aLogin: ALogin) : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(aLogin) { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "GoogleAuthorization: success")
-                    val intent = Intent(aLogin, AEventSwiper::class.java)
+                    Log.d(TAG, "GoogleAuthorization: firebase auth succeeded")
+                    val intent = Intent(aLogin, newActivity)
                     aLogin.startActivity(intent)
                 } else {
-                    Log.d(TAG, "GoogleAuthorization: failure")
+                    Log.d(TAG, "GoogleAuthorization: firebase auth failed")
                 }
             }
     }
