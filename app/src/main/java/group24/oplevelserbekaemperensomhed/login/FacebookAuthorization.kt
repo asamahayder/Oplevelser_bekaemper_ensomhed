@@ -44,13 +44,13 @@ class FacebookAuthorization(private val aLogin: ALogin, private val newActivity:
             override fun onCancel() {
                 Log.d(TAG, "FacebookAuthorization: callback canceled")
                 //Toast.makeText(aLogin.applicationContext, "canceled", Toast.LENGTH_SHORT).show()
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }
 
             override fun onError(error: FacebookException?) {
                 Log.d(TAG, "FacebookAuthorization: callback failed", error)
                 //Toast.makeText(aLogin.applicationContext, "error", Toast.LENGTH_SHORT).show()
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }
         })
     }
@@ -63,9 +63,10 @@ class FacebookAuthorization(private val aLogin: ALogin, private val newActivity:
                     Log.d(TAG, "FacebookAuthorization: firebase auth succeeded")
                     val intent = Intent(aLogin, newActivity)
                     aLogin.startActivity(intent)
+                    aLogin.finish()
                 } else {
                     Log.d(TAG, "FacebookAuthorization: firebase auth failed")
-                    TODO("Not yet implemented")
+                    //TODO("Not yet implemented")
                 }
             }
     }

@@ -51,6 +51,7 @@ class GoogleAuthorization(private val aLogin: ALogin, private val newActivity: C
                     Log.d(TAG, "GoogleAuthorization: firebase auth succeeded")
                     val intent = Intent(aLogin, newActivity)
                     aLogin.startActivity(intent)
+                    aLogin.finish()
                 } else {
                     Log.d(TAG, "GoogleAuthorization: firebase auth failed")
                 }

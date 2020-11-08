@@ -46,9 +46,11 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.0.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.airbnb.android:lottie:3.4.4'
     // Asama Dependencies
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.3.0-alpha03'
     implementation 'com.google.firebase:firebase-auth:20.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 apply plugin: 'com.google.gms.google-services'
