@@ -21,6 +21,14 @@ class AStart : AppCompatActivity() {
         checkIfLoggedIn()
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (!isTaskRoot) {
+            finish()
+            return
+        }
+    }
+
     private fun checkIfLoggedIn() {
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUser = firebaseAuth.currentUser
