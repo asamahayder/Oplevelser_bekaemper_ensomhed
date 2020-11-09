@@ -21,7 +21,7 @@
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemTextColor="@color/colorEditBackground"
-        app:itemIconTint="@color/colorEditBackground"
+        app:itemIconTint="@drawable/bottom_nav_selector"
         app:backgroundTint="@color/colorPrimary"
         android:layout_alignBottom="@id/mainFragment"
         />
