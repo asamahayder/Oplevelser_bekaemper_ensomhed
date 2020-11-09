@@ -9,9 +9,9 @@
         android:title="@string/nav_bar_search"
         android:icon="@drawable/ic_search"/>
 
-    <item android:id="@+id/placeholder"
-        android:title=""
-        android:enabled="false"/>
+    <item android:id="@+id/create_event"
+        android:title="Create"
+        android:icon="@drawable/create_event"/>
 
     <item android:id="@+id/navlist"
         android:title="@string/nav_bar_list"

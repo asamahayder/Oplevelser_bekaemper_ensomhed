@@ -66,6 +66,12 @@ public class FragmentProfile extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        handlePfpSlider(getView());
+    }
+
     private void initializeView(View view){
         linearLayout = view.findViewById(R.id.profileInfoLinearLayout);
         profileTextViews.add((TextView) view.findViewById(R.id.aprofile_nameAge));
