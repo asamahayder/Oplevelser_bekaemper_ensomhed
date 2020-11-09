@@ -2,6 +2,7 @@ package group24.oplevelserbekaemperensomhed;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -24,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
 
-        //This is to remove the wierd shadow
-        bottomNavigationView.setBackground(null);
 
         //This sets the first active fragment
         changeFragment(fragmentHome);
@@ -33,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                //item.getIcon().setTint(ContextCompat.getColor(getParent(),R.color.com_facebook_blue));
+
                 if (item.getItemId() == R.id.home){
                     changeFragment(fragmentHome);
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
     public void changeFragment (Fragment fragment){
