@@ -13,7 +13,6 @@ import group24.oplevelserbekaemperensomhed.R
 class AStart : AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var loading: LottieAnimationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +31,6 @@ class AStart : AppCompatActivity() {
     private fun checkIfLoggedIn() {
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUser = firebaseAuth.currentUser
-        loading = findViewById(R.id.astart_loading)
 
         Handler().postDelayed( {
             if (currentUser != null) {
