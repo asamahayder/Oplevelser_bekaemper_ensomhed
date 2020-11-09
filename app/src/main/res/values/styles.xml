@@ -8,12 +8,5 @@
         <item name="color">@color/ic_launcher_background</item>
     </style>
 
-    <!--<style name="AppTheme.Material" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>-->
-
 
 </resources>

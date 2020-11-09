@@ -50,12 +50,11 @@
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/aprofile_tablayout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="14dp"
                         android:paddingTop="2dp"
                         android:paddingBottom="10dp"
                         app:tabIndicatorHeight="0dp"
                         android:layout_gravity="start"
-                        style="@style/AppTheme"
                         app:tabIndicatorFullWidth="true"
                         app:tabBackground="@drawable/pfp_tab_selector"
                         app:tabUnboundedRipple="true"

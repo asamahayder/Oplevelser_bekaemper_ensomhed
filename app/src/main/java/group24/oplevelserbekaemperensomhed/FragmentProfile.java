@@ -66,6 +66,12 @@ public class FragmentProfile extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        handlePfpSlider(getView());
+    }
+
     private void initializeView(View view){
         linearLayout = view.findViewById(R.id.profileInfoLinearLayout);
         profileTextViews.add((TextView) view.findViewById(R.id.aprofile_nameAge));
@@ -161,10 +167,12 @@ public class FragmentProfile extends Fragment {
             TextView textView = new TextView(getActivity());
             textView.setText(getString(R.string.about));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorEditBackground));
 
             TextView aboutText = new TextView(getActivity());
             aboutText.setText(userData.getAbout());
             aboutText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            aboutText.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorEditBackground));
 
 
             this.linearLayout.addView(view);
@@ -189,6 +197,7 @@ public class FragmentProfile extends Fragment {
         textView.setText(txt);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         textView.setPadding(50,10,10,10);
+        textView.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorEditBackground));
 
         linearLayout.addView(imageView);
         linearLayout.addView(textView);
