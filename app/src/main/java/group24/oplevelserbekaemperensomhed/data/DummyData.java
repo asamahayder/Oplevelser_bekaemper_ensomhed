@@ -13,7 +13,7 @@ public class DummyData {
         pfps.add("https://alchetron.com/cdn/albrecht-thaer-3a110342-8ee9-462c-ade0-41fcadf6d35-resize-750.jpg");
         pfps.add("https://www.thestatesman.com/wp-content/uploads/2017/08/1493458748-beauty-face-517.jpg");
         pfps.add("https://goop.com/wp-content/uploads/2020/06/Mask-Group-2.png");
-        UserDTO user = new UserDTO("Asama", 23, "Danmark", "Student", "DTU", "Just a random dude", "Male", events, pfps);
+        UserDTO user = new UserDTO("Sarah", 23, "Danmark", "Student", "DTU", "Just a random woman", "Female", events, pfps);
         localData.setUserData(user);
         ArrayList<UserDTO> participants = new ArrayList<>();
         participants.add(user);

@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                //item.getIcon().setTint(ContextCompat.getColor(getParent(),R.color.com_facebook_blue));
 
                 if (item.getItemId() == R.id.home){
                     changeFragment(fragmentHome);
@@ -43,8 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (item.getItemId() == R.id.profile){
                     changeFragment(fragmentProfile);
-
                 }
+
+                //This sets the clicked item to be the active one, and gives it another color to stand out.
+                item.setChecked(true);
+
                 return false;
             }
         });

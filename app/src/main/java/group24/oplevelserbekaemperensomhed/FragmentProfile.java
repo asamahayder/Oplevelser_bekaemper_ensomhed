@@ -2,6 +2,7 @@ package group24.oplevelserbekaemperensomhed;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
+import group24.oplevelserbekaemperensomhed.profile.AProfileEdit;
 import group24.oplevelserbekaemperensomhed.profile.ProfilePicSliderPagerAdapter;
 
 
@@ -40,6 +43,8 @@ public class FragmentProfile extends Fragment {
     private UserDTO userData;
 
     private LinearLayout linearLayout;
+
+    private ImageView editProfileButton;
 
     public FragmentProfile() {
         // Required empty public constructor
@@ -58,10 +63,6 @@ public class FragmentProfile extends Fragment {
 
         TextView textView = v.findViewById(R.id.aprofile_nameAge);
         initializeView(v);
-        updateProfile();
-        handlePfpSlider(v);
-        handleActivityChanges(v);
-        handleAboutSection();
 
         return v;
     }
@@ -69,30 +70,42 @@ public class FragmentProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        handlePfpSlider(getView());
+        initializeView(getView());
     }
 
+
+
     private void initializeView(View view){
+
         linearLayout = view.findViewById(R.id.profileInfoLinearLayout);
+        editProfileButton = view.findViewById(R.id.aprofile_editProfileButton);
         profileTextViews.add((TextView) view.findViewById(R.id.aprofile_nameAge));
         profileTextViews.add((TextView) view.findViewById(R.id.aprofile_bio));
         icons.add((ImageView) view.findViewById(R.id.aprofile_addressIcon));
         icons.add((ImageView) view.findViewById(R.id.aprofile_occupationIcon));
         icons.add((ImageView) view.findViewById(R.id.aprofile_educationIcon));
-    }
 
-    private void handleActivityChanges(View view){
-        ImageView editProfileButton = view.findViewById(R.id.aprofile_editProfileButton);
-        ImageView backButton = view.findViewById(R.id.aprofile_backButton);
+        linearLayout.removeAllViews();
+
+        updateProfile();
+        handlePfpSlider(view);
+        handleActivityChanges(view);
+        handleAboutSection();
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO implement this
+                Intent intent = new Intent(getActivity(), AProfileEdit.class);
+                startActivity(intent);
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void handleActivityChanges(View view){
+        ImageView editProfileButton = view.findViewById(R.id.aprofile_editProfileButton);
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO implement this
@@ -107,7 +120,7 @@ public class FragmentProfile extends Fragment {
         tabLayout = view.findViewById(R.id.aprofile_tablayout);
         tabLayout.setupWithViewPager(mPager, true);
         tabLayout.setTabTextColors(Color.RED, Color.WHITE);
-        ProfilePicSliderPagerAdapter pagerAdapter = new ProfilePicSliderPagerAdapter(getActivity().getSupportFragmentManager(), userData.getProfilePictures());
+        ProfilePicSliderPagerAdapter pagerAdapter = new ProfilePicSliderPagerAdapter(getChildFragmentManager(), userData.getProfilePictures());
         mPager.setAdapter(pagerAdapter);
 
         if (tabLayout.getTabCount() == 1){
