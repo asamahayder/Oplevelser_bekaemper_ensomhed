@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import group24.oplevelserbekaemperensomhed.AEventSwiper
+import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 
 
@@ -85,6 +85,6 @@ class ALogin : AppCompatActivity() {
 
     companion object {
         private const val TAG = "login"
-        private val NEWACTIVITY = AEventSwiper::class.java
+        private val NEWACTIVITY = MainActivity::class.java
     }
 }

@@ -8,10 +8,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import group24.oplevelserbekaemperensomhed.AEventSwiper
+import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 
-class GoogleAuthorization(private val aLogin: ALogin, private val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
+class GoogleAuthorization(private val aLogin: ALogin, private val newActivity: Class<MainActivity>) : AppCompatActivity() {
 
     val RC_SIGN_IN = 404
 

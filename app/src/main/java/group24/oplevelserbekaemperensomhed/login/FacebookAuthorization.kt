@@ -11,10 +11,10 @@ import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import group24.oplevelserbekaemperensomhed.AEventSwiper
+import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 
-class FacebookAuthorization(private val aLogin: ALogin, private val newActivity: Class<AEventSwiper>) : AppCompatActivity() {
+class FacebookAuthorization(private val aLogin: ALogin, private val newActivity: Class<MainActivity>) : AppCompatActivity() {
 
     lateinit var callBackManager: CallbackManager
     private lateinit var firebaseAuth: FirebaseAuth
