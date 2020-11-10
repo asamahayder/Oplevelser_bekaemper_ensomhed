@@ -197,16 +197,6 @@
         android:layout_width="match_parent"
         android:layout_height="55sp">
 
-        <ImageView
-            android:id="@+id/aprofile_backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:src="@drawable/ic_baseline_arrow_back_ios_30"
-            android:contentDescription="back button"
-            tools:ignore="HardcodedText" />
-
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"

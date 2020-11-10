@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     changeFragment(fragmentProfile);
                 }
 
+                //This sets the clicked item to be the active one, and gives it another color to stand out.
                 item.setChecked(true);
 
                 return false;
