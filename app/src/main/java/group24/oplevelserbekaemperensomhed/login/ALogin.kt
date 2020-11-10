@@ -6,6 +6,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -26,6 +27,15 @@ class ALogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.alogin)
         initializeView()
+
+        val testButton: Button = findViewById(R.id.alogin_testbuutton)
+        testButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
         Log.d(TAG, "ALogin activity started")
     }
 
