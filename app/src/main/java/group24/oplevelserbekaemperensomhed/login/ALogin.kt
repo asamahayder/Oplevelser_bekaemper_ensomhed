@@ -42,8 +42,10 @@ class ALogin : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "requestCode: $resultCode resultCode: $resultCode")
-        if (requestCode == googleAuth.RC_SIGN_IN) {
+        val RC_SIGN_IN = googleAuth.RC_SIGN_IN
+        Log.d(TAG, "requestCode: $requestCode resultCode: $resultCode RC_SIGN_IN: $RC_SIGN_IN")
+        if (requestCode == RC_SIGN_IN) {
+            //FIXME et eller andet med dis shit virker ikke. Den fejler i try blokken begrund af task probably
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
@@ -70,11 +72,11 @@ class ALogin : AppCompatActivity() {
                     v.background.clearColorFilter()
                     v.invalidate()
                     if (button == findViewById(R.id.alogin_fbButton)) {
-                        Log.d(TAG, "Clicking on Facebook Login")
+                        Log.d(TAG, "Clicking on Facebook Login Button")
                         facebookAuth.signIn()
                     }
                     if (button == findViewById(R.id.alogin_gButton)) {
-                        Log.d(TAG, "Clicking on Google Login")
+                        Log.d(TAG, "Clicking on Google Login Button")
                         googleAuth.signIn()
                     }
                 }
