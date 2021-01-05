@@ -55,7 +55,6 @@
                         app:tabIndicatorHeight="0dp"
                         android:layout_gravity="start"
                         app:tabIndicatorFullWidth="true"
-                        style="@style/ting"
                         app:tabBackground="@drawable/pfp_tab_selector"
                         app:tabUnboundedRipple="true"
                         app:tabMaxWidth="0dp"/>
