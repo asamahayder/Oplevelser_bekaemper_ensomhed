@@ -67,7 +67,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             eventAddress.setText(eventItem.getAddress());
         }
         void initializePicture(EventDTO eventItem){
-            Picasso.get().load(eventItem.getPictureURL()).into(eventImage);
+            Picasso.get().load(eventItem.getPictures().get(0)).into(eventImage);
         }
     }
 }
