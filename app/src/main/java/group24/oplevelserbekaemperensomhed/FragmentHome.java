@@ -53,7 +53,7 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
         destinationFragment.setArguments(bundle);
 
         if (getFragmentManager() != null) {
-            getFragmentManager().beginTransaction().replace(R.id.mainFragment, destinationFragment).addToBackStack(null).commit();
+            getFragmentManager().beginTransaction().replace(R.id.mainFragment, destinationFragment).addToBackStack(getString(R.string.fragment_home)).commit();
         }else{
             Toast toast = Toast.makeText(getActivity(), "Couldn't get fragment manager", Toast.LENGTH_SHORT);
             toast.show();
