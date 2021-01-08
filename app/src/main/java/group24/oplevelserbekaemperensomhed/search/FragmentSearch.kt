@@ -1,12 +1,15 @@
 package group24.oplevelserbekaemperensomhed.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import group24.oplevelserbekaemperensomhed.R
+import group24.oplevelserbekaemperensomhed.data.DummyData
 
 class FragmentSearch : Fragment() {
 
@@ -23,9 +26,25 @@ class FragmentSearch : Fragment() {
     }
 
     private fun initializeView() {
-        searchButton = getView()!!.findViewById(R.id.fsearch_searchbutton)
-        bannerImage = getView()!!.findViewById(R.id.fsearch_bannerimage)
-        recyclerView = getView()!!.findViewById(R.id.fsearch_recyclerview)
+        searchButton = view!!.findViewById(R.id.fsearch_searchbutton)
+        bannerImage = view!!.findViewById(R.id.fsearch_bannerimage)
+        recyclerView = view!!.findViewById(R.id.fsearch_recyclerview)
+
+        testing()
+
+
     }
 
+    private fun testing() {
+        val dummy = DummyData()
+        val dummyList = dummy.searchHomeList
+        recyclerView.adapter = SearchHomeAdapterVertical(dummyList)
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        recyclerView.recycledViewPool.setMaxRecycledViews(0,0)
+        Log.d(TAG, dummyList.size.toString())
+    }
+
+    companion object {
+        const val TAG = "search"
+    }
 }

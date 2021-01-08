@@ -1,10 +1,15 @@
 package group24.oplevelserbekaemperensomhed.data;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import group24.oplevelserbekaemperensomhed.search.SearchHomeItemHorizontal;
+import group24.oplevelserbekaemperensomhed.search.SearchHomeItemVertical;
 
 public class DummyData {
 
     ArrayList<EventDTO> eventList = new ArrayList<>();
+    List<SearchHomeItemVertical> searchHomeList = new ArrayList<>();
     LocalData localData = LocalData.INSTANCE;
 
     public DummyData() {
@@ -40,7 +45,47 @@ public class DummyData {
         eventList.add(event2);
         eventList.add(event3);
 
+        for (int i = 0; i < 12; i++) {
+            String category = "";
+            if (i < 5) category = "ONE";
+            else if (i < 10) category = "TWO";
+            else category = "THREE";
+            for (int j = 0; j < 6; j++) {
+                EventDTO eventN = new EventDTO(user,participants,"TESTING","TESTING",new DateDTO(12,12,2021),category,"FAROE", "1M gp", event2Pictures);
+                eventList.add(eventN);
+            }
+        }
+        for (int i = 0; i < eventList.size(); i++) {
+            List<SearchHomeItemHorizontal> searchHomeListHorizontal = new ArrayList<>();
+            String category = eventList.get(i).getCategory();
+            boolean test2 = false;
+            for (int j = 0; j < eventList.size(); j++) {
+                String nextCategory = eventList.get(j).getCategory();
+                EventDTO event = eventList.get(i);
+                SearchHomeItemHorizontal item = new SearchHomeItemHorizontal(event.getEventTitle(), event.getEventCreator().getName(), event.getAddress(), event.getPictures().get(0), event.getEventCreator().getProfilePictures().get(0));
+                if (category.equals(nextCategory)) {
+                    boolean test = true;
+                    for (int k = 0; k < searchHomeList.size(); k++) {
+                        if (searchHomeList.get(k).getCategory().equals(category)){
+                            test = false;
+                            break;
+                        }
+                    }
+                    if (test || searchHomeList.size() == 0) {
+                        test2 = true;
+                        searchHomeListHorizontal.add(item);
+                    }
+                }
+            }
+            if (test2){
+                SearchHomeItemVertical items = new SearchHomeItemVertical(category, searchHomeListHorizontal);
+                searchHomeList.add(items);
+            }
+        }
+        System.out.println("asd");
     }
+
+    public List<SearchHomeItemVertical> getSearchHomeList() { return searchHomeList; }
 
     public ArrayList<EventDTO> getList(){
         return eventList;
