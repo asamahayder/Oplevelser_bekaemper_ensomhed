@@ -1,8 +1,10 @@
 package group24.oplevelserbekaemperensomhed;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
+import group24.oplevelserbekaemperensomhed.profile.ProfilePicSliderPagerAdapter;
 
 
 public class FragmentEventInfo extends Fragment {
@@ -27,7 +31,8 @@ public class FragmentEventInfo extends Fragment {
     private TextView eventTimeTextView;
     private TextView eventBioTextView;
     private ImageView eventBackButton;
-    private ImageView eventImage;
+    private ViewPager mPager;
+    private TabLayout tabLayout;
 
     public FragmentEventInfo() {
         // Required empty public constructor
@@ -44,7 +49,6 @@ public class FragmentEventInfo extends Fragment {
         eventTimeTextView = v.findViewById(R.id.aevent_info_time);
         eventBioTextView = v.findViewById(R.id.aevent_info_bio);
         eventBackButton = v.findViewById(R.id.aevent_info_backButton);
-        eventImage = v.findViewById(R.id.eventPictureURL);
 
 
         //Getting event from parent fragment
@@ -72,9 +76,6 @@ public class FragmentEventInfo extends Fragment {
         eventTimeTextView.setText(day + "/" + month + "/" + year);
 
 
-        //Setting image
-        Picasso.get().load(event.getPictureURL()).into(eventImage);
-
         //back button functionality
         eventBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +89,29 @@ public class FragmentEventInfo extends Fragment {
             }
         });
 
+        handlePictureSlider(v);
+
         return v;
+    }
+
+    private void handlePictureSlider(View view){
+        mPager = view.findViewById(R.id.event_info_viewpager);
+        tabLayout = view.findViewById(R.id.event_info_tablayout);
+        tabLayout.setupWithViewPager(mPager, true);
+        tabLayout.setTabTextColors(Color.RED, Color.WHITE);
+        ProfilePicSliderPagerAdapter pagerAdapter = new ProfilePicSliderPagerAdapter(getChildFragmentManager(), event.getPictures());
+        mPager.setAdapter(pagerAdapter);
+
+        if (tabLayout.getTabCount() == 1){
+            tabLayout.setVisibility(View.INVISIBLE);
+        }
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            View tab = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(i);
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
+            p.setMargins(0,0,10,0);
+            tab.requestLayout();
+        }
     }
 
 }

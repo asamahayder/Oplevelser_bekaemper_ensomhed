@@ -2,19 +2,22 @@ package group24.oplevelserbekaemperensomhed;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import group24.oplevelserbekaemperensomhed.search.FragmentSearch;
+
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     Fragment fragmentHome;
     Fragment fragmentProfile;
+    Fragment fragmentSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,24 +27,26 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
+        fragmentSearch = new FragmentSearch();
 
 
         //This sets the first active fragment
-        changeFragment(fragmentHome);
+        changeFragment(fragmentHome, getString(R.string.fragment_home));
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if (item.getItemId() == R.id.home){
-                    changeFragment(fragmentHome);
+                    changeFragment(fragmentHome, getString(R.string.fragment_home));
 
                 }else if (item.getItemId() == R.id.search){
+                    changeFragment(fragmentSearch, getString(R.string.fragment_search));
 
                 } else if(item.getItemId() == R.id.navlist){
 
                 } else if (item.getItemId() == R.id.profile){
-                    changeFragment(fragmentProfile);
+                    changeFragment(fragmentProfile, getString(R.string.fragment_profile));
                 }
 
                 //This sets the clicked item to be the active one, and gives it another color to stand out.
@@ -53,8 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void changeFragment (Fragment fragment){
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, fragment).addToBackStack(null).commit();
+    public void changeFragment (Fragment fragment, String tag){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        //transaction.setCustomAnimations();
+        transaction.replace(R.id.mainFragment, fragment, tag);
+        //if (addToBackStack) {
+        //    transaction.addToBackStack(tag);
+        //}
+        transaction.commit();
     }
 
 }

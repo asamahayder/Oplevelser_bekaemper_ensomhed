@@ -13,5 +13,5 @@ data class EventDTO (
     val Category: String,
     val address: String,
     val price: String,
-    val pictureURL: String
+    val pictures: ArrayList<String>
 ):Parcelable

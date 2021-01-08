@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    tools:context=".AProfile"
     android:background="@color/colorPrimary">
 
     <ScrollView
@@ -27,126 +26,46 @@
                     android:layout_width="match_parent"
                     android:layout_height="500dp">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/eventPictureURL"
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/event_info_viewpager"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        tools:background="@drawable/pfp_image1" />
+                        android:layout_height="match_parent"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="55sp"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingLeft="16sp"
+                        android:paddingRight="16sp"
+                        android:background="@drawable/pfp_gradient_bot2top"
+                        style="@style/AppTheme">
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/eventName"
                             android:layout_width="match_parent"
-                            android:layout_height="55sp"
-                            android:layout_gravity="bottom"
-                            android:orientation="vertical"
-                            android:paddingLeft="16sp"
-                            android:paddingRight="16sp"
-                            android:background="@drawable/pfp_gradient_bot2top">
+                            android:layout_height="wrap_content"
+                            android:text="EventName"
+                            android:textColor="#ffffff"
+                            android:textSize="23sp"
+                            tools:ignore="HardcodedText" />
 
-                            <TextView
-                                android:id="@+id/eventName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Event name here"
-                                android:textColor="#ffffff"
-                                android:textSize="23sp" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:paddingTop="2dp"
-                                android:paddingStart="5dp">
-
-                                <View
-                                    android:id="@+id/aprofile_line1"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#ffffff"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line2"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line3"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line4"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line5"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line6"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line7"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                                <View
-                                    android:id="@+id/aprofile_line8"
-                                    android:layout_width="40dp"
-                                    android:layout_height="4dp"
-                                    android:background="#7E7878"
-                                    android:layout_marginRight="7sp"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/event_info_tablayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="14dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="10dp"
+                            app:tabIndicatorHeight="0dp"
+                            android:layout_gravity="start"
+                            app:tabIndicatorFullWidth="true"
+                            app:tabBackground="@drawable/pfp_tab_selector"
+                            app:tabUnboundedRipple="true"
+                            app:tabMaxWidth="0dp"/>
 
                     </LinearLayout>
 
                 </FrameLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/aevent_info_pressLeft"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                    </View>
-
-                    <View
-                        android:id="@+id/aevent_info_pressRight"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                    </View>
-
-                </LinearLayout>
 
             </FrameLayout>
 

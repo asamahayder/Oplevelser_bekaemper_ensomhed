@@ -34,8 +34,6 @@ class ALogin : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
         Log.d(TAG, "ALogin activity started")
     }
 
