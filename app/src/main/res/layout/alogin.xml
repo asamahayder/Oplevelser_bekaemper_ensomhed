@@ -29,7 +29,7 @@
             android:fontFamily="monospace"
             android:gravity="center"
             android:textStyle="italic"
-            android:text="Øvelser bekæmper enshomhed"
+            android:text="Oplevelser bekæmper enshomhed"
             android:textColor="@color/colorEditBackground"
             android:textSize="15sp"/>
 
