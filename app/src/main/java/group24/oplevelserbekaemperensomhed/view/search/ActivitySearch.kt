@@ -3,6 +3,7 @@ package group24.oplevelserbekaemperensomhed.view.search
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
@@ -49,6 +50,25 @@ class ActivitySearch : AppCompatActivity() {
         recyclerView = findViewById(R.id.activity_search_1_recyclerview)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
+        if (intent.extras != null) {
+            if (intent.extras!!["eventList"] != null) {
+                events = intent.getParcelableArrayListExtra("eventList")!!
+
+                adapter = SearchAdapter(events, context)
+                searchView.queryHint = events[0].category
+                searchView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+                searchView.inputType = InputType.TYPE_NULL
+            }
+        } else {
+            if (events.size > 0) {
+                events.clear()
+            }
+            searchView.isIconified = false
+            searchView.isIconified = true
+            firebaseQuery()
+        }
+        recyclerView.adapter = adapter
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 TODO("Not yet implemented")
@@ -59,30 +79,15 @@ class ActivitySearch : AppCompatActivity() {
                 return false
             }
         })
-
-        if (intent.extras!!["eventList"] != null) {
-            events = intent.getParcelableArrayListExtra("eventList")!!
-
-            adapter = SearchAdapter(events, context)
-            searchView.queryHint = events[0].category
-            searchView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-            searchView.inputType = InputType.TYPE_NULL
-        } else {
-            if (events.size > 0) {
-                events.clear()
-            }
-            searchView.isIconified = false
-            searchView.isIconified = true
-            firebaseQuery()
-        }
-        recyclerView.adapter = adapter
     }
 
     private fun firebaseQuery() {
         db = FirebaseDAO()
+        Log.d(TAG, "Getting all events")
         db.getAllEvents(object : MyCallBack {
             override fun onCallBack(dbEvents: Any) {
                 val eventDataList = dbEvents as ArrayList<DBEvent>
+                Log.d(TAG, "Getting all eventCreators")
                     for (dbEvent in eventDataList) {
                     db.getUser(dbEvent.eventCreator, object : MyCallBack {
                         override fun onCallBack(`dbUser`: Any) {
@@ -94,6 +99,7 @@ class ActivitySearch : AppCompatActivity() {
                             localData.searchResultsEvents = events
                             adapter = SearchAdapter(events, context)
                             recyclerView.adapter = adapter
+                            Log.d(TAG, "Updating adapter")
                         }
                     })
                 }
