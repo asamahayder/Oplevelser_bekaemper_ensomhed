@@ -39,10 +39,16 @@ public class DummyData {
         eventList.add(event2);
         eventList.add(event3);
 
+        eventList.addAll(localData.getUserCreatedEvents());
+
     }
 
     public ArrayList<EventDTO> getList(){
         return eventList;
+    }
+
+    public void addToEventList(EventDTO eventDTO){
+        eventList.add(eventDTO);
     }
 
 }

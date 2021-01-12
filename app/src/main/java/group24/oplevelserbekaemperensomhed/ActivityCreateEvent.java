@@ -99,6 +99,8 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Uri imageUri;
     Chip getImageButton;
     ArrayList<String> pictures = new ArrayList<>();
+    ProfilePicSliderPagerAdapter adapter;
+    ViewPager viewPager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +153,8 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
         getImageButton = findViewById(R.id.create_event_choose_pictures_button);
 
+        adapter = new ProfilePicSliderPagerAdapter(getSupportFragmentManager(), pictures);
+
 
         handleTimeAndDateFields();
 
@@ -198,7 +202,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 if(switchOnline.isChecked()){
                     address = findAddressEditText.getText().toString();
                     findAddressEditText.setEnabled(false);
-                    findAddressEditText.getText().clear();
+                    findAddressEditText.setText("Online");
                     findAddressEditText.setHint("Online");
                 }else{
                     findAddressEditText.setText(address);
@@ -215,7 +219,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 if (switchPrice.isChecked()){
                     amount = editTextAmount.getText().toString();
                     editTextAmount.setEnabled(false);
-                    editTextAmount.getText().clear();
+                    editTextAmount.setText("Free");
                     editTextAmount.setHint("Free");
                 }else{
                     editTextAmount.setText(amount);
@@ -246,8 +250,8 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             @Override
             public void onClick(View v) {
                 if (switchAllDay.isChecked()){
-                    editTextStart.getText().clear();
-                    editTextEnd.getText().clear();
+                    editTextStart.setText("All Day");
+                    editTextEnd.setText("All Day");
                     editTextStart.setHint("All Day");
                     editTextEnd.setHint("All Day");
                     editTextStart.setEnabled(false);
@@ -374,6 +378,9 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
         EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(), dateDTO, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(), pictures);
         Toast.makeText(getApplicationContext(),"Created event! :D",Toast.LENGTH_SHORT).show();
+        LocalData localData = LocalData.INSTANCE;
+        localData.getUserCreatedEvents().add(eventDTO);
+        finish();
 
     }
 
@@ -442,21 +449,25 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 pictures.add(imageUri.toString());
             }
 
-            ProfilePicSliderPagerAdapter adapter = new ProfilePicSliderPagerAdapter(getSupportFragmentManager(), pictures);
+            if (viewPager == null){
+                System.out.println("***********************Im NUUUUUUUUUULLLLL***************");
+                viewPager = new ViewPager(this);
+                viewPager.setId(View.generateViewId());
+                viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
+                ((ConstraintLayout.LayoutParams)viewPager.getLayoutParams()).dimensionRatio ="1:1";
+                viewPager.setAdapter(adapter);
+                constraintLayout.addView(viewPager);
 
-            ViewPager viewPager = new ViewPager(this);
-            viewPager.setId(View.generateViewId());
-            viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
-            ((ConstraintLayout.LayoutParams)viewPager.getLayoutParams()).dimensionRatio ="1:1";
-            viewPager.setAdapter(adapter);
-
-            constraintLayout.addView(viewPager);
-
-            //Moving set images button below viewpager
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(constraintLayout);
-            constraintSet.connect(getImageButton.getId(), ConstraintSet.TOP, viewPager.getId(), ConstraintSet.BOTTOM, 20);
-            constraintSet.applyTo(constraintLayout);
+                //Moving set images button below viewpager
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(constraintLayout);
+                constraintSet.connect(getImageButton.getId(), ConstraintSet.TOP, viewPager.getId(), ConstraintSet.BOTTOM, 20);
+                constraintSet.applyTo(constraintLayout);
+            }else{
+                System.out.println("*****************************IM NOOOOOOOT NUUUUUUUULLLLL************************");
+                adapter = new ProfilePicSliderPagerAdapter(getSupportFragmentManager(), pictures);
+                viewPager.setAdapter(adapter);
+            }
         }
 
     }
