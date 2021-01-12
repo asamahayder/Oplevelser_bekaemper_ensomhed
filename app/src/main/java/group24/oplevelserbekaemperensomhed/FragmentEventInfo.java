@@ -69,11 +69,10 @@ public class FragmentEventInfo extends Fragment {
 
         //TODO there is probably a better way to do this:
         //Setting date field
-        int day = event.getEventDate().getDay();
-        int month = event.getEventDate().getMonth();
-        int year = event.getEventDate().getYear();
+        String date = event.getEventDate().getDate();
 
-        eventTimeTextView.setText(day + "/" + month + "/" + year);
+
+        eventTimeTextView.setText(date);
 
 
         //back button functionality

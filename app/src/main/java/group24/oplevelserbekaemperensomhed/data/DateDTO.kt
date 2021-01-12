@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class DateDTO (
-    val day: Int,
-    val month: Int,
-    val year: Int
+    val date: String,
+    val startTime: String,
+    val endTime: String
 ):Parcelable

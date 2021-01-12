@@ -3,6 +3,8 @@
     package="group24.oplevelserbekaemperensomhed">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -11,22 +13,23 @@
         android:label="@string/appName"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".login.AStart" >
+        android:theme="@style/Material">
+        <activity android:name=".ActivityCreateEvent" android:label="@string/title_activity_create_event"/>
+        <activity android:name=".login.AStart" android:theme="@style/AppTheme"/>
+        <activity android:name=".login.ALogin" android:theme="@style/AppTheme" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.ALogin"/>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".AEventInfo" />
-        <activity android:name=".profile.AProfile" />
-        <activity android:name=".profile.AProfileEdit" />
-        <activity android:name=".AEventCollection" />
-        <activity android:name=".Indstillinger" />
-        <activity android:name=".AEventSwiper" />
+        <activity android:name=".profile.AProfile" android:theme="@style/AppTheme"/>
+        <activity android:name=".profile.AProfileEdit" android:theme="@style/AppTheme"/>
+        <activity android:name=".Indstillinger" android:theme="@style/AppTheme"/>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -44,10 +47,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

@@ -30,10 +30,9 @@ public class DummyData {
         ArrayList<String> event3Pictures = new ArrayList<>();
         event3Pictures.add("https://upload.wikimedia.org/wikipedia/commons/6/6b/Roskilde_Cathedral_aerial.jpg");
 
-
-        EventDTO event1 = new EventDTO(user, participants, "Come and grab something to eat with us", "Group Dinner", new DateDTO(8,8,2020),"Food", "Denmark", "5-15$",event1Pictures);
-        EventDTO event2 = new EventDTO(user, participants, "Lets play some rocket league please", "Rocket League", new DateDTO(8,8,2020),"Entertainment", "Gaming Nation", "Free",event2Pictures);
-        EventDTO event3 = new EventDTO(user, participants, "Discover Roskilde with the bois", "Roskilde Adventure ", new DateDTO(8,8,2020),"City", "Denmark", "Free",event3Pictures);
+        EventDTO event1 = new EventDTO(user, participants, "Come and grab something to eat with us", "Group Dinner", new DateDTO("1/2/21-1/3/1","2:12","4:15"),"Food", "Denmark", "5-15$",event1Pictures);
+        EventDTO event2 = new EventDTO(user, participants, "Lets play some rocket league please", "Rocket League", new DateDTO("1/2/21-1/3/1","2:12","4:15"),"Game", "Gaming Nation", "Free",event2Pictures);
+        EventDTO event3 = new EventDTO(user, participants, "Discover Roskilde with the bois", "Roskilde Adventure ", new DateDTO("1/2/21-1/3/1","2:12","4:15"),"Culture", "Denmark", "Free",event3Pictures);
 
 
         eventList.add(event1);

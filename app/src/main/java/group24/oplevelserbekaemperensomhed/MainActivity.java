@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -15,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Fragment fragmentHome;
     Fragment fragmentProfile;
+    Fragment fragmentCreateEvent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
+        fragmentCreateEvent = new FragmentCreateEvent();
 
+        final Intent intent = new Intent(this, ActivityCreateEvent.class);
 
         //This sets the first active fragment
         changeFragment(fragmentHome);
@@ -37,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
                     changeFragment(fragmentHome);
 
                 }else if (item.getItemId() == R.id.search){
+
+                } else if (item.getItemId() == R.id.create_event){
+
+                    startActivity(intent);
 
                 } else if(item.getItemId() == R.id.navlist){
 

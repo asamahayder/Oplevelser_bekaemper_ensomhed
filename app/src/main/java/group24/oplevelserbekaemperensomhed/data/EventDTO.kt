@@ -10,7 +10,7 @@ data class EventDTO (
     val eventDescription: String,
     val eventTitle: String,
     val eventDate: DateDTO,
-    val Category: String,
+    val category: String,
     val address: String,
     val price: String,
     val pictures: ArrayList<String>
