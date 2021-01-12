@@ -16,9 +16,10 @@
     <string name="fragment_create">Fragment Create</string>
     <string name="fragment_list">Fragment List</string>
     <string name="fragment_profile">Fragment Profile</string>
+    <string name="fragment_event">Fragment Event</string>
 
     <!-- text strings -->
     <string name="about">About</string>
-    <string name="search_hint">Search</string>
+    <string name="search_hint">Search here …</string>
 
 </resources>

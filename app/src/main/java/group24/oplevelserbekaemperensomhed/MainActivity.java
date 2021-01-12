@@ -10,7 +10,8 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import group24.oplevelserbekaemperensomhed.search.FragmentSearch;
+import group24.oplevelserbekaemperensomhed.view.profile.FragmentProfile;
+import group24.oplevelserbekaemperensomhed.view.search.FragmentSearchHome;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
-        fragmentSearch = new FragmentSearch();
+        fragmentSearch = new FragmentSearchHome();
 
 
         //This sets the first active fragment
@@ -66,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
         //    transaction.addToBackStack(tag);
         //}
         transaction.commit();
+    }
+
+    public void slideActivityInto(){
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    public void slideActivityOut(){
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 }

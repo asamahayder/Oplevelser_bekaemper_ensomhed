@@ -12,21 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.AStart" >
+        <activity android:name=".view.ActivityFragmentHandler"></activity>
+        <activity android:name=".view.search.ActivitySearch" />
+        <activity android:name=".view.login.ActivityStart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.ALogin"/>
+        <activity android:name=".view.login.ActivityLogin" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".AEventInfo" />
-        <activity android:name=".profile.AProfile" />
-        <activity android:name=".profile.AProfileEdit" />
-        <activity android:name=".AEventCollection" />
-        <activity android:name=".Indstillinger" />
-        <activity android:name=".AEventSwiper" />
+        <activity android:name=".view.profile.AProfileEdit" />
+        <activity android:name=".view.ActivitySettings" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -44,10 +42,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

@@ -14,12 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
-import group24.oplevelserbekaemperensomhed.profile.ProfilePicSliderPagerAdapter;
+import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 
 
 public class FragmentEventInfo extends Fragment {
@@ -41,7 +38,7 @@ public class FragmentEventInfo extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_event, container, false);
 
         eventNameTextView = v.findViewById(R.id.eventName);
         eventPlaceTextView = v.findViewById(R.id.aevent_info_address);
@@ -99,7 +96,7 @@ public class FragmentEventInfo extends Fragment {
         tabLayout = view.findViewById(R.id.event_info_tablayout);
         tabLayout.setupWithViewPager(mPager, true);
         tabLayout.setTabTextColors(Color.RED, Color.WHITE);
-        ProfilePicSliderPagerAdapter pagerAdapter = new ProfilePicSliderPagerAdapter(getChildFragmentManager(), event.getPictures());
+        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), event.getPictures(), R.layout.fragment_profile_event_1_viewpager, null);
         mPager.setAdapter(pagerAdapter);
 
         if (tabLayout.getTabCount() == 1){
