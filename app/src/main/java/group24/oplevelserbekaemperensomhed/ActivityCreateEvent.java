@@ -71,6 +71,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     ImageView submitButton;
+    ImageView backButton;
     LinearLayout submitButton2;
     String address = "";
 
@@ -125,6 +126,14 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         editTextAbout = findViewById(R.id.editAbout);
         submitButton = findViewById(R.id.create_event_submitButton);
         submitButton2 = findViewById(R.id.create_event_submit2);
+        backButton = findViewById(R.id.a_create_event_backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //Chips
         chipCulture = findViewById(R.id.chipCulture);
