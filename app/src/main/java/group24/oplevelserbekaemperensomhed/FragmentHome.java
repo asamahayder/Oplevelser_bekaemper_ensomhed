@@ -21,6 +21,7 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
 
     private ViewPager2 viewPager;
     private EventsAdapter adapter;
+    private DummyData dummyData;
 
     public FragmentHome() {
         // Required empty public constructor
@@ -37,12 +38,23 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("*********************************************************************************************************");
+        dummyData = new DummyData();
+        adapter = new EventsAdapter(dummyData.getList(), this);
+        viewPager.setAdapter(adapter);
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DummyData data = new DummyData();
-        adapter = new EventsAdapter(data.getList(), this);
+        dummyData = new DummyData();
+        adapter = new EventsAdapter(dummyData.getList(), this);
     }
+
 
     @Override
     public void onEventItemClick(int position, EventDTO event, View title) {

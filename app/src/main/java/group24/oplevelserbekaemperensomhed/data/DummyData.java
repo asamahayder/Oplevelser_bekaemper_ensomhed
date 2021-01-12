@@ -47,15 +47,16 @@ public class DummyData {
         ArrayList<String> event3Pictures = new ArrayList<>();
         event3Pictures.add("https://upload.wikimedia.org/wikipedia/commons/6/6b/Roskilde_Cathedral_aerial.jpg");
 
-
-        EventDTO event1 = new EventDTO(user, participants, "Come and grab something to eat with us", "Group Dinner", new DateDTO(8,8,2020),13,"Food", "Denmark", "5-15$",event1Pictures);
-        EventDTO event2 = new EventDTO(user2, participants, "Lets play some rocket league please", "Rocket League", new DateDTO(8,8,2020),13,"Entertainment", "Gaming Nation", "Free",event2Pictures);
-        EventDTO event3 = new EventDTO(user3, participants, "Discover Roskilde with the bois", "Roskilde", new DateDTO(8,8,2020),13,"City", "Denmark", "Free",event3Pictures);
+        EventDTO event1 = new EventDTO(user, participants, "Come and grab something to eat with us", "Group Dinner", new DateDTO("1/2/21-1/3/1","2:12","4:15"), 13,"Food", "Denmark", "5-15$",event1Pictures);
+        EventDTO event2 = new EventDTO(user2, participants, "Lets play some rocket league please", "Rocket League", new DateDTO("1/2/21-1/3/1","2:12","4:15"), 13,"Game", "Gaming Nation", "Free",event2Pictures);
+        EventDTO event3 = new EventDTO(user3, participants, "Discover Roskilde with the bois", "Roskilde Adventure ", new DateDTO("1/2/21-1/3/1","2:12","4:15"), 13,"Culture", "Denmark", "Free",event3Pictures);
 
 
         eventList.add(event1);
         eventList.add(event2);
         eventList.add(event3);
+
+        eventList.addAll(localData.getUserCreatedEvents());
 
         for (int i = 0; i < 20; i++) {
             String category = "";
@@ -69,13 +70,13 @@ public class DummyData {
                     if (counter == 3) {
                         counter = 1;
                     }
-                    eventN = new EventDTO(user,participants,"TESTING1","TESTING1",new DateDTO(12,12,2021),13,category,"FAROE", "1M gp", event2Pictures);
+                    eventN = new EventDTO(user,participants,"TESTING1","TESTING1",new DateDTO("1/2/21-1/3/1","2:12","4:15"),13,category,"FAROE", "1M gp", event2Pictures);
                 }
                 else if (counter == 1) {
-                    eventN = new EventDTO(user2,participants,"TESTING2","TESTING2",new DateDTO(12,12,2021),13,category,"FAROE", "1M gp", event1Pictures);
+                    eventN = new EventDTO(user2,participants,"TESTING2","TESTING2",new DateDTO("1/2/21-1/3/1","2:12","4:15"),13,category,"FAROE", "1M gp", event1Pictures);
                 }
                 else if (counter == 2){
-                    eventN = new EventDTO(user3,participants,"TESTING3","TESTING3",new DateDTO(12,12,2021),13,category,"FAROE", "1M gp", event3Pictures);
+                    eventN = new EventDTO(user3,participants,"TESTING3","TESTING3",new DateDTO("1/2/21-1/3/1","2:12","4:15"),13,category,"FAROE", "1M gp", event3Pictures);
                 }
                 counter++;
                 eventList.add(eventN);
@@ -114,14 +115,19 @@ public class DummyData {
         bannerList.add("https://www.stockvault.net/data/2008/09/02/106231/thumb16.jpg");
         bannerList.add("https://media.istockphoto.com/photos/perfect-wiev-of-the-sunset-behaind-vestrahorn-mountain-picture-id861625452?k=6&m=861625452&s=612x612&w=0&h=ImXJ9QVeoda-uwDgVe8IyiEUAfWtWdNdU4SfDBPQxHk=");
         bannerList.add("https://c4.wallpaperflare.com/wallpaper/356/733/263/landscape-stock-huawei-mediapad-wallpaper-preview.jpg");
-    }
 
-    public List<SearchHomeItem> getSearchHomeList() { return searchHomeList; }
+    }
 
     public ArrayList<EventDTO> getList(){
         return eventList;
     }
 
+    public void addToEventList(EventDTO eventDTO){
+        eventList.add(eventDTO);
+    }
+
     public List<String> getBannerList() { return bannerList; }
+
+    public List<SearchHomeItem> getSearchHomeList() { return searchHomeList; }
 
 }

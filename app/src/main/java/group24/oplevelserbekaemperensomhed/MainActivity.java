@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragmentHome;
     Fragment fragmentProfile;
     Fragment fragmentSearch;
+    Fragment fragmentCreateEvent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
         fragmentSearch = new FragmentSearchHome();
+        fragmentCreateEvent = new FragmentCreateEvent();
 
+        final Intent intent = new Intent(this, ActivityCreateEvent.class);
 
         //This sets the first active fragment
         changeFragment(fragmentHome, getString(R.string.fragment_home));
@@ -43,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if (item.getItemId() == R.id.search){
                     changeFragment(fragmentSearch, getString(R.string.fragment_search));
+
+                } else if (item.getItemId() == R.id.create_event){
+
+                    startActivity(intent);
 
                 } else if(item.getItemId() == R.id.navlist){
 
