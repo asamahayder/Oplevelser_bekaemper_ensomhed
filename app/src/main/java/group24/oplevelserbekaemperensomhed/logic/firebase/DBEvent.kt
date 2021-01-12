@@ -4,7 +4,7 @@ data class DBEvent (
     val address: String = "",
     val category: String = "",
     val eventCreator: String = "",
-    val eventDate: List<Int> = emptyList(),
+    val eventDate: List<String> = emptyList(),
     val eventDescription: String = "",
     val eventLikes: Int = -1,
     val eventTitle: String = "",

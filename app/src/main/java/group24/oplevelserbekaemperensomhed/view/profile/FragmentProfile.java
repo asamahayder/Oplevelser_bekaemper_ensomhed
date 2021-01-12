@@ -42,6 +42,8 @@ public class FragmentProfile extends Fragment {
     private ImageView editProfileButton;
     private ImageView backButton;
 
+    private String TAG = "fragmentProfile";
+
     public FragmentProfile() {
         // Required empty public constructor
     }
@@ -71,7 +73,7 @@ public class FragmentProfile extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             userData = bundle.getParcelable("profile");
-            if (bundle.getParcelable("other") != null) {
+            if (bundle.getString("other") != null) {
                 editProfileButton.setVisibility(View.GONE);
                 backButton.setVisibility(View.VISIBLE);
                 backButton.setOnClickListener(new View.OnClickListener() {

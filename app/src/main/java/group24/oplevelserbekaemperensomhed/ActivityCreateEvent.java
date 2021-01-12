@@ -51,7 +51,7 @@ import group24.oplevelserbekaemperensomhed.data.DateDTO;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
-import group24.oplevelserbekaemperensomhed.profile.ProfilePicSliderPagerAdapter;
+import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 
 public class ActivityCreateEvent extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -100,7 +100,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Uri imageUri;
     Chip getImageButton;
     ArrayList<String> pictures = new ArrayList<>();
-    ProfilePicSliderPagerAdapter adapter;
+    ViewPagerAdapter adapter;
     ViewPager viewPager = null;
 
     @Override
@@ -162,7 +162,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
         getImageButton = findViewById(R.id.create_event_choose_pictures_button);
 
-        adapter = new ProfilePicSliderPagerAdapter(getSupportFragmentManager(), pictures);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_profile_event_1_viewpager, null);
 
 
         handleTimeAndDateFields();
@@ -385,7 +385,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         ArrayList<UserDTO> participants = new ArrayList<>();
         participants.add(user);
 
-        EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(), dateDTO, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(), pictures);
+        EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(), dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(), pictures);
         Toast.makeText(getApplicationContext(),"Created event! :D",Toast.LENGTH_SHORT).show();
         LocalData localData = LocalData.INSTANCE;
         localData.getUserCreatedEvents().add(eventDTO);
@@ -474,7 +474,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 constraintSet.applyTo(constraintLayout);
             }else{
                 System.out.println("*****************************IM NOOOOOOOT NUUUUUUUULLLLL************************");
-                adapter = new ProfilePicSliderPagerAdapter(getSupportFragmentManager(), pictures);
+                adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_search_home_1_viewpager,null);
                 viewPager.setAdapter(adapter);
             }
         }

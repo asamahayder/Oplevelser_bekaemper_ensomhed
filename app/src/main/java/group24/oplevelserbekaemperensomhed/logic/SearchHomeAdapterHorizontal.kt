@@ -92,6 +92,7 @@ class SearchHomeAdapterHorizontal(private var mContext: Context, val context: Fr
         val fragment: Fragment
         fragment = if (bundleTag == "profile"){
             bundle.putParcelable(bundleTag, currentItem.eventCreator)
+            bundle.putString("other","other")
             FragmentProfile()
         } else {
             bundle.putParcelable(bundleTag, currentItem)
