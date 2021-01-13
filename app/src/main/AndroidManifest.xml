@@ -13,35 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Material">
-        <activity android:name=".view.login.ActivityForgotPassword"></activity>
+        <activity android:name=".view.login.ActivityForgotPassword"/>
         <activity android:name=".view.login.ActivityRegisterUserDetails" />
-        <activity android:name=".view.ActivityFragmentHandler" />
+        <activity android:name=".view.ActivityFragmentHandler" android:theme="@style/AppTheme" />
         <activity android:name=".view.search.ActivitySearch" />
-        <activity
-            android:name=".ActivityCreateEvent"
-            android:label="@string/title_activity_create_event" />
-        <activity
-            android:name=".view.login.ActivityStart"
-            android:theme="@style/AppTheme">
+        <activity android:name=".ActivityCreateEvent" android:label="@string/title_activity_create_event" />
+        <activity android:name=".view.login.ActivityStart" android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.login.ActivityLogin"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".view.profile.AProfileEdit"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".view.ActivitySettings"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".view.login.ActivityLogin" android:theme="@style/AppTheme" />
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".view.profile.AProfileEdit" android:theme="@style/AppTheme" />
+        <activity android:name=".view.ActivitySettings" android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -59,13 +46,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

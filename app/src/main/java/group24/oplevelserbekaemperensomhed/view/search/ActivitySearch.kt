@@ -2,6 +2,7 @@ package group24.oplevelserbekaemperensomhed.view.search
 
 import android.os.Bundle
 import android.text.InputType
+import android.util.EventLog
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -84,7 +85,7 @@ class ActivitySearch : AppCompatActivity() {
         })
     }
 
-    private fun firebaseQuery() {
+    /*private fun firebaseQuery() {
         db = FirebaseDAO()
         Log.d(TAG, "Getting all events")
         db.getAllEvents(object : MyCallBack {
@@ -110,6 +111,22 @@ class ActivitySearch : AppCompatActivity() {
                 }
             }
         })
+    }*/
+
+    private fun firebaseQuery() {
+        db = FirebaseDAO()
+        Log.d(TAG, "Getting all events")
+
+        db.getEvents(object :MyCallBack{
+            override fun onCallBack(`object`: Any) {
+                val events = `object` as ArrayList<EventDTO>
+                localData.searchResultsEvents = events
+                adapter = SearchAdapter(events, context)
+                recyclerView.adapter = adapter
+                Log.d(TAG, "Updating adapter")
+            }
+        })
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

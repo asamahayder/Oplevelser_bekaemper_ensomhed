@@ -49,6 +49,8 @@ import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
+import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 
 public class ActivityCreateEvent extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -383,11 +385,27 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         participants.add(user);
 
         EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(), dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(), pictures);
-        Toast.makeText(getApplicationContext(),"Created event! :D",Toast.LENGTH_SHORT).show();
-        LocalData localData = LocalData.INSTANCE;
-        localData.getUserCreatedEvents().add(eventDTO);
-        finish();
+        //Toast.makeText(getApplicationContext(),"Created event! :D",Toast.LENGTH_SHORT).show();
+        //LocalData localData = LocalData.INSTANCE;
+        //localData.getUserCreatedEvents().add(eventDTO);
 
+        FirebaseDAO firebaseDAO = new FirebaseDAO();
+        firebaseDAO.createEvent(eventDTO, new MyCallBack() {
+            @Override
+            public void onCallBack(@NotNull Object object) {
+                String message = (String)object;
+                onEventCreated(message);
+            }
+        });
+
+    }
+
+    private void onEventCreated(String message){
+        if(message.equals("success")){
+            finish();
+        }else{
+            Toast.makeText(getApplicationContext(),"Something went wrong with firebase",Toast.LENGTH_SHORT).show();
+        }
     }
 
     //Called when we want to search for address
