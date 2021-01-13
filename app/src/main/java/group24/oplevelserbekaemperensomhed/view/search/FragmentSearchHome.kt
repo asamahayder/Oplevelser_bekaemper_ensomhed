@@ -94,55 +94,18 @@ class FragmentSearchHome : Fragment() {
         viewPager.adapter = pagerAdapter
     }
 
-    private fun firebaseQueryEvents() {
-        Log.d(TAG, "Querying firebase for events")
-        db.getAllEvents(object : MyCallBack {
-            override fun onCallBack(dbEvents: Any) {
-                val eventDataList = dbEvents as ArrayList<DBEvent>
-                for (dbEvent in eventDataList) {
-                    getEventCreators(dbEvent)
-                }
-            }
-
-            private fun getEventCreators(dbEvent: DBEvent) {
-                db.getUser(dbEvent.eventCreator, object : MyCallBack {
-                    override fun onCallBack(`dbUser`: Any) {
-                        val userData = dbUser as DBUser
-                        val event = createEvent(userData)
-                        events.add(event)
-                        sortedCategoriesList = sortEventsByCategory(events)
-                        handleRecyclerView()
-                        Log.d(TAG, "Firebase query for events complete")
-                    }
-
-                    private fun createEvent(userData: DBUser): EventDTO {
-                        val user = UserDTO(
-                            userData.name, userData.age, userData.address, userData.occupation,
-                            userData.education, userData.about, userData.gender, null,
-                            userData.profilePictures.toCollection(ArrayList())
-                        )
-                        val event = EventDTO(
-                            user,
-                            null,
-                            dbEvent.eventDescription,
-                            dbEvent.eventTitle,
-                            DateDTO(
-                                dbEvent.eventDate[0],
-                                dbEvent.eventDate[1],
-                                dbEvent.eventDate[2]
-                            ),
-                            dbEvent.eventLikes,
-                            dbEvent.category,
-                            dbEvent.address,
-                            dbEvent.price,
-                            dbEvent.pictures.toCollection(ArrayList())
-                        )
-                        return event
-                    }
-                })
+    private fun firebaseQueryEvents(){
+        db.getEvents(object: MyCallBack{
+            override fun onCallBack(`object`: Any) {
+                val list:ArrayList<EventDTO> = `object` as ArrayList<EventDTO>
+                sortedCategoriesList = sortEventsByCategory(list)
+                handleRecyclerView()
             }
         })
     }
+
+
+
 
     private fun handleRecyclerView() {
         adapter = SearchHomeAdapterVertical(this@FragmentSearchHome, sortedCategoriesList)

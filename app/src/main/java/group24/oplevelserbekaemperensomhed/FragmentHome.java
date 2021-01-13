@@ -1,6 +1,5 @@
 package group24.oplevelserbekaemperensomhed;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,16 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 import group24.oplevelserbekaemperensomhed.data.DummyData;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
+import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 
 public class FragmentHome extends Fragment implements EventItemClickListener{
 
     private ViewPager2 viewPager;
-    private EventsAdapter adapter;
+    private EventsAdapter adapter = null;
     private DummyData dummyData;
+    ArrayList<EventDTO> events;
 
     public FragmentHome() {
         // Required empty public constructor
@@ -37,22 +41,49 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
         return view;
     }
 
-    @Override
+    /*@Override
     public void onResume() {
         super.onResume();
         System.out.println("*********************************************************************************************************");
         dummyData = new DummyData();
-        adapter = new EventsAdapter(dummyData.getList(), this);
-        viewPager.setAdapter(adapter);
+        if (adapter == null){
+            FirebaseDAO firebaseDAO = new FirebaseDAO();
+            firebaseDAO.getEvents(new MyCallBack() {
+                @Override
+                public void onCallBack(@NotNull Object object) {
+                    ArrayList<EventDTO> events = (ArrayList<EventDTO>)object;
+                    initializeAdapter(events);
+                    viewPager.setAdapter(adapter);
+                }
+            });
+        }
 
-    }
+    }*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dummyData = new DummyData();
-        adapter = new EventsAdapter(dummyData.getList(), this);
+        final FirebaseDAO firebaseDAO = new FirebaseDAO();
+
+        events = new ArrayList<>();
+        adapter = new EventsAdapter(events, this);
+
+        //dummyData = new DummyData();
+        firebaseDAO.getEvents(new MyCallBack() {
+            @Override
+            public void onCallBack(@NotNull Object object) {
+                ArrayList<EventDTO> events = (ArrayList<EventDTO>)object;
+                updateAdapter(events);
+            }
+        });
+
+    }
+
+    private void updateAdapter(ArrayList<EventDTO> events){
+        this.events.clear();
+        this.events.addAll(events);
+        adapter.notifyDataSetChanged();
     }
 
 
