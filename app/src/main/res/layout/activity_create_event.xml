@@ -23,7 +23,7 @@
                 android:layout_height="55sp">
 
                 <ImageView
-                    android:id="@+id/aevent_info_backButton"
+                    android:id="@+id/activity_register_backButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingStart="16dp"
@@ -55,7 +55,7 @@
                 android:elevation="10dp">
 
                 <ImageView
-                    android:id="@+id/create_event_imageView"
+                    android:id="@+id/activity_register_profileImage"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scaleType="fitCenter"
@@ -71,7 +71,7 @@
                     android:id="@+id/create_event_select_picture"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/create_event_imageView"
+                    android:layout_below="@id/activity_register_profileImage"
                     android:text="Select Pictures"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
@@ -85,7 +85,7 @@
 
 
             <EditText
-                android:id="@+id/editEventTitle"
+                android:id="@+id/create_event_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

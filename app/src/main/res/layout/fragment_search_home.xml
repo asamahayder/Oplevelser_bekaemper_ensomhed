@@ -6,84 +6,93 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".view.search.FragmentSearchHome">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/fsearch_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:orientation="vertical"
-            android:background="@drawable/outline_border_under">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:clickable="true"
-                android:weightSum="4"
-                android:background="@drawable/white_rounded_corner"
-                android:focusable="true">
+                android:layout_height="45dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:background="@drawable/outline_border_under">
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:weightSum="4"
+                    android:background="@drawable/white_rounded_corner"
+                    android:focusable="true">
 
-                    <SearchView
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:inputType="none"
-                        android:iconifiedByDefault="false"
-                        android:queryHint="@string/search_hint"
-                        android:searchIcon="@drawable/ic_search2" />
+                        android:layout_height="match_parent">
 
-                    <View
-                        android:id="@+id/fsearch_home_searchbutton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        <SearchView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:inputType="none"
+                            android:iconifiedByDefault="false"
+                            android:queryBackground="@android:color/transparent"
+                            android:queryHint="@string/search_hint"
+                            android:searchIcon="@drawable/ic_search2" />
 
-                </FrameLayout>
+                        <View
+                            android:id="@+id/fsearch_home_searchbutton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:focusable="true">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/fsearch_viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@android:color/white"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fsearch_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/fragment_search_home_1_recyclerview"/>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:orientation="vertical"
-                android:focusable="true">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/fsearch_viewpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@android:color/white"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fsearch_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:listitem="@layout/fragment_search_home_1_recyclerview"/>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-    </LinearLayout>
 </FrameLayout>

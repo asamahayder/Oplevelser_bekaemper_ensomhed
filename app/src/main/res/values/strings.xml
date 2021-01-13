@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- application information -->
     <string name="appName">Eventer</string>
+    <string name="appDescription">Experiences to fight loneliness</string>
     <string name="facebook_app_id">395988721785201</string>
     <string name="fb_login_protocol_scheme">fb395988721785201</string>
 
@@ -21,9 +22,20 @@
     <!-- text strings -->
     <string name="about">About</string>
     <string name="search_hint">Search here …</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="register_string1">Not a member? </string>
+    <string name="register_string2">Join now</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="log_in">Log in</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="choose_profile_picture_max_8">Choose Profile Picture (max 8)</string>
+    <string name="day">Day*</string>
+    <string name="month">Month*</string>
+    <string name="year">Year*</string>
+    <string name="address">Address</string>
+    <string name="set_an_address">Set an address*</string>
 
     <!--API key-->
     <string name="api_key">AIzaSyDUwkNv3lmgnANbJC09i-RiYGTlxdDXqyk</string>
@@ -39,8 +51,16 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="first_name">First Name*</string>
+    <string name="last_name">Last Name</string>
+    <string name="occupation">Occupation</string>
+    <string name="your_occupation">Your occupation*</string>
+    <string name="education">Education</string>
+    <string name="your_place_of_study">Your place of study*</string>
+    <string name="your_description">Your description</string>
+    <string name="name">Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
 
 </resources>

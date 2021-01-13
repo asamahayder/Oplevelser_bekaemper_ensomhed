@@ -30,19 +30,13 @@ import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 
 public class FragmentProfile extends Fragment {
 
-    private ViewPager mPager;
-    private TabLayout tabLayout;
     private ArrayList<TextView> profileTextViews;
-    private ArrayList<ImageView> icons;
 
     private UserDTO userData;
 
     private LinearLayout linearLayout;
 
-    private ImageView editProfileButton;
-    private ImageView backButton;
-
-    private String TAG = "fragmentProfile";
+    private final String TAG = "fragmentProfile";
 
     public FragmentProfile() {
         // Required empty public constructor
@@ -57,7 +51,6 @@ public class FragmentProfile extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
         profileTextViews = new ArrayList<>();
-        icons = new ArrayList<>();
 
         initializeView(v);
 
@@ -66,9 +59,9 @@ public class FragmentProfile extends Fragment {
 
     private void initializeView(View view){
         linearLayout = view.findViewById(R.id.fragment_profile_infoLinearLayout);
-        editProfileButton = view.findViewById(R.id.fragment_profile_editButton);
+        ImageView editProfileButton = view.findViewById(R.id.fragment_profile_editButton);
         profileTextViews.add((TextView) view.findViewById(R.id.fragment_profile_nameAge));
-        backButton = view.findViewById(R.id.fragment_profile_backButton);
+        ImageView backButton = view.findViewById(R.id.fragment_profile_backButton);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -105,8 +98,8 @@ public class FragmentProfile extends Fragment {
 
 
     private void handlePfpSlider(View view){
-        mPager = view.findViewById(R.id.fragment_profile_viewpager);
-        tabLayout = view.findViewById(R.id.fragment_profile_tabLayout);
+        ViewPager mPager = view.findViewById(R.id.fragment_profile_viewpager);
+        TabLayout tabLayout = view.findViewById(R.id.fragment_profile_tabLayout);
         tabLayout.setupWithViewPager(mPager, true);
         tabLayout.setTabTextColors(Color.RED, Color.WHITE);
         assert getFragmentManager() != null;
@@ -118,7 +111,7 @@ public class FragmentProfile extends Fragment {
         }
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            View tab = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(i);
+            View tab = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(i);
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
             p.setMargins(0,0,10,0);
             tab.requestLayout();

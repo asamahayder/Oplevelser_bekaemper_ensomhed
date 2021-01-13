@@ -8,19 +8,21 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.logic.FacebookAuthorization
-import group24.oplevelserbekaemperensomhed.logic.GoogleAuthorization
 
 
 class ActivityLogin : AppCompatActivity() {
 
-    private lateinit var googleAuth: GoogleAuthorization
+    private lateinit var loginButton: Button
+    private lateinit var forgotPassButton: TextView
+    private lateinit var registerButton1: TextView
+    private lateinit var registerButton2: TextView
+
     private lateinit var facebookAuth: FacebookAuthorization
     private lateinit var firebaseAuth: FirebaseAuth
 
@@ -30,7 +32,7 @@ class ActivityLogin : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         initializeView()
 
-        val testButton: Button = findViewById(R.id.alogin_testbuutton)
+        val testButton: Button = findViewById(R.id.activity_login_testbuutton)
         testButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -40,31 +42,39 @@ class ActivityLogin : AppCompatActivity() {
     }
 
     private fun initializeView() {
+        //Initialize views
+        loginButton = findViewById(R.id.activity_login_loginButton)
+        forgotPassButton = findViewById(R.id.activity_login_forgotPasswordButton)
+        registerButton1 = findViewById(R.id.activity_login_registerButton1)
+        registerButton2 = findViewById(R.id.activity_login_registerButton2)
         //Handles authorization via firebase
-        googleAuth = GoogleAuthorization(this, NEWACTIVITY)
         facebookAuth = FacebookAuthorization(this, NEWACTIVITY)
         firebaseAuth = FirebaseAuth.getInstance()
 
         //Handles button animations and sign in initialization
-        onTouchListenerAnimation(findViewById(R.id.alogin_fbButton))
-        onTouchListenerAnimation(findViewById(R.id.alogin_gButton))
+        onTouchListenerAnimation(findViewById(R.id.activity_login_fbButton))
+
+        //Handles activityChange when clicking register
+        registerButton1.setOnClickListener {
+            val intent = Intent(this, REGISTERACTIVITY)
+            startActivity(intent)
+        }
+        registerButton2.setOnClickListener {
+            val intent = Intent(this, REGISTERACTIVITY)
+            startActivity(intent)
+        }
+
+        //Handles ActivityChange when clicking forgotten password
+        forgotPassButton.setOnClickListener {
+            val intent = Intent(this, FORGOTPASSWORDACTIVITY)
+            startActivity(intent)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "requestCode: $resultCode resultCode: $resultCode")
-        if (requestCode == googleAuth.RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                googleAuth.firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                print(e.stackTrace)
-            }
-        }
-        else {
-            facebookAuth.callBackManager.onActivityResult(requestCode, resultCode, data)
-        }
+        facebookAuth.callBackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -79,13 +89,9 @@ class ActivityLogin : AppCompatActivity() {
                 if (event.action == MotionEvent.ACTION_UP) {
                     v.background.clearColorFilter()
                     v.invalidate()
-                    if (button == findViewById(R.id.alogin_fbButton)) {
+                    if (button == findViewById(R.id.activity_login_fbButton)) {
                         Log.d(TAG, "Clicking on Facebook Login")
                         facebookAuth.signIn()
-                    }
-                    if (button == findViewById(R.id.alogin_gButton)) {
-                        Log.d(TAG, "Clicking on Google Login")
-                        googleAuth.signIn()
                     }
                 }
             }
@@ -96,5 +102,7 @@ class ActivityLogin : AppCompatActivity() {
     companion object {
         private const val TAG = "login"
         private val NEWACTIVITY = MainActivity::class.java
+        private val REGISTERACTIVITY = ActivityRegisterUserDetails::class.java
+        private val FORGOTPASSWORDACTIVITY = ActivityForgotPassword::class.java
     }
 }

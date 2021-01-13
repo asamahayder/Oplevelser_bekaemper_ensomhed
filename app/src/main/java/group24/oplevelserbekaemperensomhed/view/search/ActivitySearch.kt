@@ -1,20 +1,15 @@
 package group24.oplevelserbekaemperensomhed.view.search
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.InputType
 import android.util.Log
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.EventDTO
@@ -32,6 +27,7 @@ class ActivitySearch : AppCompatActivity() {
     private lateinit var adapter: SearchAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private lateinit var db: FirebaseDAO
     private val localData = LocalData
@@ -46,9 +42,16 @@ class ActivitySearch : AppCompatActivity() {
 
     private fun initializeView() {
         adapter = SearchAdapter(events, context)
-        searchView = findViewById(R.id.activity_search_1_searchview)
-        recyclerView = findViewById(R.id.activity_search_1_recyclerview)
+        searchView = findViewById(R.id.activity_search_searchview)
+        recyclerView = findViewById(R.id.activity_search_recyclerview)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
+        swipeRefresh = findViewById(R.id.activity_search_refresh)
+        swipeRefresh.setOnRefreshListener {
+            events.clear()
+            searchView.setQuery("",false)
+            firebaseQuery()
+            swipeRefresh.isRefreshing = false
+        }
 
         if (intent.extras != null) {
             if (intent.extras!!["eventList"] != null) {
@@ -92,9 +95,11 @@ class ActivitySearch : AppCompatActivity() {
                     db.getUser(dbEvent.eventCreator, object : MyCallBack {
                         override fun onCallBack(`dbUser`: Any) {
                             val userData = dbUser as DBUser
-                            val user = UserDTO(userData.name,userData.age,userData.address,userData.occupation,userData.education,userData.about,userData.gender,null,userData.profilePictures.toCollection(ArrayList()))
+                            val user = UserDTO(userData.name,userData.age,userData.address,userData.occupation,userData.education,userData.about,userData.gender,null,
+                                userData.profilePictures.toCollection(ArrayList()))
                             val event = EventDTO(user,null,dbEvent.eventDescription,dbEvent.eventTitle,
-                                DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
+                                DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,
+                                dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
                             events.add(event)
                             localData.searchResultsEvents = events
                             adapter = SearchAdapter(events, context)

@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.*
@@ -28,6 +29,7 @@ class FragmentSearchHome : Fragment() {
     private lateinit var searchActivityButton: View
     private lateinit var viewPager: ViewPager
     private lateinit var recyclerView: RecyclerView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private val db = FirebaseDAO()
     private val localData = LocalData
@@ -52,11 +54,20 @@ class FragmentSearchHome : Fragment() {
         searchActivityButton = view!!.findViewById(R.id.fsearch_home_searchbutton)
         viewPager = view!!.findViewById(R.id.fsearch_viewpager)
         recyclerView = view!!.findViewById(R.id.fsearch_recyclerview)
+        swipeRefresh = view!!.findViewById(R.id.fsearch_refresh)
         searchActivityButton.setOnClickListener {
             Log.d(TAG, "Search Activity clicked")
             val intent = Intent(activity, ActivitySearch::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
+        }
+        swipeRefresh.setOnRefreshListener {
+            events.clear()
+            bannerURLs.clear()
+            bannerPictures.clear()
+            firebaseQueryBanners()
+            firebaseQueryEvents()
+            swipeRefresh.isRefreshing = false
         }
         if (localData.searchResultsEvents.size == 0) {
             firebaseQueryEvents()
@@ -80,7 +91,9 @@ class FragmentSearchHome : Fragment() {
                     bannerPictures.add(banner.picture)
                     bannerURLs.add(banner.url)
                 }
-                handleViewPager()
+                if (viewPager.isAttachedToWindow) {
+                    handleViewPager()
+                }
                 localData.searchResultsBanners = bannerDataList
                 Log.d(TAG, "Firebase query for banners complete")
             }
@@ -88,9 +101,7 @@ class FragmentSearchHome : Fragment() {
     }
 
     private fun handleViewPager() {
-        val pagerAdapter = ViewPagerAdapter(
-            childFragmentManager,
-            bannerPictures, R.layout.fragment_search_home_1_viewpager, bannerURLs)
+        val pagerAdapter = ViewPagerAdapter(childFragmentManager, bannerPictures, R.layout.fragment_search_home_1_viewpager, bannerURLs)
         viewPager.adapter = pagerAdapter
     }
 

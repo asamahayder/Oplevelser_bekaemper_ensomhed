@@ -29,7 +29,7 @@ class FacebookAuthorization(private val aLogin: ActivityLogin, private val newAc
         Log.d(TAG, "FacebookAuthorization: configuring")
         firebaseAuth = FirebaseAuth.getInstance()
         callBackManager = CallbackManager.Factory.create()
-        fb_button_widget = aLogin.findViewById(R.id.alogin_fbButton_widget)
+        fb_button_widget = aLogin.findViewById(R.id.activity_login_fbButton_widget)
         fb_button_widget.setPermissions(readPermissions)
         fb_button_widget.loginBehavior = LoginBehavior.WEB_ONLY
         signInOutCallback()

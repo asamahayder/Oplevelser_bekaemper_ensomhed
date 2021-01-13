@@ -22,13 +22,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.viewpager.widget.ViewPager;
 
 import android.provider.MediaStore;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -38,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,7 +115,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         switchAllDay = findViewById(R.id.switch_all_day);
         switchPrice = findViewById(R.id.switch_price);
         switchOnline = findViewById(R.id.switch_online);
-        editTextTitle = findViewById(R.id.editEventTitle);
+        editTextTitle = findViewById(R.id.create_event_title);
         editTextStart = findViewById(R.id.editTextStart);
         editTextEnd = findViewById(R.id.editTextEnd);
         editTextDate = findViewById(R.id.editTextDate);
