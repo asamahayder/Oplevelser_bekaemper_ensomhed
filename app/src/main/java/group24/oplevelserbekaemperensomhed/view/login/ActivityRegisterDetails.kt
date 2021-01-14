@@ -1,6 +1,8 @@
 package group24.oplevelserbekaemperensomhed.view.login
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.media.MediaSyncEvent.createEvent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -31,6 +33,7 @@ import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter
 import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener
 import kotlinx.android.synthetic.main.activity_register_details.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -51,6 +54,8 @@ class ActivityRegisterDetails : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val localData = LocalData
     private val db = FirebaseDAO()
+
+    private val picturesAsURIs: ArrayList<Uri> = ArrayList()
 
     private var facebookCredential: AuthCredential? = null
 
@@ -230,9 +235,69 @@ class ActivityRegisterDetails : AppCompatActivity() {
             ).show()
             return true
         }
+
+        // Saves the data in the text fields to the user object
+        if (!saveUserDetailsToLocalData()){
+            return
+        }
+
+        //Handling upload of pictures and getting their new urls
+        //Showing progress dialog
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Uploading...")
+        progressDialog.show()
+
+        db.uploadImages(picturesAsURIs, object : MyUploadPicturesListener {
+            override fun onSuccess(`object`: Any) {
+                val pictureDownloadLinks =
+                    `object` as java.util.ArrayList<String>
+                progressDialog.dismiss()
+                createUser(pictureDownloadLinks)
+            }
+
+            override fun onProgress(`object`: Any) {
+                val counter = `object` as Int
+                progressDialog.setMessage("$counter images left")
+            }
+
+            override fun onFailure(`object`: Any) {
+                progressDialog.dismiss()
+                Toast.makeText(
+                    this@ActivityRegisterDetails,
+                    "Could not upload images",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
         return false
     }
 
+    private fun createUser(pictureDownloadLinks: ArrayList<String>) {
+        auth.createUserWithEmailAndPassword(localData.userEmail, localData.userPassword)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "create firebase user with email success")
+                    val firebaseUser = auth.currentUser
+                    if (firebaseUser != null) {
+                        val user = localData.userData
+                        val dbUser = DBUser(user.name!!,user.age!!,user.gender!!,user.about!!,user.address!!,user.occupation!!,user.education!!,ArrayList<String>(),pictureDownloadLinks)
+                        db.createUser(dbUser, localData.userEmail, object : MyCallBack {
+                            override fun onCallBack(`object`: Any) {
+                                // Opens the mainactivity now that the user has been created
+                                val intent = Intent(applicationContext, HOMEACTIVITY)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                startActivity(intent)
+                                localData.userPassword = ""
+                            }
+                        })
+                    }
+                } else {
+                    Log.d(TAG, "create firebase user with email failed")
+                    Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
     private fun createUser() {
         if (facebookCredential == null) {
             auth.createUserWithEmailAndPassword(localData.id, localData.userPassword)
@@ -374,11 +439,15 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     for (i in 0 until clipData.itemCount) {
                         val imageUri = clipData.getItemAt(i).uri
                         profilePictures.add(imageUri.toString())
+                        picturesAsURIs.add(imageUri)
                     }
                 }
             } else {
                 val imageUri: Uri? = data.data
                 profilePictures.add(imageUri.toString())
+                if (imageUri != null) {
+                    picturesAsURIs.add(imageUri)
+                }
             }
             if (viewPager == null) {
                 viewPager = ViewPager(this)

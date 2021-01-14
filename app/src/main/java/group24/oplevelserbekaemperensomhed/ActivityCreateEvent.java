@@ -62,6 +62,10 @@ import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyFailureListener;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyProgressListener;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MySuccessListener;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener;
 
 public class ActivityCreateEvent extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -111,13 +115,14 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Chip getImageButton;
     ArrayList<String> pictures = new ArrayList<>();
     ArrayList<Uri> picturesAsUris = new ArrayList<>();
-    ArrayList<String> pictureDownloadLinks = new ArrayList<>();
+    final ArrayList<String> pictureDownloadLinks = new ArrayList<>();
     ViewPagerAdapter adapter;
     ViewPager viewPager = null;
 
     //For uploading image
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+    FirebaseDAO firebaseDAO;
 
     int uploadImageCounter = 0;
 
@@ -125,6 +130,8 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event2);
+
+        firebaseDAO = new FirebaseDAO();
 
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -397,11 +404,35 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
 
         //Handling upload of pictures and getting their new urls
-        uploadImages();
+        //Showing progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        firebaseDAO.uploadImages(picturesAsUris, new MyUploadPicturesListener() {
+                    @Override
+                    public void onSuccess(@NotNull Object object) {
+                        ArrayList<String> pictureDownloadLinks = (ArrayList<String>)object;
+                        progressDialog.dismiss();
+                        createEvent(pictureDownloadLinks);
+                    }
+
+                    @Override
+                    public void onProgress(@NotNull Object object) {
+                        int counter = (int)object;
+                        progressDialog.setMessage(counter + " images left");
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Object object) {
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Could not upload images", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
-    private void createEvent(){
+    private void createEvent(ArrayList<String> pictureDownloadLinks){
         //CREATING EVENT OBJECT
         LocalData data = LocalData.INSTANCE;
         UserDTO user = data.getUserData();
@@ -415,7 +446,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(),
                 pictureDownloadLinks);
 
-        FirebaseDAO firebaseDAO = new FirebaseDAO();
         firebaseDAO.createEvent(eventDTO, new MyCallBack() {
             @Override
             public void onCallBack(@NotNull Object object) {
@@ -526,7 +556,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
     }
 
-    private void uploadImages(){
+    /*private void uploadImages(){
         //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
         //Showing progress dialog
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -575,6 +605,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             });
         }
 
-    }
+    }*/
 
 }
