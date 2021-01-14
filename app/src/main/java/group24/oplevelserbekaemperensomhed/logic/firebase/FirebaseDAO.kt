@@ -43,7 +43,7 @@ class FirebaseDAO{
     }
 
     fun getUser(id: String, callBack: MyCallBack) {
-        Log.d("loginFacebook", "CCCCCCCCCCCCCCCCCC")
+        Log.d("loginFacebook", "CCCCCCCCCCCCCCCCCC = $id")
         db.collection("users").document(id)
             .get()
             .addOnCompleteListener { task ->
