@@ -107,7 +107,7 @@ class ActivityRegister : AppCompatActivity() {
                 Log.d(TAG, "" + task.result.signInMethods!!.size)
                 if (task.result.signInMethods!!.size == 0) {
                     callLoadingAnimation(false)
-                    Toast.makeText(applicationContext,"EMAIL DOES NOT EXIST!",Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(applicationContext,"EMAIL DOES NOT EXIST!",Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, REGISTERDETAILSACTIVITY)
                     startActivity(intent)
                     finish()
@@ -116,7 +116,7 @@ class ActivityRegister : AppCompatActivity() {
                     localData.userPassword = editTextViews[1].text.toString()
                 } else {
                     callLoadingAnimation(false)
-                    Toast.makeText(applicationContext,"EMAIL EXISTS!",Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(applicationContext,"EMAIL EXISTS!",Toast.LENGTH_SHORT).show()
                 }
             }).addOnFailureListener(OnFailureListener { e -> e.printStackTrace() })
     }

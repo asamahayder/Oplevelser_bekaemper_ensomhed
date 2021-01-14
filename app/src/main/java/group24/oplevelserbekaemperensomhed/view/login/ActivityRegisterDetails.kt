@@ -265,7 +265,10 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     ArrayList<String>(),
                     profilePictures
                 )
-                db.createUser(dbUser, firebaseUser.uid, object : MyCallBack {
+                if (facebookCredential != null) {
+                    localData.id = firebaseUser.uid
+                }
+                db.createUser(dbUser, localData.id, object : MyCallBack {
                     override fun onCallBack(`object`: Any) {
                         // Opens the mainactivity now that the user has been created
                         val intent = Intent(applicationContext, HOMEACTIVITY)

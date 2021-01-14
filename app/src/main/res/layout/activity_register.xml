@@ -88,7 +88,7 @@
             android:paddingVertical="5dp"
             android:singleLine="true"
             android:textSize="20sp"
-            android:hint="@string/username"
+            android:hint="@string/email_hint"
             android:background="@drawable/edit_text_rounded_white_background" />
 
         <EditText

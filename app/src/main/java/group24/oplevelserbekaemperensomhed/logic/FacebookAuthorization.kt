@@ -79,14 +79,12 @@ class FacebookAuthorization(private val aLogin: ActivityLogin, private val newAc
                         Log.d(TAG, "facebook user does not exist in database")
                         val credential = FacebookAuthProvider.getCredential(result.accessToken.token)
                         val intent = Intent(aLogin, newActivity)
-                        localData.id = id
                         intent.putExtra("facebook",credential)
                         aLogin.startActivity(intent)
                     } else {
                         Log.d(TAG, "facebook user exists in database")
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         localData.userData = `object` as UserDTO
-                        localData.id = id
                         startActivity(intent)
                         finish()
                     }
