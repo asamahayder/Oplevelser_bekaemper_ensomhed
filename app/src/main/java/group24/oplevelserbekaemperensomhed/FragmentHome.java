@@ -10,9 +10,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +21,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 
-public class FragmentHome extends Fragment implements EventItemClickListener{
+public class FragmentHome extends Fragment implements ItemClickListener {
 
     private ViewPager2 viewPager;
     private EventsAdapter adapter = null;
