@@ -54,7 +54,6 @@ public class FragmentEventInfo extends Fragment {
         eventTimeTextView = v.findViewById(R.id.aevent_info_time);
         eventBioTextView = v.findViewById(R.id.aevent_info_bio);
         eventBackButton = v.findViewById(R.id.activity_register_details_backButton);
-        eventBackButton = v.findViewById(R.id.aevent_info_backButton);
         categoryIcon = v.findViewById(R.id.aevent_info_category_icon);
         categoryName = v.findViewById(R.id.aevent_info_category_text);
         timeStart = v.findViewById(R.id.aevent_info_clock_start_text);
@@ -100,12 +99,7 @@ public class FragmentEventInfo extends Fragment {
         eventBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().popBackStack();
-                }else{
-                    Toast toast = Toast.makeText(getActivity(), "Could not get fragment manager", Toast.LENGTH_LONG);
-                    toast.show();
-                }
+                getActivity().finish();
             }
         });
 

@@ -1,11 +1,7 @@
 package group24.oplevelserbekaemperensomhed.logic.firebase
 
-import android.app.ProgressDialog
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.UserDTO

@@ -27,11 +27,13 @@ class ActivityFragmentHandler : AppCompatActivity() {
         if (intent.extras!!["event"] != null) {
             fragment = FragmentEventInfo()
             bundle.putParcelable("event", intent.extras!!["event"] as Parcelable?)
+            bundle.putString("other","other")
             fragment.arguments = bundle
             tag = getString(R.string.fragment_event)
         } else {
             fragment = FragmentProfile()
             bundle.putParcelable("profile", intent.extras!!["profile"] as Parcelable?)
+            bundle.putString("other","other")
             fragment.arguments = bundle
             tag = getString(R.string.fragment_profile)
         }

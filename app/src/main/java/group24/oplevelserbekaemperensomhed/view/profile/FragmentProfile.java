@@ -72,9 +72,7 @@ public class FragmentProfile extends Fragment {
                 backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (getFragmentManager() != null) {
-                            getFragmentManager().popBackStack();
-                        }
+                        getActivity().finish();
                     }
                 });
             }

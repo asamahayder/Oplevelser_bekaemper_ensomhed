@@ -21,6 +21,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder>{
+
     private List<EventDTO> eventItems;
     private final EventItemClickListener eventClickListener;
 
@@ -45,6 +46,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             @Override
             public void onClick(View v) {
                 eventClickListener.onEventItemClick(position, eventItem, holder.itemView);
+            }
+        });
+        holder.eventOwnerProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventClickListener.onProfileItemClick(position, eventItem.getEventCreator(), holder.itemView);
             }
         });
 

@@ -18,19 +18,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import group24.oplevelserbekaemperensomhed.data.DummyData;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
-import group24.oplevelserbekaemperensomhed.logic.firebase.DBEvent;
-import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
+import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 
 public class FragmentHome extends Fragment implements EventItemClickListener{
 
     private ViewPager2 viewPager;
     private EventsAdapter adapter = null;
-    private DummyData dummyData;
     private ArrayList<EventDTO> events = new ArrayList<>();
 
     public FragmentHome() {
@@ -50,7 +47,6 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        dummyData = new DummyData();
         FirebaseDAO firebaseDAO = new FirebaseDAO();
         firebaseDAO.getEvents(new MyCallBack() {
             @Override
@@ -88,17 +84,18 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
 
     @Override
     public void onEventItemClick(int position, EventDTO event, View title) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("event", event);
+        Intent intent = new Intent(getContext(), ActivityFragmentHandler.class);
+        intent.putExtra("event", event);
+        intent.putExtra("other", "other");
+        startActivity(intent);
 
-        Fragment destinationFragment = new FragmentEventInfo();
-        destinationFragment.setArguments(bundle);
+    }
 
-        if (getFragmentManager() != null) {
-            getFragmentManager().beginTransaction().replace(R.id.mainFragment, destinationFragment).addToBackStack(getString(R.string.fragment_home)).commit();
-        }else{
-            Toast toast = Toast.makeText(getActivity(), "Couldn't get fragment manager", Toast.LENGTH_SHORT);
-            toast.show();
-        }
+    @Override
+    public void onProfileItemClick(int position, UserDTO user, View title) {
+        Intent intent = new Intent(getContext(), ActivityFragmentHandler.class);
+        intent.putExtra("profile", user);
+        intent.putExtra("other", "other");
+        startActivity(intent);
     }
 }
