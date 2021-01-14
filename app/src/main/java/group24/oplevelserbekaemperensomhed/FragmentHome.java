@@ -18,11 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import group24.oplevelserbekaemperensomhed.data.DummyData;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
-import group24.oplevelserbekaemperensomhed.data.UserDTO;
-import group24.oplevelserbekaemperensomhed.logic.firebase.DBEvent;
-import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 
@@ -30,7 +26,6 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
 
     private ViewPager2 viewPager;
     private EventsAdapter adapter = null;
-    private DummyData dummyData;
     private ArrayList<EventDTO> events = new ArrayList<>();
 
     public FragmentHome() {
@@ -50,7 +45,6 @@ public class FragmentHome extends Fragment implements EventItemClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        dummyData = new DummyData();
         FirebaseDAO firebaseDAO = new FirebaseDAO();
         firebaseDAO.getEvents(new MyCallBack() {
             @Override

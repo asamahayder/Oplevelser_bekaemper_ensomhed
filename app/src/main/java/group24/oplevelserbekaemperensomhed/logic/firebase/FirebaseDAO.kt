@@ -1,6 +1,7 @@
 package group24.oplevelserbekaemperensomhed.logic.firebase
 
 import android.app.ProgressDialog
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,9 +11,16 @@ import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.view.search.ActivitySearch
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FirebaseDAO{
+
+    private var uploadImageCounter = 0;
+
+    private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var storageReference: StorageReference = firebaseStorage.reference
 
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -121,6 +129,40 @@ class FirebaseDAO{
             .addOnFailureListener {
 
             }
+    }
+
+    fun uploadImages(imageList: ArrayList<Uri>, myListener: MyUploadPicturesListener) {
+        val pictureDownloadLinks: ArrayList<String> = ArrayList()
+        //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
+
+        uploadImageCounter = imageList.size
+        for (imageUri in imageList) {
+            val ref: StorageReference = storageReference.child("images/" + UUID.randomUUID().toString())
+            val uploadTask = ref.putFile(imageUri)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception!!
+                }
+
+                // Continue with the task to get the download URL
+                ref.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    pictureDownloadLinks.add(downloadUri.toString())
+
+                    //handle progress dialog
+                    uploadImageCounter--
+                    if (uploadImageCounter == 0) {
+                        myListener.onSuccess(pictureDownloadLinks)
+                    } else {
+                        myListener.onProgress(uploadImageCounter)
+                    }
+                } else {
+                    myListener.onFailure("Update failed")
+                }
+            }
+        }
     }
 
 }
