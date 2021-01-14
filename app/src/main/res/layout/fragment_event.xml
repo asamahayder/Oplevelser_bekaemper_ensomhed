@@ -104,6 +104,31 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/aevent_info_category_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <ImageView
+                        android:id="@+id/aevent_info_category_icon"
+                        android:layout_width="15sp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_directions_run_24">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/aevent_info_category_text"
+                        android:text="Category"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="12sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/aevent_info_priceLayout"
                     android:layout_width="match_parent"
                     android:layout_height="19sp">
@@ -125,6 +150,12 @@
                         android:paddingLeft="12sp">
 
                     </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
 
                 </LinearLayout>
 
@@ -152,6 +183,42 @@
                     </TextView>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_category_clock_start_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <TextView
+                        android:id="@+id/aevent_info_clock_start_text"
+                        android:text="Start time: "
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_clock_end_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <TextView
+                        android:id="@+id/aevent_info_clock_end_text"
+                        android:text="End time: "
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
+
+                    </TextView>
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -189,55 +256,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="30dp"
-                    android:paddingHorizontal="30dp">
+                    android:paddingHorizontal="30dp"
+                    android:layout_marginBottom="100dp">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginStart="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
                         android:paddingVertical="5dp">
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton"
+                        <LinearLayout
+                            android:id="@+id/event_info_submitButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:clickable="true"
-                            app:srcCompat="@drawable/ic_baseline_repeat_24" />
+                            android:orientation="horizontal"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/edit_text_rounded_white_background"
+                            android:backgroundTint="@color/confirm_green"
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Repost"
-                            android:textSize="10sp"
-                            android:textColor="@android:color/white"
-                            android:textAlignment="center"/>
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_baseline_check_30"
+                                android:layout_gravity="center_vertical"
+                                android:paddingLeft="10dp"
+                                app:tint="@android:color/black"/>
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginEnd="30dp"
-                        android:paddingVertical="5dp">
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            app:srcCompat="@android:drawable/ic_input_add" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Join Event"
-                            android:textSize="10sp"
-                            android:textColor="@android:color/white"
-                            android:textAlignment="center"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="100dp"
+                                android:text="Join"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="20dp"
+                                android:textSize="20sp"
+                                android:paddingVertical="5dp"
+                                android:textColor="#2E2E2E"
+                                android:gravity="center"
+                                android:layout_gravity="center_vertical"/>
+                        </LinearLayout>
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </RelativeLayout>
