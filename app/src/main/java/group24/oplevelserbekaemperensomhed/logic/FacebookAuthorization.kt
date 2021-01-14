@@ -14,8 +14,9 @@ import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.view.login.ActivityLogin
+import group24.oplevelserbekaemperensomhed.view.login.ActivityRegisterDetails
 
-class FacebookAuthorization(private val aLogin: ActivityLogin, private val newActivity: Class<MainActivity>) : AppCompatActivity() {
+class FacebookAuthorization(private val aLogin: ActivityLogin, private val newActivity: Class<ActivityRegisterDetails>) : AppCompatActivity() {
 
     lateinit var callBackManager: CallbackManager
     private lateinit var firebaseAuth: FirebaseAuth
@@ -58,18 +59,9 @@ class FacebookAuthorization(private val aLogin: ActivityLogin, private val newAc
 
     private fun firebaseAuthWithFacebook(result: LoginResult) {
         val credential = FacebookAuthProvider.getCredential(result.accessToken.token)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener(aLogin) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "FacebookAuthorization: firebase auth succeeded")
-                    val intent = Intent(aLogin, newActivity)
-                    aLogin.startActivity(intent)
-                    aLogin.finish()
-                } else {
-                    Log.d(TAG, "FacebookAuthorization: firebase auth failed")
-                    //TODO("Not yet implemented")
-                }
-            }
+        val intent = Intent(aLogin, newActivity)
+        intent.putExtra("facebook",credential)
+        aLogin.startActivity(intent)
     }
 
     fun signIn() {

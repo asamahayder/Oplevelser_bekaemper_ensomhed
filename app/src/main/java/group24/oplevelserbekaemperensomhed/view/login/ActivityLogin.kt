@@ -64,7 +64,7 @@ class ActivityLogin : AppCompatActivity() {
         passText = findViewById(R.id.activity_login_password)
 
         // Handles authorization via firebase
-        facebookAuth = FacebookAuthorization(this, HOMEACTIVITY)
+        facebookAuth = FacebookAuthorization(this, REGISTERACTIVITYDETAILS)
         firebaseAuth = FirebaseAuth.getInstance()
 
         // Initialize TextView animation
@@ -169,6 +169,7 @@ class ActivityLogin : AppCompatActivity() {
         private const val TAG = "login"
         private val HOMEACTIVITY = MainActivity::class.java
         private val REGISTERACTIVITY = ActivityRegister::class.java
+        private val REGISTERACTIVITYDETAILS = ActivityRegisterDetails::class.java
         private val FORGOTPASSWORDACTIVITY = ActivityForgotPassword::class.java
     }
 }
