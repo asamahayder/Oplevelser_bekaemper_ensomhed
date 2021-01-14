@@ -2,7 +2,6 @@ package group24.oplevelserbekaemperensomhed.view.login
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.media.MediaSyncEvent.createEvent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -68,7 +67,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
     }
 
     private fun checkWhatLoginType() {
-        if (intent.extras!!["facebook"] != null) {
+        if (intent.extras != null) {
             facebookCredential = intent.extras!!["facebook"] as AuthCredential
         }
     }
@@ -164,7 +163,35 @@ class ActivityRegisterDetails : AppCompatActivity() {
         // Saves the data in the text fields to the user object
         if(saveUserDetailsToLocalData()) {
             //FIXME LOADING ANIMATION MAYBE?
-            createUser()
+
+            //Handling upload of pictures and getting their new urls
+            //Showing progress dialog
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setTitle("Uploading...")
+            progressDialog.show()
+
+            db.uploadImages(picturesAsURIs, object : MyUploadPicturesListener {
+                override fun onSuccess(`object`: Any) {
+                    val pictureDownloadLinks =
+                        `object` as java.util.ArrayList<String>
+                    progressDialog.dismiss()
+                    createUser(pictureDownloadLinks)
+                }
+
+                override fun onProgress(`object`: Any) {
+                    val counter = `object` as Int
+                    progressDialog.setMessage("$counter images left")
+                }
+
+                override fun onFailure(`object`: Any) {
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this@ActivityRegisterDetails,
+                        "Could not upload images",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
         }
     }
 
@@ -235,85 +262,28 @@ class ActivityRegisterDetails : AppCompatActivity() {
             ).show()
             return true
         }
-
-        // Saves the data in the text fields to the user object
-        if (!saveUserDetailsToLocalData()){
-            return
-        }
-
-        //Handling upload of pictures and getting their new urls
-        //Showing progress dialog
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setTitle("Uploading...")
-        progressDialog.show()
-
-        db.uploadImages(picturesAsURIs, object : MyUploadPicturesListener {
-            override fun onSuccess(`object`: Any) {
-                val pictureDownloadLinks =
-                    `object` as java.util.ArrayList<String>
-                progressDialog.dismiss()
-                createUser(pictureDownloadLinks)
-            }
-
-            override fun onProgress(`object`: Any) {
-                val counter = `object` as Int
-                progressDialog.setMessage("$counter images left")
-            }
-
-            override fun onFailure(`object`: Any) {
-                progressDialog.dismiss()
-                Toast.makeText(
-                    this@ActivityRegisterDetails,
-                    "Could not upload images",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-
         return false
     }
 
     private fun createUser(pictureDownloadLinks: ArrayList<String>) {
-        auth.createUserWithEmailAndPassword(localData.userEmail, localData.userPassword)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "create firebase user with email success")
-                    val firebaseUser = auth.currentUser
-                    if (firebaseUser != null) {
-                        val user = localData.userData
-                        val dbUser = DBUser(user.name!!,user.age!!,user.gender!!,user.about!!,user.address!!,user.occupation!!,user.education!!,ArrayList<String>(),pictureDownloadLinks)
-                        db.createUser(dbUser, localData.userEmail, object : MyCallBack {
-                            override fun onCallBack(`object`: Any) {
-                                // Opens the mainactivity now that the user has been created
-                                val intent = Intent(applicationContext, HOMEACTIVITY)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                startActivity(intent)
-                                localData.userPassword = ""
-                            }
-                        })
-                    }
-                } else {
-                    Log.d(TAG, "create firebase user with email failed")
-                    Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-    private fun createUser() {
         if (facebookCredential == null) {
             auth.createUserWithEmailAndPassword(localData.id, localData.userPassword)
                 .addOnCompleteListener { task ->
-                    uploadUserDetailsToDatabase(task)
+                    uploadUserDetailsToDatabase(task, pictureDownloadLinks)
                 }
         } else {
             auth.signInWithCredential(facebookCredential!!)
                 .addOnCompleteListener { task ->
                     Log.d(TAG, "FacebookAuthorization: firebase auth succeeded")
-                    uploadUserDetailsToDatabase(task)
+                    uploadUserDetailsToDatabase(task, pictureDownloadLinks)
                 }
         }
     }
 
-    private fun uploadUserDetailsToDatabase(task: Task<AuthResult>) {
+    private fun uploadUserDetailsToDatabase(
+        task: Task<AuthResult>,
+        pictureDownloadLinks: ArrayList<String>
+    ) {
         if (task.isSuccessful) {
             Log.d(TAG, "create firebase firestore user success")
             val firebaseUser = auth.currentUser
@@ -328,7 +298,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     user.occupation!!,
                     user.education!!,
                     ArrayList<String>(),
-                    profilePictures
+                    pictureDownloadLinks
                 )
                 if (facebookCredential != null) {
                     localData.id = firebaseUser.uid
@@ -519,5 +489,4 @@ class ActivityRegisterDetails : AppCompatActivity() {
         private var checked = false
         private var gender = ""
     }
-
 }
