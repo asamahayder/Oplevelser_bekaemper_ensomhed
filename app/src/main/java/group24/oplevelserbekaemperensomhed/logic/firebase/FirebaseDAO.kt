@@ -52,7 +52,8 @@ class FirebaseDAO{
                 if (task.isSuccessful) {
                     val dbUser = task.result!!.toObject(DBUser::class.java)
                     if (dbUser != null) {
-                        callBack.onCallBack(dbUser)
+                        var user: UserDTO = UserDTO(dbUser.name,dbUser.age,dbUser.address,dbUser.occupation,dbUser.education,dbUser.about,dbUser.gender,ArrayList(),dbUser.profilePictures.toCollection(ArrayList<String>()))
+                        callBack.onCallBack(user)
                     }
                 }
             }
@@ -74,7 +75,6 @@ class FirebaseDAO{
     }
 
     fun getEvents(callBack: MyCallBack){
-
         getAllEventsFromDB(object : MyCallBack {
             override fun onCallBack(`object`: Any) {
                 val eventDataList = `object` as ArrayList<DBEvent>
@@ -82,8 +82,7 @@ class FirebaseDAO{
                 for (dbEvent in eventDataList) {
                     getUser(dbEvent.eventCreator, object : MyCallBack {
                         override fun onCallBack(`object`: Any) {
-                            val userData = `object` as DBUser
-                            val user = UserDTO(userData.name,userData.age,userData.address,userData.occupation,userData.education,userData.about,userData.gender,null,userData.profilePictures.toCollection(ArrayList()))
+                            val user = `object` as UserDTO
                             val event = EventDTO(user,null,dbEvent.eventDescription,dbEvent.eventTitle,
                                 DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
                             waitForAllEvents(event, eventDataList.size, callBack)
@@ -107,7 +106,7 @@ class FirebaseDAO{
         val date: List<String> = listOf(event.eventDate.date, event.eventDate.startTime, event.eventDate.endTime)
         val pictures: List<String> = listOf("https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
         val participants: List<String> = listOf(event.participants?.get(0)?.name.toString())
-        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = event.eventCreator.name.toString(), eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
+        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = event.eventCreator?.name.toString(), eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
         db.collection("events").add(dbEvent).addOnSuccessListener { callBack.onCallBack("success") }.addOnFailureListener{
             println("*******************************************************************************************************************")
             Log.e("gg", it.stackTrace.toString())

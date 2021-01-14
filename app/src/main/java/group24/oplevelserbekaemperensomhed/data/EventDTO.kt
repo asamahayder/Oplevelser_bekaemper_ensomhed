@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class EventDTO(
-    var eventCreator: UserDTO,
+    var eventCreator: UserDTO?,
     val participants: ArrayList<UserDTO>?,
     val eventDescription: String,
     val eventTitle: String,

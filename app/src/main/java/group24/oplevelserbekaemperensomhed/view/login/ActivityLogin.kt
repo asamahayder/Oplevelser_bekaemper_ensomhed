@@ -8,14 +8,16 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
+import group24.oplevelserbekaemperensomhed.data.LocalData
+import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.logic.FacebookAuthorization
+import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 
 
 class ActivityLogin : AppCompatActivity() {
@@ -26,10 +28,15 @@ class ActivityLogin : AppCompatActivity() {
     private lateinit var registerButton1: TextView
     private lateinit var registerButton2: TextView
 
+    private lateinit var emailText: EditText
+    private lateinit var passText: EditText
+
     private lateinit var textBlink: Animation
 
     private lateinit var facebookAuth: FacebookAuthorization
     private lateinit var firebaseAuth: FirebaseAuth
+
+    private val localData = LocalData
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +60,11 @@ class ActivityLogin : AppCompatActivity() {
         facebookLoginButton = findViewById(R.id.activity_login_fbButton)
         registerButton1 = findViewById(R.id.activity_login_registerButton1)
         registerButton2 = findViewById(R.id.activity_login_registerButton2)
+        emailText = findViewById(R.id.activity_login_email)
+        passText = findViewById(R.id.activity_login_password)
 
         // Handles authorization via firebase
-        facebookAuth = FacebookAuthorization(this, NEWACTIVITY)
+        facebookAuth = FacebookAuthorization(this, HOMEACTIVITY)
         firebaseAuth = FirebaseAuth.getInstance()
 
         // Initialize TextView animation
@@ -66,12 +75,14 @@ class ActivityLogin : AppCompatActivity() {
         onTouchListenerAnimation(registerButton1)
         onTouchListenerAnimation(registerButton2)
         onTouchListenerAnimation(forgotPassButton)
+        onTouchListenerAnimation(loginButton)
 
         // Handles ActivityChange when clicking forgotten password
         forgotPassButton.setOnClickListener {
             val intent = Intent(this, FORGOTPASSWORDACTIVITY)
             startActivity(intent)
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,9 +95,11 @@ class ActivityLogin : AppCompatActivity() {
     private fun onTouchListenerAnimation(button: Any) {
         val tempButton: Any
         tempButton = if (button is ImageButton) {
-            button as ImageButton
+            button
+        } else if (button is TextView) {
+            button
         } else {
-            button as TextView
+            button as Button
         }
         tempButton.setOnTouchListener { v, event ->
             if (event != null) {
@@ -110,6 +123,8 @@ class ActivityLogin : AppCompatActivity() {
                         forgotPassButton.startAnimation(textBlink)
                         val intent = Intent(this, FORGOTPASSWORDACTIVITY)
                         startActivity(intent)
+                    } else if (tempButton == loginButton) {
+                        logInWithFirebase(emailText,passText)
                     }
                 }
             }
@@ -117,9 +132,42 @@ class ActivityLogin : AppCompatActivity() {
         }
     }
 
+    private fun logInWithFirebase(emailText: EditText, passText: EditText) {
+        val db = FirebaseDAO()
+        if (emailText.text.toString().isEmpty() || !emailText.text.toString().contains("@")) {
+            Toast.makeText(applicationContext,"Please enter a valid email",Toast.LENGTH_SHORT).show()
+            return
+        } else if (passText.text.toString().isEmpty()) {
+            Toast.makeText(applicationContext,"Please enter a valid password",Toast.LENGTH_SHORT).show()
+            return
+        } else if (passText.text.toString().length <= 7) {
+            Toast.makeText(applicationContext,"Please enter a password that's at least 8 characters",Toast.LENGTH_SHORT).show()
+            return
+        } else {
+            firebaseAuth.signInWithEmailAndPassword(emailText.text.toString(),passText.text.toString())
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG,"Login success")
+                        db.getUser(emailText.text.toString(), object : MyCallBack {
+                            override fun onCallBack(`object`: Any) {
+                                localData.userData = `object` as UserDTO
+                                localData.userEmail = emailText.text.toString()
+                                val intent = Intent(applicationContext, HOMEACTIVITY)
+                                startActivity(intent)
+                                finish()
+                            }
+                        })
+                    } else {
+                        Log.d(TAG, "Login failure")
+                        Toast.makeText(applicationContext, "Authentication fialed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
+
     companion object {
         private const val TAG = "login"
-        private val NEWACTIVITY = MainActivity::class.java
+        private val HOMEACTIVITY = MainActivity::class.java
         private val REGISTERACTIVITY = ActivityRegister::class.java
         private val FORGOTPASSWORDACTIVITY = ActivityForgotPassword::class.java
     }

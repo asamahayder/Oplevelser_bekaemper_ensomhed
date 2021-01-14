@@ -46,7 +46,7 @@ class SearchHomeAdapterHorizontal(private var mContext: Context, val context: Fr
     override fun onBindViewHolder(holder: SearchHomeViewHolderColumn, position: Int) {
         val currentItem = itemList[position]
         holder.titleText.text = currentItem.eventTitle
-        holder.nameText.text = currentItem.eventCreator.name
+        holder.nameText.text = currentItem.eventCreator!!.name
         holder.locationText.text = currentItem.address
         Picasso.get()
             .load(currentItem.pictures[0])
@@ -54,7 +54,7 @@ class SearchHomeAdapterHorizontal(private var mContext: Context, val context: Fr
             .centerCrop()
             .into(holder.eventImage)
         Picasso.get()
-            .load(currentItem.eventCreator.profilePictures[0])
+            .load(currentItem.eventCreator!!.profilePictures[0])
             .fit()
             .centerCrop()
             .into(holder.profileImage)

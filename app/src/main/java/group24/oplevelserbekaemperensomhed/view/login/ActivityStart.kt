@@ -8,6 +8,8 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
+import group24.oplevelserbekaemperensomhed.data.LocalData
+import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
@@ -16,6 +18,8 @@ class ActivityStart : AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = FirebaseDAO()
+
+    private val localData = LocalData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +43,13 @@ class ActivityStart : AppCompatActivity() {
             if (currentUser != null) {
                 Log.d(TAG, "User not authenticated")
                 val intent = Intent(applicationContext, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                db.getUser(currentUser.email!!, object : MyCallBack {
+                    override fun onCallBack(`object`: Any) {
+                        localData.userData = `object` as UserDTO
+                        startActivity(intent)
+                        finish()
+                    }
+                })
             } else {
                 Log.d(TAG, "User authenticated")
                 val intent = Intent(applicationContext, ActivityLogin::class.java)

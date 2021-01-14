@@ -38,7 +38,7 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
             val currentItem = searchResult[position]
 
             imageGliderURLs(currentItem.pictures[0], holder.eventImage)
-            imageGliderURLs(currentItem.eventCreator.profilePictures[0], holder.profilePic)
+            imageGliderURLs(currentItem.eventCreator!!.profilePictures[0], holder.profilePic)
 
             holder.eventTitle.text = currentItem.eventTitle
             holder.cateText.text = currentItem.category

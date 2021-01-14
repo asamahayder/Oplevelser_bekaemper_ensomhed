@@ -74,12 +74,14 @@
                 </FrameLayout>
 
                 <EditText
+                    android:id="@+id/activity_login_email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:paddingStart="7dp"
+                    android:inputType="textEmailAddress"
                     android:text=""
                     android:textSize="15sp"
                     android:textColor="@color/colorEditBackground"
@@ -88,7 +90,7 @@
                     android:singleLine="true"
                     android:gravity="bottom"
                     android:background="@android:color/transparent"
-                    android:hint="@string/username_hint"/>
+                    android:hint="@string/email_hint"/>
 
             </LinearLayout>
 
@@ -134,12 +136,14 @@
                 </FrameLayout>
 
                 <EditText
+                    android:id="@+id/activity_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:paddingStart="7dp"
+                    android:inputType="textPassword"
                     android:text=""
                     android:textSize="15sp"
                     android:textColor="@color/colorEditBackground"
