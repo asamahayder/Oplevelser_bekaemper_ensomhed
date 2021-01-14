@@ -14,12 +14,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
@@ -54,11 +57,20 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
     private val picturesAsURIs: ArrayList<Uri> = ArrayList()
 
+    private var facebookCredential: AuthCredential? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_details)
+        checkWhatLoginType()
         initializeViews()
+    }
+
+    private fun checkWhatLoginType() {
+        if (intent.extras!!["facebook"] != null) {
+            facebookCredential = intent.extras!!["facebook"] as AuthCredential
+        }
     }
 
     private fun initializeViews() {
@@ -147,6 +159,16 @@ class ActivityRegisterDetails : AppCompatActivity() {
     }
 
     private fun submitDataToUserObject() {
+        if (checkTextFieldsForMistakes()) return
+
+        // Saves the data in the text fields to the user object
+        if(saveUserDetailsToLocalData()) {
+            //FIXME LOADING ANIMATION MAYBE?
+            createUser()
+        }
+    }
+
+    private fun checkTextFieldsForMistakes(): Boolean {
         for (textView in editTextViews) {
             val text = textView.text.toString()
             val hint = textView.hint.toString()
@@ -156,11 +178,11 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     "Please fill out the sections marked with '*'",
                     Toast.LENGTH_SHORT
                 ).show()
-                return
-            }
-            else if (hint.contains("First Name*") && text.length == 1) {
-                Toast.makeText(applicationContext, "Please choose a real name", Toast.LENGTH_SHORT).show()
-                return
+                return true
+            } else if (hint.contains("First Name*") && text.length == 1) {
+                Toast.makeText(applicationContext, "Please choose a real name", Toast.LENGTH_SHORT)
+                    .show()
+                return true
             }
             if (hint.contains("Day") && text.toInt() > 31) {
                 Toast.makeText(
@@ -168,25 +190,22 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     "Please choose a real day date",
                     Toast.LENGTH_SHORT
                 ).show()
-                return
-            }
-            else if (hint.contains("Month") && text.toInt() > 12) {
+                return true
+            } else if (hint.contains("Month") && text.toInt() > 12) {
                 Toast.makeText(
                     applicationContext,
                     "Please choose a real month date",
                     Toast.LENGTH_SHORT
                 ).show()
-                return
-            }
-            else if (hint.contains("Year") && text.length < 4) {
+                return true
+            } else if (hint.contains("Year") && text.length < 4) {
                 Toast.makeText(
                     applicationContext,
                     "Please choose a real year date",
                     Toast.LENGTH_SHORT
                 ).show()
-                return
-            }
-            else if (hint.contains("Month")) {
+                return true
+            } else if (hint.contains("Month")) {
                 //FIXME NOT REALLY WORKING AS INTENDED
                 if (text.toInt() % 2 != 1) {
                     if (text.toInt() >= 29) {
@@ -195,7 +214,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                             "Please choose a real day date",
                             Toast.LENGTH_SHORT
                         ).show()
-                        return
+                        return true
                     }
                 }
             }
@@ -206,7 +225,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                 "Please choose at least one profile picture",
                 Toast.LENGTH_SHORT
             ).show()
-            return
+            return true
         }
         if (!checked) {
             Toast.makeText(
@@ -214,7 +233,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                 "Please choose a gender",
                 Toast.LENGTH_SHORT
             ).show()
-            return
+            return true
         }
 
         // Saves the data in the text fields to the user object
@@ -251,6 +270,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
             }
         })
 
+        return false
     }
 
     private fun createUser(pictureDownloadLinks: ArrayList<String>) {
@@ -278,6 +298,53 @@ class ActivityRegisterDetails : AppCompatActivity() {
                         .show()
                 }
             }
+    private fun createUser() {
+        if (facebookCredential == null) {
+            auth.createUserWithEmailAndPassword(localData.id, localData.userPassword)
+                .addOnCompleteListener { task ->
+                    uploadUserDetailsToDatabase(task)
+                }
+        } else {
+            auth.signInWithCredential(facebookCredential!!)
+                .addOnCompleteListener { task ->
+                    Log.d(TAG, "FacebookAuthorization: firebase auth succeeded")
+                    uploadUserDetailsToDatabase(task)
+                }
+        }
+    }
+
+    private fun uploadUserDetailsToDatabase(task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            Log.d(TAG, "create firebase firestore user success")
+            val firebaseUser = auth.currentUser
+            if (firebaseUser != null) {
+                val user = localData.userData
+                val dbUser = DBUser(
+                    user.name!!,
+                    user.age!!,
+                    user.gender!!,
+                    user.about!!,
+                    user.address!!,
+                    user.occupation!!,
+                    user.education!!,
+                    ArrayList<String>(),
+                    profilePictures
+                )
+                db.createUser(dbUser, firebaseUser.uid, object : MyCallBack {
+                    override fun onCallBack(`object`: Any) {
+                        // Opens the mainactivity now that the user has been created
+                        val intent = Intent(applicationContext, HOMEACTIVITY)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                        localData.userPassword = ""
+                    }
+                })
+            }
+        } else {
+            Log.d(TAG, "create firebase firestore user failed")
+            Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     private fun saveUserDetailsToLocalData(): Boolean {

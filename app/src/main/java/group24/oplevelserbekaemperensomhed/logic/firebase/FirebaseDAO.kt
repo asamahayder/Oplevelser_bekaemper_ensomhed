@@ -3,10 +3,7 @@ package group24.oplevelserbekaemperensomhed.logic.firebase
 import android.app.ProgressDialog
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.UserDTO
@@ -55,16 +52,24 @@ class FirebaseDAO{
     }
 
     fun getUser(id: String, callBack: MyCallBack) {
+        Log.d("loginFacebook", "CCCCCCCCCCCCCCCCCC")
         db.collection("users").document(id)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    Log.d("loginFacebook", "BBBBBBBBBBBBBBBBBBBB")
                     val dbUser = task.result!!.toObject(DBUser::class.java)
                     if (dbUser != null) {
-                        var user: UserDTO = UserDTO(dbUser.name,dbUser.age,dbUser.address,dbUser.occupation,dbUser.education,dbUser.about,dbUser.gender,ArrayList(),dbUser.profilePictures.toCollection(ArrayList<String>()))
+                        Log.d("loginFacebook", "DDDDDDDDDDDDDDDDDDDDDDDDD")
+                        val user: UserDTO = UserDTO(dbUser.name,dbUser.age,dbUser.address,dbUser.occupation,dbUser.education,dbUser.about,dbUser.gender,ArrayList(),dbUser.profilePictures.toCollection(ArrayList<String>()))
                         callBack.onCallBack(user)
+                    } else {
+                        callBack.onCallBack("failure")
                     }
-                }
+                } else {
+                    Log.d("loginFacebook", "AAAAAAAAAAAAAAAAAAAAAAAAA")
+                    callBack.onCallBack("failure")
+            }
             }
     }
 

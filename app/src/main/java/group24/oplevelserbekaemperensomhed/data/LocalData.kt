@@ -4,7 +4,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.DBBanner
 
 object LocalData{
 
-    lateinit var userEmail: String
+    lateinit var id: String
     lateinit var userPassword: String
 
     lateinit var userData: UserDTO

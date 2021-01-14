@@ -1,20 +1,18 @@
 package group24.oplevelserbekaemperensomhed.logic
 
 import android.content.Context
-import android.os.Bundle
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import group24.oplevelserbekaemperensomhed.FragmentEventInfo
-import group24.oplevelserbekaemperensomhed.view.profile.FragmentProfile
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.EventDTO
+import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler
 import group24.oplevelserbekaemperensomhed.view.search.FragmentSearchHome
 import kotlinx.android.synthetic.main.fragment_search_home_2_recyclerview.view.*
 
@@ -61,11 +59,11 @@ class SearchHomeAdapterHorizontal(private var mContext: Context, val context: Fr
 
         holder.eventImage.setOnClickListener {
             Log.d(TAG, "Clicking on Event")
-            handleFragmentChange("event", currentItem)
+            handleFragmentActivityChange("event", currentItem)
         }
         holder.profileImage.setOnClickListener {
             Log.d(TAG, "Clicking on Profile")
-            handleFragmentChange("profile", currentItem)
+            handleFragmentActivityChange("profile", currentItem)
         }
     }
 
@@ -87,23 +85,15 @@ class SearchHomeAdapterHorizontal(private var mContext: Context, val context: Fr
         const val TAG = "adapterH"
     }
 
-    private fun handleFragmentChange(bundleTag: String, currentItem: EventDTO) {
-        val bundle = Bundle()
-        val fragment: Fragment
-        fragment = if (bundleTag == "profile"){
-            bundle.putParcelable(bundleTag, currentItem.eventCreator)
-            bundle.putString("other","other")
-            FragmentProfile()
+    private fun handleFragmentActivityChange(bundleTag: String, currentItem: EventDTO) {
+        val intent = Intent(mContext, ActivityFragmentHandler::class.java)
+        if (bundleTag == "profile") {
+            intent.putExtra(bundleTag, currentItem.eventCreator)
+            intent.putExtra("other", "other")
         } else {
-            bundle.putParcelable(bundleTag, currentItem)
-            FragmentEventInfo()
+            intent.putExtra(bundleTag, currentItem)
+            intent.putExtra("other", "other")
         }
-        fragment.arguments = bundle
-        if (context.fragmentManager != null){
-            context.fragmentManager!!.beginTransaction()
-                .replace(R.id.mainFragment, fragment)
-                .addToBackStack(R.string.fragment_search.toString())
-                .commit()
-        }
+        mContext.startActivity(intent)
     }
 }

@@ -11,20 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
-import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser;
-import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
-import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder>{
-    private List<EventDTO> eventItems;
-    private final EventItemClickListener eventClickListener;
 
-    public EventsAdapter(List<EventDTO> eventItems, EventItemClickListener eventClickListener) {
+    private List<EventDTO> eventItems;
+    private final ItemClickListener eventClickListener;
+
+    public EventsAdapter(List<EventDTO> eventItems, ItemClickListener eventClickListener) {
         this.eventItems = eventItems;
         this.eventClickListener = eventClickListener;
     }
@@ -45,6 +41,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             @Override
             public void onClick(View v) {
                 eventClickListener.onEventItemClick(position, eventItem, holder.itemView);
+            }
+        });
+        holder.eventOwnerProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventClickListener.onProfileItemClick(position, eventItem.getEventCreator(), holder.itemView);
             }
         });
 

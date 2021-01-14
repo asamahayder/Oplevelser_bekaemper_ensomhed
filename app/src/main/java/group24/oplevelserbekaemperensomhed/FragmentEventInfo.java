@@ -99,12 +99,7 @@ public class FragmentEventInfo extends Fragment {
         eventBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().popBackStack();
-                }else{
-                    Toast toast = Toast.makeText(getActivity(), "Could not get fragment manager", Toast.LENGTH_LONG);
-                    toast.show();
-                }
+                getActivity().finish();
             }
         });
 
