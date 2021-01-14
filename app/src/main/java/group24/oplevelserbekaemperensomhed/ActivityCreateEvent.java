@@ -1,6 +1,7 @@
 package group24.oplevelserbekaemperensomhed;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
@@ -8,6 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -16,7 +20,11 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -45,6 +53,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import group24.oplevelserbekaemperensomhed.data.DateDTO;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
@@ -101,18 +110,29 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Uri imageUri;
     Chip getImageButton;
     ArrayList<String> pictures = new ArrayList<>();
+    ArrayList<Uri> picturesAsUris = new ArrayList<>();
+    ArrayList<String> pictureDownloadLinks = new ArrayList<>();
     ViewPagerAdapter adapter;
     ViewPager viewPager = null;
+
+    //For uploading image
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+
+    int uploadImageCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event2);
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
         initializeView();
     }
 
     private void initializeView(){
-        //linearLayout = findViewById(R.id.create_event_linear_layout);
         constraintLayout = findViewById(R.id.create_event_constraintlayout);
 
         findAddressEditText = findViewById(R.id.editTextAddress);
@@ -164,7 +184,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         getImageButton = findViewById(R.id.create_event_choose_pictures_button);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_profile_event_1_viewpager, null);
-
 
         handleTimeAndDateFields();
 
@@ -377,6 +396,12 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }
 
 
+        //Handling upload of pictures and getting their new urls
+        uploadImages();
+
+    }
+
+    private void createEvent(){
         //CREATING EVENT OBJECT
         LocalData data = LocalData.INSTANCE;
         UserDTO user = data.getUserData();
@@ -386,10 +411,9 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         ArrayList<UserDTO> participants = new ArrayList<>();
         participants.add(user);
 
-        EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(), dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(), pictures);
-        //Toast.makeText(getApplicationContext(),"Created event! :D",Toast.LENGTH_SHORT).show();
-        //LocalData localData = LocalData.INSTANCE;
-        //localData.getUserCreatedEvents().add(eventDTO);
+        EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(),
+                dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(),
+                pictureDownloadLinks);
 
         FirebaseDAO firebaseDAO = new FirebaseDAO();
         firebaseDAO.createEvent(eventDTO, new MyCallBack() {
@@ -401,6 +425,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         });
 
     }
+
 
     private void onEventCreated(String message){
         if(message.equals("success")){
@@ -466,6 +491,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 }else{
                     for (int i = 0; i <clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();
+                        picturesAsUris.add(imageUri);
                         pictures.add(imageUri.toString());
                     }
                 }
@@ -473,10 +499,12 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             }else{
                 imageUri = data.getData();
                 pictures.add(imageUri.toString());
+                picturesAsUris.add(imageUri);
             }
 
+
+            //Showing pictures on viewpager
             if (viewPager == null){
-                System.out.println("***********************Im NUUUUUUUUUULLLLL***************");
                 viewPager = new ViewPager(this);
                 viewPager.setId(View.generateViewId());
                 viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
@@ -490,10 +518,61 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 constraintSet.connect(getImageButton.getId(), ConstraintSet.TOP, viewPager.getId(), ConstraintSet.BOTTOM, 20);
                 constraintSet.applyTo(constraintLayout);
             }else{
-                System.out.println("*****************************IM NOOOOOOOT NUUUUUUUULLLLL************************");
                 adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_search_home_1_viewpager,null);
                 viewPager.setAdapter(adapter);
             }
+        }
+
+
+    }
+
+    private void uploadImages(){
+        //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
+        //Showing progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        uploadImageCounter = picturesAsUris.size();
+
+        for (Uri imageUri : picturesAsUris) {
+            final StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+            UploadTask uploadTask = ref.putFile(imageUri);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+
+                        Uri downloadUri = task.getResult();
+                        pictureDownloadLinks.add(downloadUri.toString());
+
+                        //handle progress dialog
+                        uploadImageCounter--;
+                        if (uploadImageCounter == 0){
+                            progressDialog.dismiss();
+                            createEvent();
+                        }else{
+                            progressDialog.setMessage(uploadImageCounter + " Images left");
+                        }
+
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Failed upload", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
     }

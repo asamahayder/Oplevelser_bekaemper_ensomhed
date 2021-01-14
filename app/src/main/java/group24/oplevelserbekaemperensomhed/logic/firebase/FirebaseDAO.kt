@@ -1,19 +1,20 @@
 package group24.oplevelserbekaemperensomhed.logic.firebase
 
+import android.app.ProgressDialog
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.view.search.ActivitySearch
 
+
 class FirebaseDAO{
 
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-    //This are to ensure that the program waits until ALL events have been loaded in
-    private var waitToken: Int = 0
-    private val list : ArrayList<EventDTO> = ArrayList()
 
     private fun getAllEventsFromDB(callBack: MyCallBack) {
         val dbEvents = ArrayList<DBEvent>()
@@ -75,6 +76,7 @@ class FirebaseDAO{
     }
 
     fun getEvents(callBack: MyCallBack){
+        val list : ArrayList<EventDTO> = ArrayList()
         getAllEventsFromDB(object : MyCallBack {
             override fun onCallBack(`object`: Any) {
                 val eventDataList = `object` as ArrayList<DBEvent>
@@ -85,7 +87,8 @@ class FirebaseDAO{
                             val user = `object` as UserDTO
                             val event = EventDTO(user,null,dbEvent.eventDescription,dbEvent.eventTitle,
                                 DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
-                            waitForAllEvents(event, eventDataList.size, callBack)
+                            list.add(event)
+                            callBack.onCallBack(list)
                         }
                     })
                 }
@@ -93,26 +96,20 @@ class FirebaseDAO{
         })
     }
 
-    private fun waitForAllEvents(event: EventDTO, size:Int, callBack: MyCallBack){
-        waitToken++
-        list.add(event)
-        if (waitToken == size){
-            callBack.onCallBack(list)
-        }
-
-    }
-
     fun createEvent(event: EventDTO, callBack: MyCallBack){
         val date: List<String> = listOf(event.eventDate.date, event.eventDate.startTime, event.eventDate.endTime)
-        val pictures: List<String> = listOf("https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
+        val pictures: List<String> = event.pictures
         val participants: List<String> = listOf(event.participants?.get(0)?.name.toString())
-        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = event.eventCreator?.name.toString(), eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
+
+        //TODO instead of the 'testUser' placeholder, use a real user.
+        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = "testUser", eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
         db.collection("events").add(dbEvent).addOnSuccessListener { callBack.onCallBack("success") }.addOnFailureListener{
             println("*******************************************************************************************************************")
             Log.e("gg", it.stackTrace.toString())
             callBack.onCallBack("Failure")
         }
     }
+
 
     fun createUser(dbUser: DBUser, uid: String, callBack: MyCallBack) {
         db.collection("users").document(uid).set(dbUser)
