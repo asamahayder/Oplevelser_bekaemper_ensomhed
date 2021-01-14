@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
@@ -113,7 +112,7 @@ class ActivityRegister : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                     lottie.visibility = View.GONE
-                    localData.userEmail = editTextViews[0].text.toString()
+                    localData.id = editTextViews[0].text.toString()
                     localData.userPassword = editTextViews[1].text.toString()
                 } else {
                     callLoadingAnimation(false)

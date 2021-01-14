@@ -151,7 +151,7 @@ class ActivityLogin : AppCompatActivity() {
                         db.getUser(emailText.text.toString(), object : MyCallBack {
                             override fun onCallBack(`object`: Any) {
                                 localData.userData = `object` as UserDTO
-                                localData.userEmail = emailText.text.toString()
+                                localData.id = emailText.text.toString()
                                 val intent = Intent(applicationContext, HOMEACTIVITY)
                                 startActivity(intent)
                                 finish()

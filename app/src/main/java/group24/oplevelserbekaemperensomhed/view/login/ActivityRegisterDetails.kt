@@ -1,16 +1,13 @@
 package group24.oplevelserbekaemperensomhed.view.login
 
-import android.app.Service
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.IBinder
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -30,7 +27,6 @@ import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
-import group24.oplevelserbekaemperensomhed.logic.FacebookAuthorization
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter
 import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
@@ -239,7 +235,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
     private fun createUser() {
         if (facebookCredential == null) {
-            auth.createUserWithEmailAndPassword(localData.userEmail, localData.userPassword)
+            auth.createUserWithEmailAndPassword(localData.id, localData.userPassword)
                 .addOnCompleteListener { task ->
                     uploadUserDetailsToDatabase(task)
                 }
@@ -269,7 +265,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     ArrayList<String>(),
                     profilePictures
                 )
-                db.createUser(dbUser, firebaseUser.email!!, object : MyCallBack {
+                db.createUser(dbUser, firebaseUser.uid, object : MyCallBack {
                     override fun onCallBack(`object`: Any) {
                         // Opens the mainactivity now that the user has been created
                         val intent = Intent(applicationContext, HOMEACTIVITY)
