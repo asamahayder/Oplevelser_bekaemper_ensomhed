@@ -36,6 +36,23 @@
     <string name="year">Year*</string>
     <string name="address">Address</string>
     <string name="set_an_address">Set an address*</string>
+    <string name="first_name">First Name*</string>
+    <string name="last_name">Last Name</string>
+    <string name="occupation">Occupation</string>
+    <string name="your_occupation">Your occupation*</string>
+    <string name="education">Education</string>
+    <string name="your_place_of_study">Your place of study*</string>
+    <string name="your_description">Your description</string>
+    <string name="name">Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="submit">Submit</string>
+    <string name="username">Username*</string>
+    <string name="password">Password (Minimum 8 characters)*</string>
+    <string name="type_password_again">Type password again*</string>
+    <string name="create_a_user">Create a User</string>
+    <string name="sign_up">Sign up</string>
 
     <!--API key-->
     <string name="api_key">AIzaSyDUwkNv3lmgnANbJC09i-RiYGTlxdDXqyk</string>
@@ -51,16 +68,5 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="first_name">First Name*</string>
-    <string name="last_name">Last Name</string>
-    <string name="occupation">Occupation</string>
-    <string name="your_occupation">Your occupation*</string>
-    <string name="education">Education</string>
-    <string name="your_place_of_study">Your place of study*</string>
-    <string name="your_description">Your description</string>
-    <string name="name">Name</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="other">Other</string>
 
 </resources>

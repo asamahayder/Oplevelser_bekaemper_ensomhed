@@ -1,14 +1,11 @@
 package group24.oplevelserbekaemperensomhed.view.search
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -85,9 +82,9 @@ class FragmentSearchHome : Fragment() {
     private fun firebaseQueryBanners() {
         Log.d(TAG, "Querying firebase for banners")
         db.getAllBanners(object : MyCallBack {
-            override fun onCallBack(`dbBanners`: Any) {
-                val bannerDataList = dbBanners as ArrayList<DBBanner>
-                for (banner in dbBanners) {
+            override fun onCallBack(`object`: Any) {
+                val bannerDataList = `object` as ArrayList<DBBanner>
+                for (banner in `object`) {
                     bannerPictures.add(banner.picture)
                     bannerURLs.add(banner.url)
                 }

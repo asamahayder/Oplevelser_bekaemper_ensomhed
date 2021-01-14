@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".view.login.ActivityRegisterUserDetails">
+    tools:context=".view.login.ActivityRegisterDetails">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_height="55sp">
 
             <ImageView
-                android:id="@+id/activity_register_backButton"
+                android:id="@+id/activity_register_details_backButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingStart="16dp"
@@ -28,7 +28,7 @@
                 />
 
             <ImageView
-                android:id="@+id/activity_register_submitButton1"
+                android:id="@+id/activity_register_details_submitButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingStart="16dp"
@@ -40,7 +40,7 @@
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/activity_register_choose_pictures_layout"
+            android:id="@+id/activity_register_details_choose_pictures_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -48,7 +48,7 @@
             >
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/activity_register_choose_pictures_button"
+                android:id="@+id/activity_register_details_choose_pictures_button"
                 style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/activity_register_firstName"
+                android:id="@+id/activity_register_details_firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -103,7 +103,7 @@
                 />
 
             <EditText
-                android:id="@+id/activity_register_lastName"
+                android:id="@+id/activity_register_details_lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -193,7 +193,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/activity_register_dayTest"
+                android:id="@+id/activity_register_details_dayTest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="4"
@@ -210,7 +210,7 @@
                 />
 
             <EditText
-                android:id="@+id/activity_register_monthText"
+                android:id="@+id/activity_register_details_monthText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="4"
@@ -226,7 +226,7 @@
                 />
 
             <EditText
-                android:id="@+id/activity_register_yearText"
+                android:id="@+id/activity_register_details_yearText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="4"
@@ -263,7 +263,7 @@
             android:layout_marginBottom="10dp"/>
 
         <EditText
-            android:id="@+id/activity_register_addressText"
+            android:id="@+id/activity_register_details_addressText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -296,7 +296,7 @@
             android:layout_marginBottom="10dp"/>
 
         <EditText
-            android:id="@+id/activity_register_occupationText"
+            android:id="@+id/activity_register_details_occupationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -328,7 +328,7 @@
             android:layout_marginBottom="10dp"/>
 
         <EditText
-            android:id="@+id/activity_register_educationText"
+            android:id="@+id/activity_register_details_educationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -362,7 +362,7 @@
 
 
         <EditText
-            android:id="@+id/activity_register_aboutText"
+            android:id="@+id/activity_register_details_aboutText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="200dp"
@@ -379,7 +379,7 @@
             />
 
         <LinearLayout
-            android:id="@+id/activity_register_submitButton2"
+            android:id="@+id/activity_register_details_submitButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -400,9 +400,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit"
-                android:paddingLeft="10dp"
-                android:paddingRight="20dp"
+                android:text="Finish"
+                android:paddingStart="10dp"
+                android:paddingEnd="20dp"
                 android:textSize="20sp"
                 android:paddingVertical="5dp"
                 android:textColor="#2E2E2E"

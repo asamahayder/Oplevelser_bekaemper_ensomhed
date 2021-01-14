@@ -76,13 +76,13 @@ class FirebaseDAO{
     fun getEvents(callBack: MyCallBack){
 
         getAllEventsFromDB(object : MyCallBack {
-            override fun onCallBack(dbEvents: Any) {
-                val eventDataList = dbEvents as ArrayList<DBEvent>
+            override fun onCallBack(`object`: Any) {
+                val eventDataList = `object` as ArrayList<DBEvent>
                 Log.d(ActivitySearch.TAG, "Getting all eventCreators")
                 for (dbEvent in eventDataList) {
                     getUser(dbEvent.eventCreator, object : MyCallBack {
-                        override fun onCallBack(`dbUser`: Any) {
-                            val userData = dbUser as DBUser
+                        override fun onCallBack(`object`: Any) {
+                            val userData = `object` as DBUser
                             val user = UserDTO(userData.name,userData.age,userData.address,userData.occupation,userData.education,userData.about,userData.gender,null,userData.profilePictures.toCollection(ArrayList()))
                             val event = EventDTO(user,null,dbEvent.eventDescription,dbEvent.eventTitle,
                                 DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))

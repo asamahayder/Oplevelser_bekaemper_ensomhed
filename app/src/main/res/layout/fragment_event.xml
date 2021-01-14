@@ -258,7 +258,7 @@
         android:layout_height="55sp">
 
         <ImageView
-            android:id="@+id/aevent_info_backButton"
+            android:id="@+id/activity_register_details_backButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="16dp"

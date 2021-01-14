@@ -45,7 +45,7 @@ public class FragmentEventInfo extends Fragment {
         eventPriceTextView = v.findViewById(R.id.aevent_info_price);
         eventTimeTextView = v.findViewById(R.id.aevent_info_time);
         eventBioTextView = v.findViewById(R.id.aevent_info_bio);
-        eventBackButton = v.findViewById(R.id.activity_register_backButton);
+        eventBackButton = v.findViewById(R.id.activity_register_details_backButton);
 
 
         //Getting event from parent fragment

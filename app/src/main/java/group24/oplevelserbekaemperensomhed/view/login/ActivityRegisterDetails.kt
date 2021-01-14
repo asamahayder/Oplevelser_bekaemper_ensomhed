@@ -1,12 +1,16 @@
 package group24.oplevelserbekaemperensomhed.view.login
 
+import android.app.Service
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -17,18 +21,19 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip
+import com.google.firebase.auth.FirebaseAuth
 import group24.oplevelserbekaemperensomhed.MainActivity
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter
-import kotlinx.android.synthetic.main.activity_register_user_details.*
+import kotlinx.android.synthetic.main.activity_register_details.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ActivityRegisterUserDetails : AppCompatActivity() {
+class ActivityRegisterDetails : AppCompatActivity() {
 
     private lateinit var choosePicturesLayout: ConstraintLayout
     private lateinit var editTextViews: Array<EditText>
@@ -40,20 +45,22 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
     private val profilePictures = ArrayList<String>()
     private var address = ""
 
+    private lateinit var serviceIntent: Intent
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register_user_details)
+        setContentView(R.layout.activity_register_details)
         initializeViews()
     }
 
     private fun initializeViews() {
         // Initializing all Buttons
-        val backButton: ImageView = activity_register_backButton
-        val submitButton1: ImageView = activity_register_submitButton1
-        val submitButton2: LinearLayout = activity_register_submitButton2
-        val addressButton: EditText = activity_register_addressText
-        val choosePicturesButton: Chip = activity_register_choose_pictures_button
+        val backButton: ImageView = activity_register_details_backButton
+        val submitButton1: ImageView = activity_register_details_submitButton1
+        val submitButton2: LinearLayout = activity_register_details_submitButton2
+        val addressButton: EditText = activity_register_details_addressText
+        val choosePicturesButton: Chip = activity_register_details_choose_pictures_button
         buttonViews = arrayOf(
             backButton,
             submitButton1,
@@ -63,17 +70,17 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
         )
 
         // Choose pictures layout
-        choosePicturesLayout = activity_register_choose_pictures_layout
+        choosePicturesLayout = activity_register_details_choose_pictures_layout
 
         // Initializing all TextViews
-        val firstName: EditText = activity_register_firstName
-        val lastName: EditText = activity_register_lastName
-        val dayText: EditText = activity_register_dayTest
-        val monthText: EditText = activity_register_monthText
-        val yearText: EditText = activity_register_yearText
-        val occupationText: EditText = activity_register_occupationText
-        val educationText: EditText = activity_register_educationText
-        val aboutText: EditText = activity_register_aboutText
+        val firstName: EditText = activity_register_details_firstName
+        val lastName: EditText = activity_register_details_lastName
+        val dayText: EditText = activity_register_details_dayTest
+        val monthText: EditText = activity_register_details_monthText
+        val yearText: EditText = activity_register_details_yearText
+        val occupationText: EditText = activity_register_details_occupationText
+        val educationText: EditText = activity_register_details_educationText
+        val aboutText: EditText = activity_register_details_aboutText
         editTextViews = arrayOf(
             firstName,
             lastName,
@@ -94,13 +101,18 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
         }
 
         // Initialize adapter
-        adapter = ViewPagerAdapter(supportFragmentManager,profilePictures,R.layout.fragment_profile_event_1_viewpager,null)
+        adapter = ViewPagerAdapter(
+            supportFragmentManager,
+            profilePictures,
+            R.layout.fragment_profile_event_1_viewpager,
+            null
+        )
     }
 
     private fun handleOnClickViews() {
         val backButton: ImageView = buttonViews[0] as ImageView
         backButton.setOnClickListener {
-            finish()
+            goBackAndDeleteUserDetails()
         }
         val submitButton1: ImageView = buttonViews[1] as ImageView
         submitButton1.setOnClickListener {
@@ -120,12 +132,24 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
         }
     }
 
+    private fun goBackAndDeleteUserDetails() {
+        val auth = FirebaseAuth.getInstance()
+        auth.currentUser?.delete()
+        val intent = Intent(applicationContext, LOGINACTIVITY)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+    }
+
     private fun submitDataToUserObject() {
         for (textView in editTextViews) {
             val text = textView.text.toString()
             val hint = textView.hint.toString()
             if (hint.contains("*") && text == "") {
-                Toast.makeText(applicationContext, "Please fill out the sections marked with '*'", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Please fill out the sections marked with '*'",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
             else if (hint.contains("First Name*") && text.length == 1) {
@@ -133,21 +157,38 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
                 return
             }
             if (hint.contains("Day") && text.toInt() > 31) {
-                Toast.makeText(applicationContext, "Please choose a real day date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Please choose a real day date",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
             else if (hint.contains("Month") && text.toInt() > 12) {
-                Toast.makeText(applicationContext, "Please choose a real month date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Please choose a real month date",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
             else if (hint.contains("Year") && text.length < 4) {
-                Toast.makeText(applicationContext, "Please choose a real year date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Please choose a real year date",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
             else if (hint.contains("Month")) {
+                //FIXME NOT REALLY WORKING AS INTENDED
                 if (text.toInt() % 2 != 1) {
-                    if (text.toInt() >= 30) {
-                        Toast.makeText(applicationContext, "Please choose a real day date", Toast.LENGTH_SHORT).show()
+                    if (text.toInt() >= 29) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Please choose a real day date",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return
                     }
                 }
@@ -171,26 +212,37 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
         }
 
         // Saves the data in the text fields to the user object
-        saveUserDetailsToLocalData()
+        if(saveUserDetailsToLocalData()) {
+            //FIXME ADD FIREBASE REGISTRATION HERE
 
-        //FIXME ADD FIREBASE REGISTRATION HERE
-
-        // Opens the mainactivity now that the user has been created
-        val intent = Intent(applicationContext, HOMEACTIVITY)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
+            // Opens the mainactivity now that the user has been created
+            val intent = Intent(applicationContext, HOMEACTIVITY)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+            stopService(serviceIntent)
+        }
     }
 
-    private fun saveUserDetailsToLocalData() {
+    private fun saveUserDetailsToLocalData(): Boolean {
         val localData = LocalData
-        val name = StringBuilder()
+        var nameBuilder = StringBuilder()
         val age = getAge(
-            editTextViews[2].text.toString().toInt(),
-            editTextViews[2].text.toString().toInt(),
-            editTextViews[3].text.toString().toInt()
+            editTextViews[4].text.toString().toInt(),
+            editTextViews[3].text.toString().toInt(),
+            editTextViews[2].text.toString().toInt()
         )
+        if (age < 0) {
+            Toast.makeText(applicationContext, "Please enter a valid age", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        nameBuilder = nameBuilder.append(editTextViews[0].text.toString())
+        if (editTextViews[1].text.toString().isNotEmpty()) {
+            nameBuilder = nameBuilder.append(editTextViews[0].text.toString()).append(" ").append(
+                editTextViews[1].text.toString()
+            )
+        }
         val user = UserDTO(
-            name.toString(),
+            nameBuilder.toString(),
             age,
             address,
             editTextViews[5].text.toString(),
@@ -201,6 +253,8 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
             profilePictures
         )
         localData.userData = user
+        Log.d(TAG, "userdata = $user")
+        return true
     }
 
     private fun getAge(year: Int, month: Int, day: Int): Int {
@@ -211,14 +265,15 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
         if (today[Calendar.DAY_OF_YEAR] < dob[Calendar.DAY_OF_YEAR]) {
             age--
         }
-
+        Log.d(TAG, "user age = $age")
         return age
     }
 
     private fun searchForAddressWithAutoComplete() {
         val fields = listOf(Place.Field.NAME, Place.Field.ADDRESS)
         val intent = Autocomplete.IntentBuilder(
-            AutocompleteActivityMode.FULLSCREEN, fields)
+            AutocompleteActivityMode.FULLSCREEN, fields
+        )
             .setCountry("DK") //Denmark
             .build(this)
         startActivityForResult(intent, 1)
@@ -239,7 +294,6 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
                 RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
                     val addressEditText: EditText = buttonViews[3] as EditText
-                    Toast.makeText(this, "address:" + place.address + "Name:" + place.name, Toast.LENGTH_LONG).show()
                     address = place.address!!
                     addressEditText.setText(address)
                 }
@@ -247,18 +301,20 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
                     val status = Autocomplete.getStatusFromIntent(
                         data!!
                     )
-                    Toast.makeText(this, "Error: " + status.statusMessage, Toast.LENGTH_LONG
+                    Toast.makeText(
+                        this, "Error: " + status.statusMessage, Toast.LENGTH_LONG
                     ).show()
                 }
-                RESULT_CANCELED -> { }
+                RESULT_CANCELED -> {
+                }
             }
         }
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             profilePictures.clear()
             val clipData = data!!.clipData
             if (clipData != null) {
-                if (clipData.itemCount > 3) {
-                    Toast.makeText(this, "Error: Max 3 pictures", Toast.LENGTH_LONG).show()
+                if (clipData.itemCount > 8) {
+                    Toast.makeText(this, "Error: Max 8 pictures", Toast.LENGTH_LONG).show()
                     return
                 } else {
                     for (i in 0 until clipData.itemCount) {
@@ -286,13 +342,30 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
                 val constraintSet = ConstraintSet()
                 val choosePicturesButton: Chip = buttonViews[4] as Chip
                 constraintSet.clone(choosePicturesLayout)
-                constraintSet.connect(choosePicturesButton.id, ConstraintSet.TOP, viewPager!!.id, ConstraintSet.BOTTOM, 20)
+                constraintSet.connect(
+                    choosePicturesButton.id,
+                    ConstraintSet.TOP,
+                    viewPager!!.id,
+                    ConstraintSet.BOTTOM,
+                    20
+                )
                 constraintSet.applyTo(choosePicturesLayout)
             } else {
-                adapter = ViewPagerAdapter(supportFragmentManager, profilePictures, R.layout.fragment_search_home_1_viewpager, null)
+                adapter = ViewPagerAdapter(
+                    supportFragmentManager,
+                    profilePictures,
+                    R.layout.fragment_profile_event_1_viewpager,
+                    null
+                )
                 viewPager!!.adapter = adapter
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val auth = FirebaseAuth.getInstance()
+        auth.currentUser?.delete()
     }
 
     fun onRadioButtonClicked(view: View) {
@@ -317,8 +390,11 @@ class ActivityRegisterUserDetails : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE = 100
+        private const val TAG = "ActivityRegisterDetails"
         private val HOMEACTIVITY = MainActivity::class.java
+        private val LOGINACTIVITY = ActivityLogin::class.java
         private var checked = false
         private var gender = ""
     }
+
 }
