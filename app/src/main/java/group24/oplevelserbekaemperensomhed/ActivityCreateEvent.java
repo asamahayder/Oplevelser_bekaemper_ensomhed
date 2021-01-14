@@ -1,6 +1,7 @@
 package group24.oplevelserbekaemperensomhed;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
@@ -8,6 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -16,7 +22,12 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -48,6 +59,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import group24.oplevelserbekaemperensomhed.data.DateDTO;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
@@ -104,13 +116,26 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Uri imageUri;
     Chip getImageButton;
     ArrayList<String> pictures = new ArrayList<>();
+    ArrayList<Uri> picturesAsUris = new ArrayList<>();
+    ArrayList<String> pictureDownloadLinks = new ArrayList<>();
     ViewPagerAdapter adapter;
     ViewPager viewPager = null;
+    boolean multipleImagesChosen = false;
+
+    //For uploading image
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+
+    int uploadImageCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event2);
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
         initializeView();
     }
 
@@ -380,6 +405,12 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }
 
 
+        //Handling upload of pictures and getting their new urls
+        uploadImage();
+
+    }
+
+    private void createEvent(){
         //CREATING EVENT OBJECT
         LocalData data = LocalData.INSTANCE;
         UserDTO user = data.getUserData();
@@ -389,7 +420,10 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         ArrayList<UserDTO> participants = new ArrayList<>();
         participants.add(user);
 
-        EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(), dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(), pictures);
+        EventDTO eventDTO = new EventDTO(user, participants, editTextAbout.getText().toString(), editTextTitle.getText().toString(),
+                dateDTO, 13, chosenCategory, findAddressEditText.getText().toString(), editTextAmount.getText().toString(),
+                pictureDownloadLinks);
+
         //Toast.makeText(getApplicationContext(),"Created event! :D",Toast.LENGTH_SHORT).show();
         //LocalData localData = LocalData.INSTANCE;
         //localData.getUserCreatedEvents().add(eventDTO);
@@ -404,6 +438,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         });
 
     }
+
 
     private void onEventCreated(String message){
         if(message.equals("success")){
@@ -459,7 +494,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             }
         }
 
-        if (resultCode == RESULT_OK && requestCode == getImageResultCode) {
+        if (resultCode == RESULT_OK && requestCode == getImageResultCode && data != null && data.getData() != null) {
             pictures.clear();
             ClipData clipData = data.getClipData();
             if (clipData != null){//Checking if user selected multiple
@@ -469,15 +504,21 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 }else{
                     for (int i = 0; i <clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();
+                        picturesAsUris.add(imageUri);
                         pictures.add(imageUri.toString());
                     }
+                    multipleImagesChosen = true;
                 }
 
             }else{
                 imageUri = data.getData();
                 pictures.add(imageUri.toString());
+                picturesAsUris.add(imageUri);
+                multipleImagesChosen = false;
             }
 
+
+            //Showing pictures on viewpager
             if (viewPager == null){
                 System.out.println("***********************Im NUUUUUUUUUULLLLL***************");
                 viewPager = new ViewPager(this);
@@ -497,6 +538,133 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_search_home_1_viewpager,null);
                 viewPager.setAdapter(adapter);
             }
+        }
+
+    }
+
+    /*private String uploadImage(){
+        final String[] resultMessage = {"Fail"};
+        //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
+        //Showing progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        //handling multiple pictures
+        if (multipleImagesChosen){
+            for (Uri filePath : picturesAsUris) {
+                StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+                ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Image uploaded successfully
+                        // Dismiss dialog
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                    }})
+
+                        .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Error, Image not uploaded
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }})
+
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        // Progress Listener for loading
+                        // percentage on the dialog box
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                            }
+                    });
+            }
+        }else{
+            final StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+            UploadTask uploadTask = ref.putFile(imageUri);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        pictures.clear();
+                        pictures.add(downloadUri.toString());
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                        resultMessage[0] = "Success";
+                        createEvent();
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Failed upload", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+        return resultMessage[0];
+    }*/
+
+    private void uploadImage(){
+        //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
+        //Showing progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        uploadImageCounter = picturesAsUris.size();
+
+        for (Uri imageUri : picturesAsUris) {
+            final StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+            UploadTask uploadTask = ref.putFile(imageUri);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+
+                        Uri downloadUri = task.getResult();
+                        pictureDownloadLinks.add(downloadUri.toString());
+
+                        //handle progress dialog
+                        uploadImageCounter--;
+                        if (uploadImageCounter == 0){
+                            progressDialog.dismiss();
+                        }else{
+                            progressDialog.setMessage(uploadImageCounter + "Images left");
+                        }
+
+                        Toast.makeText(ActivityCreateEvent.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                        createEvent();
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(ActivityCreateEvent.this, "Failed upload", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
     }
