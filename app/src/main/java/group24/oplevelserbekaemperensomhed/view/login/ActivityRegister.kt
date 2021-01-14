@@ -69,7 +69,6 @@ class ActivityRegister : AppCompatActivity() {
     }
 
     private fun handleSubmitUserDetails() {
-        val auth = FirebaseAuth.getInstance()
         if (editTextViews[1].text.toString() != editTextViews[2].text.toString()) {
             Toast.makeText(
                 applicationContext,
@@ -87,28 +86,6 @@ class ActivityRegister : AppCompatActivity() {
         }
         callLoadingAnimation(true)
         checkEmailExistsOrNot(editTextViews[0].text.toString())
-//        auth.createUserWithEmailAndPassword(
-//            editTextViews[0].text.toString(),
-//            editTextViews[1].text.toString()
-//        )
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    Log.d(TAG, "create firebase user with email success")
-//                    val user = auth.currentUser
-//                    if (user != null) {
-//                        localData.userID = user.uid
-//                    }
-//                    callLoadingAnimation(false)
-//                    val intent = Intent(this, REGISTERDETAILSACTIVITY)
-//                    startActivity(intent)
-//                    lottie.visibility = View.GONE
-//                    finish()
-//                } else {
-//                    Log.d(TAG, "create firebase user with email failed")
-//                    callLoadingAnimation(false)
-//                    Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
     }
 
     private fun callLoadingAnimation(playAnimation: Boolean) {
@@ -119,14 +96,9 @@ class ActivityRegister : AppCompatActivity() {
         }
     }
 
-
     companion object {
         private const val TAG = "ActivityRegister"
         private val REGISTERDETAILSACTIVITY = ActivityRegisterDetails::class.java
-    }
-
-    interface OnEmailCheckListener {
-        fun onSuccess(isRegistered: Boolean)
     }
 
     private fun checkEmailExistsOrNot(email: String) {
@@ -135,9 +107,17 @@ class ActivityRegister : AppCompatActivity() {
             OnCompleteListener<SignInMethodQueryResult> { task ->
                 Log.d(TAG, "" + task.result.signInMethods!!.size)
                 if (task.result.signInMethods!!.size == 0) {
-                    // email not existed
+                    callLoadingAnimation(false)
+                    Toast.makeText(applicationContext,"EMAIL DOES NOT EXIST!",Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, REGISTERDETAILSACTIVITY)
+                    startActivity(intent)
+                    finish()
+                    lottie.visibility = View.GONE
+                    localData.userEmail = editTextViews[0].text.toString()
+                    localData.userPassword = editTextViews[1].text.toString()
                 } else {
-                    // email existed
+                    callLoadingAnimation(false)
+                    Toast.makeText(applicationContext,"EMAIL EXISTS!",Toast.LENGTH_SHORT).show()
                 }
             }).addOnFailureListener(OnFailureListener { e -> e.printStackTrace() })
     }

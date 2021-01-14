@@ -28,6 +28,9 @@ import group24.oplevelserbekaemperensomhed.data.EventDTO
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter
+import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
+import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 import kotlinx.android.synthetic.main.activity_register_details.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,7 +48,9 @@ class ActivityRegisterDetails : AppCompatActivity() {
     private val profilePictures = ArrayList<String>()
     private var address = ""
 
-    private lateinit var serviceIntent: Intent
+    private val auth = FirebaseAuth.getInstance()
+    private val localData = LocalData
+    private val db = FirebaseDAO()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,7 +138,6 @@ class ActivityRegisterDetails : AppCompatActivity() {
     }
 
     private fun goBackAndDeleteUserDetails() {
-        val auth = FirebaseAuth.getInstance()
         auth.currentUser?.delete()
         val intent = Intent(applicationContext, LOGINACTIVITY)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -213,14 +217,36 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
         // Saves the data in the text fields to the user object
         if(saveUserDetailsToLocalData()) {
-            //FIXME ADD FIREBASE REGISTRATION HERE
-
-            // Opens the mainactivity now that the user has been created
-            val intent = Intent(applicationContext, HOMEACTIVITY)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-            stopService(serviceIntent)
+            //FIXME LOADING ANIMATION MAYBE?
+            createUser()
         }
+    }
+
+    private fun createUser() {
+        auth.createUserWithEmailAndPassword(localData.userEmail, localData.userPassword)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "create firebase user with email success")
+                    val firebaseUser = auth.currentUser
+                    if (firebaseUser != null) {
+                        val user = localData.userData
+                        val dbUser = DBUser(user.name!!,user.age!!,user.gender!!,user.about!!,user.address!!,user.occupation!!,user.education!!,ArrayList<String>(),profilePictures)
+                        db.createUser(dbUser, localData.userEmail, object : MyCallBack {
+                            override fun onCallBack(`object`: Any) {
+                                // Opens the mainactivity now that the user has been created
+                                val intent = Intent(applicationContext, HOMEACTIVITY)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                startActivity(intent)
+                                localData.userPassword = ""
+                            }
+                        })
+                    }
+                } else {
+                    Log.d(TAG, "create firebase user with email failed")
+                    Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
     }
 
     private fun saveUserDetailsToLocalData(): Boolean {
@@ -241,17 +267,9 @@ class ActivityRegisterDetails : AppCompatActivity() {
                 editTextViews[1].text.toString()
             )
         }
-        val user = UserDTO(
-            nameBuilder.toString(),
-            age,
-            address,
-            editTextViews[5].text.toString(),
-            editTextViews[6].text.toString(),
-            editTextViews[7].text.toString(),
-            gender,
-            ArrayList<EventDTO>(),
-            profilePictures
-        )
+        val user = UserDTO(nameBuilder.toString(), age, address, editTextViews[5].text.toString(), editTextViews[6].text.toString(), editTextViews[7].text.toString(), gender, ArrayList<EventDTO>(), profilePictures)
+        Log.d(TAG, "User object = $user")
+
         localData.userData = user
         Log.d(TAG, "userdata = $user")
         return true

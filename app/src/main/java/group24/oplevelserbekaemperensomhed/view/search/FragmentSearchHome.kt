@@ -20,7 +20,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.*
 
 class FragmentSearchHome : Fragment() {
 
-    private val events = ArrayList<EventDTO>()
+    private lateinit var events: ArrayList<EventDTO>
     private lateinit var adapter: SearchHomeAdapterVertical
 
     private lateinit var searchActivityButton: View
@@ -48,10 +48,10 @@ class FragmentSearchHome : Fragment() {
     }
 
     private fun initializeView() {
-        searchActivityButton = view!!.findViewById(R.id.fsearch_home_searchbutton)
-        viewPager = view!!.findViewById(R.id.fsearch_viewpager)
-        recyclerView = view!!.findViewById(R.id.fsearch_recyclerview)
-        swipeRefresh = view!!.findViewById(R.id.fsearch_refresh)
+        searchActivityButton = requireView().findViewById(R.id.fsearch_home_searchbutton)
+        viewPager = requireView().findViewById(R.id.fsearch_viewpager)
+        recyclerView = requireView().findViewById(R.id.fsearch_recyclerview)
+        swipeRefresh = requireView().findViewById(R.id.fsearch_refresh)
         searchActivityButton.setOnClickListener {
             Log.d(TAG, "Search Activity clicked")
             val intent = Intent(activity, ActivitySearch::class.java)
@@ -66,17 +66,19 @@ class FragmentSearchHome : Fragment() {
             firebaseQueryEvents()
             swipeRefresh.isRefreshing = false
         }
-        if (localData.searchResultsEvents.size == 0) {
+        Log.d(TAG, "searchResultsEvents = ${localData.searchResultsEvents}")
+        Log.d(TAG, "searchResultsBanners = ${localData.searchResultsBanners}")
+        Log.d(TAG, "eventsSortedByCategories = $sortedCategoriesList")
+        if (sortedCategoriesList.size == 0) {
             firebaseQueryEvents()
         } else {
             handleRecyclerView()
         }
-        if (localData.searchResultsBanners.size == 0) {
+        if (sortedCategoriesList.size == 0) {
             firebaseQueryBanners()
         } else {
             handleViewPager()
         }
-        //testing()
     }
 
     private fun firebaseQueryBanners() {
@@ -103,17 +105,17 @@ class FragmentSearchHome : Fragment() {
     }
 
     private fun firebaseQueryEvents(){
+        Log.d(TAG, "Querying firebase for events")
         db.getEvents(object: MyCallBack{
             override fun onCallBack(`object`: Any) {
                 val list:ArrayList<EventDTO> = `object` as ArrayList<EventDTO>
                 sortedCategoriesList = sortEventsByCategory(list)
+                localData.searchResultsEvents = list
                 handleRecyclerView()
+                Log.d(TAG, "Firebase query for events complete")
             }
         })
     }
-
-
-
 
     private fun handleRecyclerView() {
         adapter = SearchHomeAdapterVertical(this@FragmentSearchHome, sortedCategoriesList)
@@ -121,7 +123,7 @@ class FragmentSearchHome : Fragment() {
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.recycledViewPool.setMaxRecycledViews(0, 0)
-        localData.searchResultsEvents = events
+        events = localData.searchResultsEvents
     }
 
     private fun sortEventsByCategory(eventList: ArrayList<EventDTO>): ArrayList<SearchHomeItem> {
@@ -162,31 +164,8 @@ class FragmentSearchHome : Fragment() {
         return searchHomeListVertical
     }
 
-    private fun testing() {
-        val dummy = DummyData()
-        val dummyList = dummy.searchHomeList
-        testing_viewpager()
-        recyclerView.adapter = SearchHomeAdapterVertical(this, dummyList)
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,
-            false
-        )
-        recyclerView.recycledViewPool.setMaxRecycledViews(0, 0)
-
-        Log.d(TAG, dummyList.size.toString())
-    }
-
-
-
-    private fun testing_viewpager() {
-        val dummy = DummyData()
-        val pagerAdapter = ViewPagerAdapter(
-            childFragmentManager,
-            dummy.bannerList as ArrayList<String>, R.layout.fragment_search_home_1_viewpager,dummy.bannerList as ArrayList<String>)
-        viewPager.adapter = pagerAdapter
-    }
-
     companion object {
-        const val TAG = "search"
+        const val TAG = "FragmentSearchHome"
     }
 
 }

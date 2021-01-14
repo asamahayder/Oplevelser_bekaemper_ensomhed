@@ -115,4 +115,16 @@ class FirebaseDAO{
         }
     }
 
+    fun createUser(dbUser: DBUser, uid: String, callBack: MyCallBack) {
+        db.collection("users").document(uid).set(dbUser)
+            .addOnCompleteListener {task ->
+                if (task.isSuccessful) {
+                    callBack.onCallBack("success")
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
 }
