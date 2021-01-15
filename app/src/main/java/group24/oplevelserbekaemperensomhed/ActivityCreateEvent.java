@@ -50,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -419,16 +420,21 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }
 
         if(!editTextDate.equals("")) { //Checking that the date range is before current date
-            Date startDate = new Date(this.startDate);
-            Date now = new Date(System.currentTimeMillis());
-            if (!startDate.equals(now)){ //the .before() function returns true when they are equal, therefore we want check if they are equal first.
-                if (startDate.before(now)) {
-                    Toast.makeText(this, "Date start time can not be in past", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            long now = cal.getTimeInMillis();
 
+            long difference = now-startDate;
+            if (difference > 0){ //startDate is before now
+                Toast.makeText(this, "Date start time can not be in past", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
+
+
 
 
         //Handling upload of pictures and getting their new urls
