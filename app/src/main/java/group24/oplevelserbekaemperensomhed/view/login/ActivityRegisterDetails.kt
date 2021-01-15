@@ -35,6 +35,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener
+import kotlinx.android.synthetic.main.activity_create_event2.*
 import kotlinx.android.synthetic.main.activity_register_details.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -46,7 +47,6 @@ class ActivityRegisterDetails : AppCompatActivity() {
     private lateinit var editTextViews: Array<EditText>
     private lateinit var buttonViews: Array<Any>
 
-    private lateinit var adapter: ViewPagerAdapter
     private var viewPager: ViewPager? = null
 
     private val profilePictures = ArrayList<String>()
@@ -154,13 +154,6 @@ class ActivityRegisterDetails : AppCompatActivity() {
             Places.initialize(applicationContext, getString(R.string.api_key))
         }
 
-        // Initialize adapter
-        adapter = ViewPagerAdapter(
-            supportFragmentManager,
-            profilePictures,
-            R.layout.fragment_profile_event_1_viewpager,
-            null
-        )
     }
 
     private fun handleOnClickViews() {
@@ -427,6 +420,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
         }
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             profilePictures.clear()
+            picturesAsURIs.clear()
             val clipData = data!!.clipData
             if (clipData != null) {
                 if (clipData.itemCount > 8) {
@@ -446,40 +440,37 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     picturesAsURIs.add(imageUri)
                 }
             }
-            if (viewPager == null) {
-                viewPager = ViewPager(this)
-                viewPager!!.id = View.generateViewId()
-                viewPager!!.layoutParams = ConstraintLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    0
-                )
-                (viewPager!!.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio =
-                    "1:1"
-                viewPager!!.adapter = adapter
-                choosePicturesLayout.addView(viewPager)
-
-                //Moving set images button below viewpager
-                val constraintSet = ConstraintSet()
-                val choosePicturesButton: Chip = buttonViews[4] as Chip
-                constraintSet.clone(choosePicturesLayout)
-                constraintSet.connect(
-                    choosePicturesButton.id,
-                    ConstraintSet.TOP,
-                    viewPager!!.id,
-                    ConstraintSet.BOTTOM,
-                    20
-                )
-                constraintSet.applyTo(choosePicturesLayout)
-            } else {
-                adapter = ViewPagerAdapter(
-                    supportFragmentManager,
-                    profilePictures,
-                    R.layout.fragment_profile_event_1_viewpager,
-                    null
-                )
-                viewPager!!.adapter = adapter
+            if (viewPager != null) {
+                choosePicturesLayout.removeView(viewPager)
             }
+            createViewPager()
         }
+    }
+
+    private fun createViewPager(){
+        viewPager = ViewPager(this)
+        viewPager!!.id = View.generateViewId()
+        viewPager!!.layoutParams = ConstraintLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            0
+        )
+        (viewPager!!.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio =
+            "1:1"
+        viewPager!!.adapter = ViewPagerAdapter(supportFragmentManager, profilePictures, R.layout.fragment_profile_event_1_viewpager, null);
+        choosePicturesLayout.addView(viewPager)
+
+        //Moving set images button below viewpager
+        val constraintSet = ConstraintSet()
+        val choosePicturesButton: Chip = buttonViews[4] as Chip
+        constraintSet.clone(choosePicturesLayout)
+        constraintSet.connect(
+            choosePicturesButton.id,
+            ConstraintSet.TOP,
+            viewPager!!.id,
+            ConstraintSet.BOTTOM,
+            20
+        )
+        constraintSet.applyTo(choosePicturesLayout)
     }
 
     override fun onDestroy() {
