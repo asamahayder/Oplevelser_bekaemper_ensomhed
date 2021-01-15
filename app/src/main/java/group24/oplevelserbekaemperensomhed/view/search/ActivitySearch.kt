@@ -75,7 +75,8 @@ class ActivitySearch : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                TODO("Not yet implemented")
+                //FIXME
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    tools:context=".view.profile.AProfileEdit"
+    tools:context=".view.profile.ActivityEditProfile"
     android:background="@color/colorEditBackground">
 
     <LinearLayout
