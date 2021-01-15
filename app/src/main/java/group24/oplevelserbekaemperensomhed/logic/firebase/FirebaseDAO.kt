@@ -182,6 +182,17 @@ class FirebaseDAO{
         }
     }
 
+    fun deleteUser(id: String,callBack: MyCallBack) {
+        db.collection("users").document(id).delete().addOnCompleteListener {task ->
+            if (task.isSuccessful) {
+                callBack.onCallBack(true)
+            }
+            else {
+                callBack.onCallBack(false)
+            }
+        }
+    }
+
     fun getParticipants(event: EventDTO, callBack: MyCallBack){
         val pairs: ArrayList<DBEventParticipantPair> = ArrayList()
         val users: ArrayList<UserDTO> = ArrayList()
