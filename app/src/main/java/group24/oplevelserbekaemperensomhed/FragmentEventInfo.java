@@ -3,6 +3,7 @@ package group24.oplevelserbekaemperensomhed;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,11 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.ktx.Firebase;
+import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
+import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
+import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
+import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 
 
 public class FragmentEventInfo extends Fragment {
@@ -37,7 +46,9 @@ public class FragmentEventInfo extends Fragment {
     private TextView categoryName;
     private TextView timeStart;
     private TextView timeEnd;
+    private TextView eventOwnerName;
     private LinearLayout joinButton;
+    private LinearLayout participantLayout;
 
     public FragmentEventInfo() {
         // Required empty public constructor
@@ -59,6 +70,8 @@ public class FragmentEventInfo extends Fragment {
         timeStart = v.findViewById(R.id.aevent_info_clock_start_text);
         timeEnd = v.findViewById(R.id.aevent_info_clock_end_text);
         joinButton = v.findViewById(R.id.event_info_submitButton);
+        eventOwnerName = v.findViewById(R.id.event_info_creator_name);
+        participantLayout = v.findViewById(R.id.event_info_participants_list);
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +98,7 @@ public class FragmentEventInfo extends Fragment {
         eventBioTextView.setText(event.getEventDescription());
         timeStart.setText("Start time: " + event.getEventDate().getStartTime());
         timeEnd.setText("End time: " + event.getEventDate().getEndTime());
+        eventOwnerName.setText(event.getEventCreator().getName());
         handleCategories();
 
         //TODO there is probably a better way to do this:
@@ -104,6 +118,8 @@ public class FragmentEventInfo extends Fragment {
         });
 
         handlePictureSlider(v);
+
+        handleParticipants();
 
         return v;
     }
@@ -145,6 +161,41 @@ public class FragmentEventInfo extends Fragment {
 
     private void handleOnSubmmit(){
         //TODO implement join event here
+    }
+
+    private void handleParticipants(){
+        FirebaseDAO firebaseDAO = new FirebaseDAO();
+        //final ArrayList<UserDTO> participants = new ArrayList<>();
+        firebaseDAO.getParticipants(event, new MyCallBack() {
+            @Override
+            public void onCallBack(@NotNull Object object) {
+                ArrayList<UserDTO> participants = (ArrayList<UserDTO>) object;
+                insertParticipants(participants);
+            }
+        });
+
+
+
+    }
+
+    private void insertParticipants(ArrayList<UserDTO> participants){
+        for (UserDTO user : participants) {
+            CardView cardView = new CardView(getActivity());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            cardView.setLayoutParams(layoutParams);
+            cardView.setRadius(250);
+            cardView.setPadding(10,0,10,0);
+
+            ImageView imageView = new ImageView(getActivity());
+            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(20, 20);
+            imageView.setLayoutParams(imageParams);
+            Picasso.get().load(user.getProfilePictures().get(0)).into(imageView);
+
+            cardView.addView(imageView);
+            participantLayout.addView(cardView);
+
+        }
+
     }
 
 }
