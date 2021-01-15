@@ -21,10 +21,12 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import group24.oplevelserbekaemperensomhed.R;
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
+import group24.oplevelserbekaemperensomhed.logic.Logic;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 
 
@@ -87,13 +89,12 @@ public class FragmentProfile extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AProfileEdit.class);
+                Intent intent = new Intent(getActivity(), ActivityEditProfile.class);
                 startActivity(intent);
             }
         });
 
     }
-
 
     private void handlePfpSlider(View view){
         ViewPager mPager = view.findViewById(R.id.fragment_profile_viewpager);
@@ -129,10 +130,10 @@ public class FragmentProfile extends Fragment {
     private void handleProfileInfo(){
         if (userData.getName() != null){
             profileTextViews.get(0).setText(userData.getName());
-            if (userData.getAge()!=null){
-                String text = userData.getName() + ", " + userData.getAge();
-                profileTextViews.get(0).setText(text);
-            }
+            userData.getAge();
+            Logic logic = new Logic();
+            String text = userData.getName() + ", " + logic.getAge(userData.getAge().get(0),userData.getAge().get(1),userData.getAge().get(2));
+            profileTextViews.get(0).setText(text);
         }
     }
 

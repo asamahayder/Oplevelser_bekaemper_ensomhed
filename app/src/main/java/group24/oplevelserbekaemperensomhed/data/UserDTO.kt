@@ -10,7 +10,7 @@ data class UserDTO     //mangler evt.
 //Social media integration (Instagram, facebook_common friends)
     (
     var name: String?,
-    var age: Int?,
+    var age: List<Int>,
     var address: String?,
     var occupation: String?,
     var education: String?,

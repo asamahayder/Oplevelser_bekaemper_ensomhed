@@ -27,10 +27,14 @@ public class DummyData {
         pfps.add("https://goop.com/wp-content/uploads/2020/06/Mask-Group-2.png");
         pfps2.add("https://www.thestatesman.com/wp-content/uploads/2017/08/1493458748-beauty-face-517.jpg");
         pfps3.add("https://goop.com/wp-content/uploads/2020/06/Mask-Group-2.png");
+        ArrayList<Integer> age = new ArrayList<>();
+        age.add(2001);
+        age.add(12);
+        age.add(31);
 
-        UserDTO user = new UserDTO("Bob", 45, "Danmark", "Student", "DTU", "Just a random man", "Male", events, pfps);
-        UserDTO user2 = new UserDTO("Sarah", 23, "Danmark", "Student", "DTU", "Just a random woman", "Female", events, pfps2);
-        UserDTO user3 = new UserDTO("XÆØ A", 1, "Danmark", "Student", "DTU", "Just a random it", "Trans", events, pfps3);
+        UserDTO user = new UserDTO("Bob", age, "Danmark", "Student", "DTU", "Just a random man", "Male", events, pfps);
+        UserDTO user2 = new UserDTO("Sarah", age, "Danmark", "Student", "DTU", "Just a random woman", "Female", events, pfps2);
+        UserDTO user3 = new UserDTO("XÆØ A", age, "Danmark", "Student", "DTU", "Just a random it", "Trans", events, pfps3);
         localData.setUserData(user);
         ArrayList<UserDTO> participants = new ArrayList<>();
         participants.add(user);

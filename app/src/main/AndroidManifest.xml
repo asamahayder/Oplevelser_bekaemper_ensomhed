@@ -13,35 +13,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Material">
-        <activity android:name=".view.login.ActivityRegister"></activity>
+        <activity android:name=".view.login.ActivityRegister" />
         <activity android:name=".view.login.ActivityForgotPassword" />
         <activity android:name=".view.login.ActivityRegisterDetails" />
         <activity
             android:name=".view.ActivityFragmentHandler"
             android:theme="@style/AppTheme" />
         <activity android:name=".view.search.ActivitySearch" />
-        <activity
-            android:name=".ActivityCreateEvent"
-            android:label="@string/title_activity_create_event" />
-        <activity
-            android:name=".view.login.ActivityStart"
-            android:theme="@style/AppTheme">
+        <activity android:name=".ActivityCreateEvent" android:label="@string/title_activity_create_event" />
+        <activity android:name=".view.login.ActivityStart" android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.login.ActivityLogin" android:theme="@style/AppTheme" />
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".view.login.ActivityLogin"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".view.profile.AProfileEdit"
-            android:theme="@style/AppTheme" />
+            android:name=".view.profile.ActivityEditProfile"/>
         <activity
             android:name=".view.ActivitySettings"
             android:theme="@style/AppTheme" />

@@ -2,7 +2,7 @@ package group24.oplevelserbekaemperensomhed.logic.firebase
 
 data class DBUser(
     val name: String = "",
-    val age: Int = -1,
+    val age: List<Int> = emptyList(),
     val gender: String = "",
     val about: String = "",
     val address: String = "",
@@ -12,6 +12,6 @@ data class DBUser(
     val profilePictures: List<String> = emptyList()
 ) {
     constructor() :
-            this("",-1,"","","","","",
+            this("",emptyList(),"","","","","",
                 emptyList(), emptyList())
 }
