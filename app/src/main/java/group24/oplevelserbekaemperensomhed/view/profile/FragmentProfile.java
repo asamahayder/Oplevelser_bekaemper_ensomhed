@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ public class FragmentProfile extends Fragment {
 
     private LinearLayout linearLayout;
 
-    private final String TAG = "fragmentProfile";
+    private final String TAG = "FragmentProfile";
 
     public FragmentProfile() {
         // Required empty public constructor
@@ -59,7 +60,8 @@ public class FragmentProfile extends Fragment {
         return v;
     }
 
-    private void initializeView(View view){
+    private void initializeView(final View view){
+        Log.d(TAG, "InitializeView created");
         linearLayout = view.findViewById(R.id.fragment_profile_infoLinearLayout);
         ImageView editProfileButton = view.findViewById(R.id.fragment_profile_editButton);
         profileTextViews.add((TextView) view.findViewById(R.id.fragment_profile_nameAge));
@@ -117,7 +119,16 @@ public class FragmentProfile extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getView() != null) {
+            initializeView(getView());
+        }
+    }
+
     private void updateProfile(){
+        Log.d(TAG, "LocalDataUserData = " + userData);
         if (userData == null){
             LocalData localData = LocalData.INSTANCE;
             userData = localData.getUserData();
