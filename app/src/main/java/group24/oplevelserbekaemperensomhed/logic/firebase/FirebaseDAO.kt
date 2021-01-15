@@ -127,7 +127,8 @@ class FirebaseDAO{
 
         //TODO instead of the 'testUser' placeholder, use a real user.
         val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = userID, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
-        db.collection("events").add(dbEvent).addOnSuccessListener { callBack.onCallBack("success") }.addOnFailureListener{
+        db.collection("events").add(dbEvent).addOnSuccessListener {
+            callBack.onCallBack("success") }.addOnFailureListener{
             println("*******************************************************************************************************************")
             Log.e("gg", it.stackTrace.toString())
             callBack.onCallBack("Failure")

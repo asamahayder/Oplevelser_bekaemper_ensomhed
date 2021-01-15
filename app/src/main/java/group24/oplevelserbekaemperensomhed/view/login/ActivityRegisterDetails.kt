@@ -108,14 +108,12 @@ class ActivityRegisterDetails : AppCompatActivity() {
     private fun initializeViews() {
         // Initializing all Buttons
         val backButton: ImageView = activity_register_details_backButton
-        val submitButton1: ImageView = activity_register_details_submitButton1
-        val submitButton2: LinearLayout = activity_register_details_submitButton2
+        val submitButton: LinearLayout = activity_register_details_submitButton
         val addressButton: EditText = activity_register_details_addressText
         val choosePicturesButton: Chip = activity_register_details_choose_pictures_button
         buttonViews = arrayOf(
             backButton,
-            submitButton1,
-            submitButton2,
+            submitButton,
             addressButton,
             choosePicturesButton
         )
@@ -159,19 +157,15 @@ class ActivityRegisterDetails : AppCompatActivity() {
             auth.currentUser?.delete()
             onBackPressed()
         }
-        val submitButton1: ImageView = buttonViews[1] as ImageView
-        submitButton1.setOnClickListener {
+        val submitButton: LinearLayout = buttonViews[1] as LinearLayout
+        submitButton.setOnClickListener {
             submitDataToUserObject()
         }
-        val submitButton2: LinearLayout = buttonViews[2] as LinearLayout
-        submitButton2.setOnClickListener {
-            submitDataToUserObject()
-        }
-        val addressButton: EditText = buttonViews[3] as EditText
+        val addressButton: EditText = buttonViews[2] as EditText
         addressButton.setOnClickListener {
             searchForAddressWithAutoComplete()
         }
-        val choosePicturesButton: Chip = buttonViews[4] as Chip
+        val choosePicturesButton: Chip = buttonViews[3] as Chip
         choosePicturesButton.setOnClickListener {
             openPhoneStorage()
         }
@@ -399,7 +393,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
             when (resultCode) {
                 RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
-                    val addressEditText: EditText = buttonViews[3] as EditText
+                    val addressEditText: EditText = buttonViews[2] as EditText
                     address = place.address!!
                     addressEditText.setText(address)
                 }
@@ -458,7 +452,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
         //Moving set images button below viewpager
         val constraintSet = ConstraintSet()
-        val choosePicturesButton: Chip = buttonViews[4] as Chip
+        val choosePicturesButton: Chip = buttonViews[3] as Chip
         constraintSet.clone(choosePicturesLayout)
         constraintSet.connect(
             choosePicturesButton.id,

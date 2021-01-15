@@ -69,5 +69,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="email_hint">email</string>
+    <string name="finish">Finish</string>
 
 </resources>
