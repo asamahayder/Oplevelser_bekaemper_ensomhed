@@ -6,6 +6,7 @@ object LocalData{
 
     lateinit var id: String
     lateinit var userPassword: String
+    lateinit var userEmail: String
 
     lateinit var userData: UserDTO
     var userCreatedEvents: ArrayList<EventDTO> = ArrayList()

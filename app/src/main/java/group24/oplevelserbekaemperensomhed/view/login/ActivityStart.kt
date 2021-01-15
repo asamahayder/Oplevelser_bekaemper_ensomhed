@@ -42,12 +42,20 @@ class ActivityStart : AppCompatActivity() {
         Handler().postDelayed( {
             if (currentUser != null) {
                 Log.d(TAG, "User authenticated")
-                val intent = Intent(applicationContext, MainActivity::class.java)
                 db.getUser(currentUser.uid, object : MyCallBack {
                     override fun onCallBack(`object`: Any) {
-                        localData.userData = `object` as UserDTO
-                        startActivity(intent)
-                        finish()
+                        if (`object` is UserDTO) {
+                            Log.d(TAG, "User authenticated")
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            localData.userData = `object` as UserDTO
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Log.d(TAG, "User not authenticated")
+                            val intent = Intent(applicationContext, ActivityLogin::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     }
                 })
             } else {

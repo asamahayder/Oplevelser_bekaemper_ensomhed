@@ -48,7 +48,6 @@ class ActivityLogin : AppCompatActivity() {
         testButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish()
         }
         Log.d(TAG, "ALogin activity started")
     }
@@ -64,8 +63,8 @@ class ActivityLogin : AppCompatActivity() {
         passText = findViewById(R.id.activity_login_password)
 
         // Handles authorization via firebase
-        facebookAuth = FacebookAuthorization(this, REGISTERACTIVITYDETAILS)
         firebaseAuth = FirebaseAuth.getInstance()
+        facebookAuth = FacebookAuthorization(this, REGISTERACTIVITYDETAILS)
 
         // Initialize TextView animation
         textBlink = AnimationUtils.loadAnimation(this, R.anim.text_blink)
@@ -81,6 +80,7 @@ class ActivityLogin : AppCompatActivity() {
         forgotPassButton.setOnClickListener {
             val intent = Intent(this, FORGOTPASSWORDACTIVITY)
             startActivity(intent)
+            finish()
         }
 
     }
@@ -154,7 +154,6 @@ class ActivityLogin : AppCompatActivity() {
                                 localData.id = emailText.text.toString()
                                 val intent = Intent(applicationContext, HOMEACTIVITY)
                                 startActivity(intent)
-                                finish()
                             }
                         })
                     } else {

@@ -112,11 +112,11 @@ class ActivityRegister : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                     lottie.visibility = View.GONE
-                    localData.id = editTextViews[0].text.toString()
+                    localData.userEmail = editTextViews[0].text.toString()
                     localData.userPassword = editTextViews[1].text.toString()
                 } else {
                     callLoadingAnimation(false)
-                    //Toast.makeText(applicationContext,"EMAIL EXISTS!",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"The email entered is already in use",Toast.LENGTH_SHORT).show()
                 }
             }).addOnFailureListener(OnFailureListener { e -> e.printStackTrace() })
     }
