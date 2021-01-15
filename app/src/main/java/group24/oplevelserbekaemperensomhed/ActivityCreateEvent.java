@@ -116,7 +116,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     ArrayList<String> pictures = new ArrayList<>();
     ArrayList<Uri> picturesAsUris = new ArrayList<>();
     final ArrayList<String> pictureDownloadLinks = new ArrayList<>();
-    ViewPagerAdapter adapter;
     ViewPager viewPager = null;
 
     //For uploading image
@@ -190,7 +189,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
         getImageButton = findViewById(R.id.create_event_choose_pictures_button);
 
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_profile_event_1_viewpager, null);
 
         handleTimeAndDateFields();
 
@@ -513,6 +511,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
         if (resultCode == RESULT_OK && requestCode == getImageResultCode) {
             pictures.clear();
+            picturesAsUris.clear();
             ClipData clipData = data.getClipData();
             if (clipData != null){//Checking if user selected multiple
                 if (clipData.getItemCount() > 3){//Checking if exceeded max limit
@@ -534,26 +533,33 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
 
             //Showing pictures on viewpager
-            if (viewPager == null){
-                viewPager = new ViewPager(this);
-                viewPager.setId(View.generateViewId());
-                viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
-                ((ConstraintLayout.LayoutParams)viewPager.getLayoutParams()).dimensionRatio ="1:1";
-                viewPager.setAdapter(adapter);
-                constraintLayout.addView(viewPager);
-
-                //Moving set images button below viewpager
-                ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(constraintLayout);
-                constraintSet.connect(getImageButton.getId(), ConstraintSet.TOP, viewPager.getId(), ConstraintSet.BOTTOM, 20);
-                constraintSet.applyTo(constraintLayout);
-            }else{
-                adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_search_home_1_viewpager,null);
-                viewPager.setAdapter(adapter);
+            if (viewPager != null) {
+                constraintLayout.removeView(viewPager);
+                //Toast.makeText(this, "Im here" + pictures, Toast.LENGTH_SHORT).show();
+                //ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_profile_event_1_viewpager,null);
+                //viewPager.setAdapter(adapter);
             }
+            createViewPager();
         }
 
 
+    }
+
+    private void createViewPager(){
+        viewPager = new ViewPager(this);
+        viewPager.setId(View.generateViewId());
+        viewPager.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
+        ((ConstraintLayout.LayoutParams)viewPager.getLayoutParams()).dimensionRatio ="1:1";
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_profile_event_1_viewpager, null);
+        viewPager.setAdapter(adapter);
+        constraintLayout.addView(viewPager);
+
+        //Moving set images button below viewpager
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+        constraintSet.connect(getImageButton.getId(), ConstraintSet.TOP, viewPager.getId(), ConstraintSet.BOTTOM, 20);
+        constraintSet.applyTo(constraintLayout);
     }
 
     /*private void uploadImages(){

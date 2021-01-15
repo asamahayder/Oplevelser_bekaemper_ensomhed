@@ -3,6 +3,7 @@ package group24.oplevelserbekaemperensomhed.logic.firebase
 import android.app.ProgressDialog
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -96,11 +97,17 @@ class FirebaseDAO{
                 for (dbEvent in eventDataList) {
                     getUser(dbEvent.eventCreator, object : MyCallBack {
                         override fun onCallBack(`object`: Any) {
-                            val user = `object` as UserDTO
-                            val event = EventDTO(user,null,dbEvent.eventDescription,dbEvent.eventTitle,
-                                DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
-                            list.add(event)
-                            callBack.onCallBack(list)
+                            try {
+                                val user = `object` as UserDTO
+                                val event = EventDTO(user,null,dbEvent.eventDescription,dbEvent.eventTitle,
+                                    DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
+                                list.add(event)
+                                callBack.onCallBack(list)
+                            }catch (e: ClassCastException){
+                                return
+                            }
+
+
                         }
                     })
                 }
@@ -113,13 +120,12 @@ class FirebaseDAO{
         val pictures: List<String> = event.pictures
         val participants: List<String> = listOf(event.participants?.get(0)?.name.toString())
 
-        val localData: LocalData = LocalData
-        val user: UserDTO = localData.userData
-        val userName: String = user.name.toString()
+        val localData = LocalData
+        val userID = localData.id
 
 
         //TODO instead of the 'testUser' placeholder, use a real user.
-        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = userName, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
+        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = userID, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
         db.collection("events").add(dbEvent).addOnSuccessListener { callBack.onCallBack("success") }.addOnFailureListener{
             println("*******************************************************************************************************************")
             Log.e("gg", it.stackTrace.toString())
