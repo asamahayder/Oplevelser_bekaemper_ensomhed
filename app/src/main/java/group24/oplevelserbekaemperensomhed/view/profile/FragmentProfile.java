@@ -80,11 +80,11 @@ public class FragmentProfile extends Fragment {
             }
         }
 
-        linearLayout.removeAllViews();
-
         updateProfile();
         handlePfpSlider(view);
         handleAboutSection();
+
+        linearLayout.removeAllViews();
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +136,6 @@ public class FragmentProfile extends Fragment {
             profileTextViews.get(0).setText(text);
         }
     }
-
 
     private void handleProfileIcons(){
         if (userData.getAddress() != null){

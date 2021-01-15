@@ -29,6 +29,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener
+import group24.oplevelserbekaemperensomhed.view.login.ActivityRegisterDetails
 import kotlinx.android.synthetic.main.activity_register_details.*
 import kotlin.collections.ArrayList
 
@@ -42,7 +43,7 @@ class ActivityEditProfile : AppCompatActivity() {
     private lateinit var adapter: ViewPagerAdapter
     private var viewPager: ViewPager? = null
 
-    private val profilePictures = ArrayList<String>()
+    private var profilePictures = ArrayList<String>()
     private var address = ""
 
     private val auth = FirebaseAuth.getInstance()
@@ -116,6 +117,7 @@ class ActivityEditProfile : AppCompatActivity() {
         // Sets the text onto the edit text fields and updates variables
         address = localData.userData.address.toString()
         gender = localData.userData.gender.toString()
+        profilePictures = localData.userData.profilePictures
         when (gender) {
             "male" -> {
                 radioButton1.isChecked = true
@@ -149,12 +151,7 @@ class ActivityEditProfile : AppCompatActivity() {
         addressButton.setText(localData.userData.address)
 
         // Initialize adapter
-        adapter = ViewPagerAdapter(
-            supportFragmentManager,
-            localData.userData.profilePictures,
-            R.layout.fragment_profile_event_1_viewpager,
-            null
-        )
+        createViewPager()
     }
 
     private fun handleOnClickViews() {
@@ -185,34 +182,41 @@ class ActivityEditProfile : AppCompatActivity() {
 
         // Saves the data in the text fields to the user object
         if(saveUserDetailsToLocalData()) {
-            //Handling upload of pictures and getting their new urls
-            //Showing progress dialog
-            val progressDialog = ProgressDialog(this)
-            progressDialog.setTitle("Uploading...")
-            progressDialog.show()
 
-            db.uploadImages(picturesAsURIs, object : MyUploadPicturesListener {
-                override fun onSuccess(`object`: Any) {
-                    val pictureDownloadLinks =
-                        `object` as java.util.ArrayList<String>
-                    progressDialog.dismiss()
-                    uploadUserDetailsToDatabase(pictureDownloadLinks)
-                }
+            Log.d(TAG, "localDataPictures = ${localData.userData.profilePictures} currentProfilePictures = $profilePictures")
+            if (localData.userData.profilePictures[0] != profilePictures[0]) {
+                //Handling upload of pictures and getting their new urls
+                //Showing progress dialog
+                val progressDialog = ProgressDialog(this)
+                progressDialog.setTitle("Uploading...")
+                progressDialog.show()
 
-                override fun onProgress(`object`: Any) {
-                    val counter = `object` as Int
-                    progressDialog.setMessage("$counter images left")
-                }
+                db.uploadImages(picturesAsURIs, object : MyUploadPicturesListener {
+                    override fun onSuccess(`object`: Any) {
+                        val pictureDownloadLinks =
+                            `object` as java.util.ArrayList<String>
+                        progressDialog.dismiss()
+                        uploadUserDetailsToDatabase(pictureDownloadLinks)
+                    }
 
-                override fun onFailure(`object`: Any) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        "Could not upload images",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
+                    override fun onProgress(`object`: Any) {
+                        val counter = `object` as Int
+                        progressDialog.setMessage("$counter images left")
+                    }
+
+                    override fun onFailure(`object`: Any) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            "Could not upload images",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            } else {
+                uploadUserDetailsToDatabase(profilePictures)
+            }
+
         }
     }
 
@@ -410,6 +414,7 @@ class ActivityEditProfile : AppCompatActivity() {
         }
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             profilePictures.clear()
+            picturesAsURIs.clear()
             val clipData = data!!.clipData
             if (clipData != null) {
                 if (clipData.itemCount > 8) {
@@ -429,40 +434,37 @@ class ActivityEditProfile : AppCompatActivity() {
                     picturesAsURIs.add(imageUri)
                 }
             }
-            if (viewPager == null) {
-                viewPager = ViewPager(this)
-                viewPager!!.id = View.generateViewId()
-                viewPager!!.layoutParams = ConstraintLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    0
-                )
-                (viewPager!!.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio =
-                    "1:1"
-                viewPager!!.adapter = adapter
-                choosePicturesLayout.addView(viewPager)
-
-                //Moving set images button below viewpager
-                val constraintSet = ConstraintSet()
-                val choosePicturesButton: Chip = buttonViews[4] as Chip
-                constraintSet.clone(choosePicturesLayout)
-                constraintSet.connect(
-                    choosePicturesButton.id,
-                    ConstraintSet.TOP,
-                    viewPager!!.id,
-                    ConstraintSet.BOTTOM,
-                    20
-                )
-                constraintSet.applyTo(choosePicturesLayout)
-            } else {
-                adapter = ViewPagerAdapter(
-                    supportFragmentManager,
-                    profilePictures,
-                    R.layout.fragment_profile_event_1_viewpager,
-                    null
-                )
-                viewPager!!.adapter = adapter
+            if (viewPager != null) {
+                choosePicturesLayout.removeView(viewPager)
             }
+            createViewPager()
         }
+    }
+
+    private fun createViewPager(){
+        viewPager = ViewPager(this)
+        viewPager!!.id = View.generateViewId()
+        viewPager!!.layoutParams = ConstraintLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            0
+        )
+        (viewPager!!.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio =
+            "1:1"
+        viewPager!!.adapter = ViewPagerAdapter(supportFragmentManager, profilePictures, R.layout.fragment_profile_event_1_viewpager, null);
+        choosePicturesLayout.addView(viewPager)
+
+        //Moving set images button below viewpager
+        val constraintSet = ConstraintSet()
+        val choosePicturesButton: Chip = buttonViews[4] as Chip
+        constraintSet.clone(choosePicturesLayout)
+        constraintSet.connect(
+            choosePicturesButton.id,
+            ConstraintSet.TOP,
+            viewPager!!.id,
+            ConstraintSet.BOTTOM,
+            20
+        )
+        constraintSet.applyTo(choosePicturesLayout)
     }
 
     companion object {
