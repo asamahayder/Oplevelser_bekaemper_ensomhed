@@ -8,6 +8,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import group24.oplevelserbekaemperensomhed.data.DateDTO
 import group24.oplevelserbekaemperensomhed.data.EventDTO
+import group24.oplevelserbekaemperensomhed.data.LocalData
 import group24.oplevelserbekaemperensomhed.data.UserDTO
 import group24.oplevelserbekaemperensomhed.view.search.ActivitySearch
 import java.util.*
@@ -116,8 +117,13 @@ class FirebaseDAO{
         val pictures: List<String> = event.pictures
         val participants: List<String> = listOf(event.participants?.get(0)?.name.toString())
 
+        val localData: LocalData = LocalData
+        val user: UserDTO = localData.userData
+        val userName: String = user.name.toString()
+
+
         //TODO instead of the 'testUser' placeholder, use a real user.
-        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = "testUser", eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
+        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = userName, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
         db.collection("events").add(dbEvent).addOnSuccessListener { callBack.onCallBack("success") }.addOnFailureListener{
             println("*******************************************************************************************************************")
             Log.e("gg", it.stackTrace.toString())
