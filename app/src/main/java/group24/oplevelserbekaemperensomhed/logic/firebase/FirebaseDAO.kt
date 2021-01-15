@@ -181,4 +181,15 @@ class FirebaseDAO{
         }
     }
 
+    fun deleteUser(id: String,callBack: MyCallBack) {
+        db.collection("users").document(id).delete().addOnCompleteListener {task ->
+            if (task.isSuccessful) {
+                callBack.onCallBack(true)
+            }
+            else {
+                callBack.onCallBack(false)
+            }
+        }
+    }
+
 }
