@@ -18,6 +18,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,6 +34,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.util.Pair;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Parcel;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.View;
@@ -52,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,6 +109,9 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Chip chipGaming;
     ArrayList<Chip> listOfChips = new ArrayList<>();
     String chosenCategory = "";
+
+    //To check if start date is before current date
+    Long startDate;
 
 
     //Image stuff
@@ -355,13 +361,23 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
         materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
 
-        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long,Long>>() {
             @Override
-            public void onPositiveButtonClick(Object selection) {
+            public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                startDate = selection.first;
                 editText.setText(materialDatePicker.getHeaderText());
             }
         });
+
+        /*materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                editText.setText(materialDatePicker.getHeaderText());
+                startDate = selection.
+            }
+        });*/
     }
+
 
     //Checking if all requirements are fulfilled and submitting to database
     private void handleOnSubmit() throws ParseException {
@@ -378,6 +394,13 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }else if (editTextDate.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Need a date",Toast.LENGTH_SHORT).show();
             return;
+        } else if(!editTextDate.equals("")) {
+            Date startDate = new Date(this.startDate);
+            Date now = new Date(System.currentTimeMillis());
+            if (startDate.before(now)){
+                Toast.makeText(this, "Date start time can not be in past", Toast.LENGTH_SHORT).show();
+                return;
+            }
         } else if (!switchAllDay.isChecked()){ //checking if time is set correct, and only doing it if All-day is not checked
             String startTime = editTextStart.getText().toString();
             String endTime = editTextEnd.getText().toString();
