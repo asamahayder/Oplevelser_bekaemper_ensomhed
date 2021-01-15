@@ -80,6 +80,9 @@ public class FragmentProfile extends Fragment {
                     }
                 });
             }
+        }else {
+            LocalData localData = LocalData.INSTANCE;
+            userData = localData.getUserData();
         }
 
         linearLayout.removeAllViews();
