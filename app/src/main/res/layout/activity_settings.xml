@@ -5,8 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorEditBackground"
-    tools:context="group24.oplevelserbekaemperensomhed.search.Indstillinger">
+    android:background="#03346c"
+    tools:context="group24.oplevelserbekaemperensomhed.settings.Settings">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/aprofile_backButton"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="16dp"

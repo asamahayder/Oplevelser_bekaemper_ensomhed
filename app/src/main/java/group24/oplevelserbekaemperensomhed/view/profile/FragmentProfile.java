@@ -22,13 +22,13 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import group24.oplevelserbekaemperensomhed.R;
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.Logic;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
+import group24.oplevelserbekaemperensomhed.settings.Settings;
 
 
 public class FragmentProfile extends Fragment {
@@ -83,6 +83,15 @@ public class FragmentProfile extends Fragment {
         } else {
             LocalData localData = LocalData.INSTANCE;
             userData = localData.getUserData();
+            backButton.setVisibility(View.VISIBLE);
+            backButton.setImageResource(R.drawable.ic_baseline_settings_24);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), Settings.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         linearLayout.removeAllViews();

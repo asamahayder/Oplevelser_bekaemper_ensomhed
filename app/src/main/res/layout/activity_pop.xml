@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pop_bg"
-    tools:context=".search.PopActivity">
+    tools:context=".settings.PopActivity">
 
     <Button
         android:id="@+id/btn_luk"
