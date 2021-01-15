@@ -361,7 +361,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
         }
         nameBuilder = nameBuilder.append(editTextViews[0].text.toString())
         if (editTextViews[1].text.toString().isNotEmpty()) {
-            nameBuilder = nameBuilder.append(editTextViews[0].text.toString()).append(" ").append(
+            nameBuilder = nameBuilder.append(" ").append(
                 editTextViews[1].text.toString()
             )
         }
