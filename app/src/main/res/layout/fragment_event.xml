@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:screenOrientation="portrait"
+    android:background="@color/colorPrimary">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorAccent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/event_info_viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55sp"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingLeft="16sp"
+                        android:paddingRight="16sp"
+                        android:background="@drawable/pfp_gradient_bot2top"
+                        style="@style/AppTheme">
+
+                        <TextView
+                            android:id="@+id/eventName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="EventName"
+                            android:textColor="#ffffff"
+                            android:textSize="23sp"
+                            tools:ignore="HardcodedText" />
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/event_info_tablayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="14dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="10dp"
+                            app:tabIndicatorHeight="0dp"
+                            android:layout_gravity="start"
+                            app:tabIndicatorFullWidth="true"
+                            app:tabBackground="@drawable/pfp_tab_selector"
+                            app:tabUnboundedRipple="true"
+                            app:tabMaxWidth="0dp"/>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingLeft="16sp"
+                android:paddingRight="16sp"
+                android:paddingBottom="30dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorPrimary">
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_addressLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <ImageView
+                        android:id="@+id/aevent_info_addressIcon"
+                        android:layout_width="15sp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_location_on_15">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/aevent_info_address"
+                        android:text="København NV"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="12sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_category_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <ImageView
+                        android:id="@+id/aevent_info_category_icon"
+                        android:layout_width="15sp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_directions_run_24">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/aevent_info_category_text"
+                        android:text="Category"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="12sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_priceLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <ImageView
+                        android:id="@+id/aevent_info_priceIcon"
+                        android:layout_width="15sp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_attach_money_24">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/aevent_info_price"
+                        android:text="free"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="12sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_timeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <ImageView
+                        android:id="@+id/aevent_info_timeIcon"
+                        android:layout_width="15sp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_access_time_24">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/aevent_info_time"
+                        android:text="9/9/2020"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="12sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_category_clock_start_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <TextView
+                        android:id="@+id/aevent_info_clock_start_text"
+                        android:text="Start time: "
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aevent_info_clock_end_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <TextView
+                        android:id="@+id/aevent_info_clock_end_text"
+                        android:text="End time: "
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
+
+                    </TextView>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="25dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#ffffff"
+                        android:layout_marginBottom="5dp">
+                    </View>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="About"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/aevent_info_bio"
+                        android:text="Event details"
+                        android:textSize="12sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </TextView>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="30dp"
+                    android:paddingHorizontal="30dp"
+                    android:layout_marginBottom="100dp">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:paddingVertical="5dp">
+
+                        <LinearLayout
+                            android:id="@+id/event_info_submitButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/edit_text_rounded_white_background"
+                            android:backgroundTint="@color/confirm_green"
+
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_baseline_check_30"
+                                android:layout_gravity="center_vertical"
+                                android:paddingLeft="10dp"
+                                app:tint="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="100dp"
+                                android:text="Join"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="20dp"
+                                android:textSize="20sp"
+                                android:paddingVertical="5dp"
+                                android:textColor="#2E2E2E"
+                                android:gravity="center"
+                                android:layout_gravity="center_vertical"/>
+                        </LinearLayout>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </RelativeLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:background="@drawable/pfp_gradient_top2bot"
+        android:layout_width="match_parent"
+        android:layout_height="55sp">
+
+        <ImageView
+            android:id="@+id/activity_register_details_backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_30"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

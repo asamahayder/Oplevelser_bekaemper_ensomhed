@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import group24.oplevelserbekaemperensomhed.search.FragmentSearch;
+import group24.oplevelserbekaemperensomhed.view.profile.FragmentProfile;
+import group24.oplevelserbekaemperensomhed.view.search.FragmentSearchHome;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragmentHome;
     Fragment fragmentProfile;
     Fragment fragmentSearch;
+    Fragment fragmentCreateEvent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
-        fragmentSearch = new FragmentSearch();
+        fragmentSearch = new FragmentSearchHome();
+        fragmentCreateEvent = new FragmentCreateEvent();
 
+        final Intent intent = new Intent(this, ActivityCreateEvent.class);
 
         //This sets the first active fragment
         changeFragment(fragmentHome, getString(R.string.fragment_home));
@@ -42,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if (item.getItemId() == R.id.search){
                     changeFragment(fragmentSearch, getString(R.string.fragment_search));
+
+                } else if (item.getItemId() == R.id.create_event){
+
+                    startActivity(intent);
 
                 } else if(item.getItemId() == R.id.navlist){
 
@@ -58,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
+
     public void changeFragment (Fragment fragment, String tag){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //transaction.setCustomAnimations();
@@ -66,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
         //    transaction.addToBackStack(tag);
         //}
         transaction.commit();
+    }
+
+    public void slideActivityInto(){
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    public void slideActivityOut(){
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 }

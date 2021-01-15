@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    tools:context=".profile.AProfile"
     android:background="@color/colorPrimary">
 
     <ScrollView
@@ -24,7 +23,7 @@
                 android:layout_height="500dp">
 
                 <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/aprofile_viewpager"
+                    android:id="@+id/fragment_profile_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
@@ -39,7 +38,7 @@
                     style="@style/AppTheme">
 
                     <TextView
-                        android:id="@+id/aprofile_nameAge"
+                        android:id="@+id/fragment_profile_nameAge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Name, Age"
@@ -48,7 +47,7 @@
                         tools:ignore="HardcodedText" />
 
                     <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/aprofile_tablayout"
+                        android:id="@+id/fragment_profile_tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="14dp"
                         android:paddingTop="2dp"
@@ -65,7 +64,7 @@
             </FrameLayout>
 
             <LinearLayout
-                android:id="@+id/profileInfoLinearLayout"
+                android:id="@+id/fragment_profile_infoLinearLayout"
                 android:layout_width="match_parent"
                 android:paddingLeft="16sp"
                 android:paddingRight="16sp"
@@ -73,118 +72,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary">
-
-                <!--<LinearLayout
-                    android:id="@+id/aprofile_addressLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="19sp"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:id="@+id/aprofile_addressIcon"
-                        android:layout_width="15sp"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_baseline_location_on_15"
-                        android:contentDescription="address icon"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/aprofile_address"
-                        android:text="Location"
-                        android:textSize="14sp"
-                        android:textColor="#ffffff"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingStart="12sp"
-                        tools:ignore="HardcodedText,RtlSymmetry"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/aprofile_occupationLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="19sp"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:id="@+id/aprofile_occupationIcon"
-                        android:layout_width="15sp"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_baseline_work_15"
-                        android:contentDescription="occupation icon"
-                        tools:ignore="HardcodedText"/>
-
-                    <TextView
-                        android:id="@+id/aprofile_occupation"
-                        android:text="Occupation"
-                        android:textSize="14sp"
-                        android:textColor="#ffffff"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingStart="12sp"
-                        tools:ignore="HardcodedText,RtlSymmetry"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/aprofile_educationLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="19sp"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:id="@+id/aprofile_educationIcon"
-                        android:layout_width="15sp"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_baseline_school_15"
-                        android:contentDescription="education icon"
-                        tools:ignore="HardcodedText"/>
-
-                    <TextView
-                        android:id="@+id/aprofile_education"
-                        android:text="Education"
-                        android:textSize="14sp"
-                        android:textColor="#ffffff"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingStart="12sp"
-                        tools:ignore="HardcodedText,RtlSymmetry"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="25dp">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="#ffffff"
-                        android:layout_marginBottom="5dp">
-                    </View>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="About"
-                        android:textColor="#ffffff"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/aprofile_bio"
-                        android:text="Description"
-                        android:textSize="12sp"
-                        android:textColor="#ffffff"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:ignore="HardcodedText"/>
-
-                </LinearLayout>-->
 
             </LinearLayout>
 
@@ -197,13 +84,22 @@
         android:layout_width="match_parent"
         android:layout_height="55sp">
 
+        <ImageView
+            android:id="@+id/fragment_profile_backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_baseline_arrow_back_ios_30"/>
+
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
         <ImageView
-            android:id="@+id/aprofile_editProfileButton"
+            android:id="@+id/fragment_profile_editButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
@@ -211,8 +107,7 @@
             android:paddingEnd="16dp"
             app:srcCompat="@drawable/ic_baseline_edit_28"
             android:focusable="true"
-            android:contentDescription="edit prodile button"
-            tools:ignore="HardcodedText" />
+            tools:ignore="ContentDescription,HardcodedText"/>
 
     </LinearLayout>
 
