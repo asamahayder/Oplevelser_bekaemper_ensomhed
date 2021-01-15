@@ -80,11 +80,11 @@ public class FragmentProfile extends Fragment {
             }
         }
 
+        linearLayout.removeAllViews();
+
         updateProfile();
         handlePfpSlider(view);
         handleAboutSection();
-
-        linearLayout.removeAllViews();
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -48,6 +48,7 @@ class ActivityStart : AppCompatActivity() {
                             Log.d(TAG, "User authenticated")
                             val intent = Intent(applicationContext, MainActivity::class.java)
                             localData.userData = `object` as UserDTO
+                            localData.id = currentUser.uid
                             startActivity(intent)
                             finish()
                         } else {

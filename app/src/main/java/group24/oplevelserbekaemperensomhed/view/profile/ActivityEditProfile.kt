@@ -43,7 +43,7 @@ class ActivityEditProfile : AppCompatActivity() {
     private lateinit var adapter: ViewPagerAdapter
     private var viewPager: ViewPager? = null
 
-    private var profilePictures = ArrayList<String>()
+    private lateinit var profilePictures: ArrayList<String>
     private var address = ""
 
     private val auth = FirebaseAuth.getInstance()
@@ -471,6 +471,6 @@ class ActivityEditProfile : AppCompatActivity() {
         private const val REQUEST_CODE = 100
         private const val TAG = "ActivityEditProfile"
         private var gender = ""
-        private var checked = false
+        private var checked = true
     }
 }
