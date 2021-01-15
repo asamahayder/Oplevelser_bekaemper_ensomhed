@@ -394,24 +394,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }else if (editTextDate.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Need a date",Toast.LENGTH_SHORT).show();
             return;
-        } else if(!editTextDate.equals("")) {
-            Date startDate = new Date(this.startDate);
-            Date now = new Date(System.currentTimeMillis());
-            if (startDate.before(now)){
-                Toast.makeText(this, "Date start time can not be in past", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        } else if (!switchAllDay.isChecked()){ //checking if time is set correct, and only doing it if All-day is not checked
-            String startTime = editTextStart.getText().toString();
-            String endTime = editTextEnd.getText().toString();
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm");
-            Date startTimeAsDate = dateFormatter.parse(startTime);
-            Date endTimeAsDate = dateFormatter.parse(endTime);
-
-            if (endTimeAsDate.before(startTimeAsDate) || startTimeAsDate.equals(endTimeAsDate)){
-                Toast.makeText(getApplicationContext(),"Start time should be before end time",Toast.LENGTH_SHORT).show();
-                return;
-            }
         } else if (!switchOnline.isChecked() && findAddressEditText.getText().toString().equals("")) { //Checking address
             Toast.makeText(getApplicationContext(),"Need an Address",Toast.LENGTH_SHORT).show();
             return;
@@ -421,6 +403,31 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         } else if (editTextAbout.getText().toString().equals("")){ //Checking about
             Toast.makeText(getApplicationContext(),"Need a description",Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        if (!switchAllDay.isChecked()) { //checking if time is set correct, and only doing it if All-day is not checked
+            String startTime = editTextStart.getText().toString();
+            String endTime = editTextEnd.getText().toString();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm");
+            Date startTimeAsDate = dateFormatter.parse(startTime);
+            Date endTimeAsDate = dateFormatter.parse(endTime);
+
+            if (endTimeAsDate.before(startTimeAsDate) || startTimeAsDate.equals(endTimeAsDate)) {
+                Toast.makeText(getApplicationContext(), "Start time should be before end time", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if(!editTextDate.equals("")) { //Checking that the date range is before current date
+            Date startDate = new Date(this.startDate);
+            Date now = new Date(System.currentTimeMillis());
+            if (!startDate.equals(now)){ //the .before() function returns true when they are equal, therefore we want check if they are equal first.
+                if (startDate.before(now)) {
+                    Toast.makeText(this, "Date start time can not be in past", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
         }
 
 
