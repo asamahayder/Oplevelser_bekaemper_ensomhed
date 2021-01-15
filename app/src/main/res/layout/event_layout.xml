@@ -68,6 +68,16 @@
                         tools:text="event title here"
                         />
 
+                    <TextView
+                        android:id="@+id/eventOwnerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="Surname Lastname"
+                        />
+
 
 
                 </LinearLayout>

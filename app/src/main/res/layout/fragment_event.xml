@@ -79,6 +79,44 @@
                 android:background="@color/colorPrimary">
 
                 <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+                    <TextView
+                        android:text="By:"
+                        android:textSize="10sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="15sp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/event_info_creator_name"
+                        android:text="Username lastname"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="12sp"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="19sp">
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/aevent_info_addressLayout"
                     android:layout_width="match_parent"
                     android:layout_height="19sp">
@@ -251,6 +289,46 @@
                     </TextView>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="25dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#ffffff"
+                        android:layout_marginBottom="5dp">
+                    </View>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Participants"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <LinearLayout
+                            android:id="@+id/event_info_participants_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"/>
+
+                    </HorizontalScrollView>
+
+
+
+                </LinearLayout>
+
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -189,6 +190,35 @@ class FirebaseDAO{
             }
             else {
                 callBack.onCallBack(false)
+            }
+        }
+    }
+
+    fun getParticipants(event: EventDTO, callBack: MyCallBack){
+        val pairs: ArrayList<DBEventParticipantPair> = ArrayList()
+        val users: ArrayList<UserDTO> = ArrayList()
+        var counter = 0
+        db.collection("eventParticipants").whereEqualTo("eventName", event.eventTitle).get().addOnCompleteListener {
+            task ->
+            if (task.isSuccessful){
+                counter = task.result.size()
+                for (document in task.result!!){
+                    val dbPair = document.toObject(DBEventParticipantPair::class.java)
+                    pairs.add(dbPair)
+                }
+
+                for (pair in pairs){
+                    getUser(pair.userID, object : MyCallBack{
+                        override fun onCallBack(`object`: Any) {
+                            val user = `object` as UserDTO
+                            users.add(user)
+                            counter--
+                            if (counter == 0){
+                                callBack.onCallBack(users)
+                            }
+                        }
+                    })
+                }
             }
         }
     }
