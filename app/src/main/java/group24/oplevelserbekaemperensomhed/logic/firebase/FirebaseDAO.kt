@@ -59,6 +59,7 @@ class FirebaseDAO{
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val dbUser = task.result!!.toObject(DBUser::class.java)
+                    Log.d("TESSSST", "id = $id user = $dbUser")
                     if (dbUser != null) {
                         val user: UserDTO = UserDTO(dbUser.name,dbUser.age,dbUser.address,dbUser.occupation,dbUser.education,dbUser.about,dbUser.gender,ArrayList(),dbUser.profilePictures.toCollection(ArrayList<String>()))
                         callBack.onCallBack(user)

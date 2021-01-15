@@ -147,18 +147,19 @@ class ActivityLogin : AppCompatActivity() {
             firebaseAuth.signInWithEmailAndPassword(emailText.text.toString(),passText.text.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        val currentUser = firebaseAuth.currentUser
                         Log.d(TAG,"Login success")
-                        db.getUser(emailText.text.toString(), object : MyCallBack {
+                        db.getUser(currentUser!!.uid, object : MyCallBack {
                             override fun onCallBack(`object`: Any) {
                                 localData.userData = `object` as UserDTO
-                                localData.id = emailText.text.toString()
+                                localData.id = currentUser!!.uid
                                 val intent = Intent(applicationContext, HOMEACTIVITY)
                                 startActivity(intent)
                             }
                         })
                     } else {
                         Log.d(TAG, "Login failure")
-                        Toast.makeText(applicationContext, "Authentication fialed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Authentication failed", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
