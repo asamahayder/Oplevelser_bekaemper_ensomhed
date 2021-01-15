@@ -8,12 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.squareup.picasso.Picasso
 import group24.oplevelserbekaemperensomhed.R
 
-class FragmentViewPager(val pictureURL: String?, val layout: Int, private val webURL: String) : Fragment() {
+class FragmentViewPager(
+    val pictureURL: String?,
+    val layout: Int,
+    private val listOfBannerThings: ArrayList<ArrayList<String>>?,
+    private val position: Int
+) : Fragment() {
 
     private lateinit var pictureImageView: ImageView
+    private lateinit var bannerText: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(layout, container, false)
@@ -38,9 +45,11 @@ class FragmentViewPager(val pictureURL: String?, val layout: Int, private val we
                 .centerCrop()
                 .into(pictureImageView)
         }
-        if (webURL != "") {
+        if (listOfBannerThings != null) {
+            bannerText = view.findViewById(R.id.fsearch_viewpager_bannertext)
+            bannerText.text = listOfBannerThings[1][position]
             pictureImageView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webURL))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(listOfBannerThings[0][position]))
                 startActivity(intent)
             }
         }

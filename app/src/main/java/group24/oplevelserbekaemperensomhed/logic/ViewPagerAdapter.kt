@@ -11,7 +11,7 @@ class ViewPagerAdapter(
     val fm: FragmentManager,
     private val pictureURLs: ArrayList<String>,
     val layout: Int,
-    val webURLlist: ArrayList<String>?
+    private val listOfBannerThings: ArrayList<ArrayList<String>>?
 ) : FragmentPagerAdapter(fm) {
 
     private lateinit var layoutInflater: LayoutInflater
@@ -20,10 +20,10 @@ class ViewPagerAdapter(
     override fun getCount() = pictureURLs.size
 
     override fun getItem(position: Int): Fragment {
-        return if (webURLlist == null) {
-            FragmentViewPager(pictureURLs[position], layout, "")
+        return if (listOfBannerThings == null) {
+            FragmentViewPager(pictureURLs[position], layout, null, position)
         } else {
-            FragmentViewPager(pictureURLs[position], layout, webURLlist[position])
+            FragmentViewPager(pictureURLs[position], layout, listOfBannerThings, position)
         }
     }
 

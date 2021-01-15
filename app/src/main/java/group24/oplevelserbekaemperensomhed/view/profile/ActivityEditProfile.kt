@@ -29,7 +29,6 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener
-import group24.oplevelserbekaemperensomhed.view.login.ActivityRegisterDetails
 import kotlinx.android.synthetic.main.activity_register_details.*
 import kotlin.collections.ArrayList
 

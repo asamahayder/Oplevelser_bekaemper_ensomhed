@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -35,9 +34,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener
-import kotlinx.android.synthetic.main.activity_create_event2.*
 import kotlinx.android.synthetic.main.activity_register_details.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
