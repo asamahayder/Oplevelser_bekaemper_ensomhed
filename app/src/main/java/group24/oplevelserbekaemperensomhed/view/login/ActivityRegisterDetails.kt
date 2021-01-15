@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -61,14 +62,48 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register_details)
+        setContentView(R.layout.activity_start)
         checkWhatLoginType()
-        initializeViews()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(applicationContext, LOGINACTIVITY)
+        startActivity(intent)
+        finish()
     }
 
     private fun checkWhatLoginType() {
-        if (intent.extras != null) {
+        if (intent.extras?.get("facebook") is AuthCredential) {
             facebookCredential = intent.extras!!["facebook"] as AuthCredential
+
+            auth.signInWithCredential(facebookCredential!!)
+                .addOnCompleteListener {task ->
+                    if (task.isSuccessful) {
+                        db.getUser(auth.currentUser!!.uid, object : MyCallBack {
+                            override fun onCallBack(`object`: Any) {
+                                if (`object` is UserDTO) {
+                                    Log.d(
+                                        TAG,
+                                        "facebook user with this id is already created = ${auth.currentUser}"
+                                    )
+                                    localData.userData = `object`
+                                    val intent = Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)
+                                } else {
+                                    Log.d(TAG, "No facebook user with this id created")
+                                    auth.currentUser!!.delete()
+                                    setContentView(R.layout.activity_register_details)
+                                    initializeViews()
+                                }
+                            }
+                        })
+                    }
+
+                }
+        } else {
+            setContentView(R.layout.activity_register_details)
+            initializeViews()
         }
     }
 
@@ -130,7 +165,8 @@ class ActivityRegisterDetails : AppCompatActivity() {
     private fun handleOnClickViews() {
         val backButton: ImageView = buttonViews[0] as ImageView
         backButton.setOnClickListener {
-            goBackAndDeleteUserDetails()
+            auth.currentUser?.delete()
+            onBackPressed()
         }
         val submitButton1: ImageView = buttonViews[1] as ImageView
         submitButton1.setOnClickListener {
@@ -148,13 +184,6 @@ class ActivityRegisterDetails : AppCompatActivity() {
         choosePicturesButton.setOnClickListener {
             openPhoneStorage()
         }
-    }
-
-    private fun goBackAndDeleteUserDetails() {
-        auth.currentUser?.delete()
-        val intent = Intent(applicationContext, LOGINACTIVITY)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
     }
 
     private fun submitDataToUserObject() {
@@ -186,7 +215,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                 override fun onFailure(`object`: Any) {
                     progressDialog.dismiss()
                     Toast.makeText(
-                        this@ActivityRegisterDetails,
+                        applicationContext,
                         "Could not upload images",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -267,7 +296,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
     private fun createUser(pictureDownloadLinks: ArrayList<String>) {
         if (facebookCredential == null) {
-            auth.createUserWithEmailAndPassword(localData.id, localData.userPassword)
+            auth.createUserWithEmailAndPassword(localData.userEmail, localData.userPassword)
                 .addOnCompleteListener { task ->
                     uploadUserDetailsToDatabase(task, pictureDownloadLinks)
                 }
@@ -300,16 +329,14 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     ArrayList<String>(),
                     pictureDownloadLinks
                 )
-                if (facebookCredential != null) {
-                    localData.id = firebaseUser.uid
-                }
+                localData.id = firebaseUser.uid
                 db.createUser(dbUser, localData.id, object : MyCallBack {
                     override fun onCallBack(`object`: Any) {
                         // Opens the mainactivity now that the user has been created
-                        val intent = Intent(applicationContext, HOMEACTIVITY)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        val intent = Intent(this@ActivityRegisterDetails, HOMEACTIVITY)
                         startActivity(intent)
                         localData.userPassword = ""
+                        localData.userEmail = ""
                     }
                 })
             }
@@ -338,7 +365,17 @@ class ActivityRegisterDetails : AppCompatActivity() {
                 editTextViews[1].text.toString()
             )
         }
-        val user = UserDTO(nameBuilder.toString(), age, address, editTextViews[5].text.toString(), editTextViews[6].text.toString(), editTextViews[7].text.toString(), gender, ArrayList<EventDTO>(), profilePictures)
+        val user = UserDTO(
+            nameBuilder.toString(),
+            age,
+            address,
+            editTextViews[5].text.toString(),
+            editTextViews[6].text.toString(),
+            editTextViews[7].text.toString(),
+            gender,
+            ArrayList<EventDTO>(),
+            profilePictures
+        )
         Log.d(TAG, "User object = $user")
 
         localData.userData = user

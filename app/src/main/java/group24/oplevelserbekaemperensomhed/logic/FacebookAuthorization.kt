@@ -24,9 +24,6 @@ class FacebookAuthorization(private val aLogin: ActivityLogin, private val newAc
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var fb_button_widget : LoginButton
 
-    private val db = FirebaseDAO()
-    private val localData = LocalData
-
     init {
         configure()
     }
@@ -47,13 +44,7 @@ class FacebookAuthorization(private val aLogin: ActivityLogin, private val newAc
                 Log.d(TAG, "FacebookAuthorization: callback succeeded")
                 val accessToken = result.accessToken
                 Log.d(TAG, "Facebook permissions = ${accessToken.permissions}")
-                val request = GraphRequest.newMeRequest(accessToken
-                ) { `object`, response ->
-                    val id = `object`?.getString("id")
-                    Log.d(TAG, "Facebook uid is = $id")
-                    firebaseAuthWithFacebook(result, id)
-                }
-                request.executeAsync()
+                firebaseAuthWithFacebook(result)
             }
 
             override fun onCancel() {
@@ -70,27 +61,11 @@ class FacebookAuthorization(private val aLogin: ActivityLogin, private val newAc
         })
     }
 
-    private fun firebaseAuthWithFacebook(result: LoginResult, id: String?) {
-        if (id != null) {
-            Log.d(TAG, "Check if facebook user already exists in database")
-            db.getUser(id, object : MyCallBack {
-                override fun onCallBack(`object`: Any) {
-                    if (`object` is String) {
-                        Log.d(TAG, "facebook user does not exist in database")
-                        val credential = FacebookAuthProvider.getCredential(result.accessToken.token)
-                        val intent = Intent(aLogin, newActivity)
-                        intent.putExtra("facebook",credential)
-                        aLogin.startActivity(intent)
-                    } else {
-                        Log.d(TAG, "facebook user exists in database")
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        localData.userData = `object` as UserDTO
-                        startActivity(intent)
-                        finish()
-                    }
-                }
-            })
-        }
+    private fun firebaseAuthWithFacebook(result: LoginResult) {
+        val credential = FacebookAuthProvider.getCredential(result.accessToken.token)
+        val intent = Intent(aLogin, newActivity)
+        intent.putExtra("facebook",credential)
+        aLogin.startActivity(intent)
     }
 
     fun signIn() {
