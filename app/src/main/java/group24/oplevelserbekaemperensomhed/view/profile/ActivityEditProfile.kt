@@ -117,7 +117,8 @@ class ActivityEditProfile : AppCompatActivity() {
         // Sets the text onto the edit text fields and updates variables
         address = localData.userData.address.toString()
         gender = localData.userData.gender.toString()
-        profilePictures = localData.userData.profilePictures
+        val tempList = localData.userData.profilePictures.toMutableList()
+        profilePictures = tempList as ArrayList<String>
         when (gender) {
             "male" -> {
                 radioButton1.isChecked = true
@@ -180,11 +181,15 @@ class ActivityEditProfile : AppCompatActivity() {
     private fun submitDataToUserObject() {
         if (checkTextFieldsForMistakes()) return
 
+        // Check if new pictures added
+        var added = false
+        if (localData.userData.profilePictures[0] != profilePictures[0]) {
+            added = true
+        }
+
         // Saves the data in the text fields to the user object
         if(saveUserDetailsToLocalData()) {
-
-            Log.d(TAG, "localDataPictures = ${localData.userData.profilePictures} currentProfilePictures = $profilePictures")
-            if (localData.userData.profilePictures[0] != profilePictures[0]) {
+            if (added) {
                 //Handling upload of pictures and getting their new urls
                 //Showing progress dialog
                 val progressDialog = ProgressDialog(this)
@@ -197,6 +202,7 @@ class ActivityEditProfile : AppCompatActivity() {
                             `object` as java.util.ArrayList<String>
                         progressDialog.dismiss()
                         uploadUserDetailsToDatabase(pictureDownloadLinks)
+                        localData.userData.profilePictures = pictureDownloadLinks
                     }
 
                     override fun onProgress(`object`: Any) {
@@ -214,7 +220,7 @@ class ActivityEditProfile : AppCompatActivity() {
                     }
                 })
             } else {
-                uploadUserDetailsToDatabase(profilePictures)
+                uploadUserDetailsToDatabase(localData.userData.profilePictures)
             }
 
         }
@@ -415,6 +421,7 @@ class ActivityEditProfile : AppCompatActivity() {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             profilePictures.clear()
             picturesAsURIs.clear()
+            Log.d(TAG, "localDataPictures = ${localData.userData.profilePictures} currentProfilePictures = $profilePictures")
             val clipData = data!!.clipData
             if (clipData != null) {
                 if (clipData.itemCount > 8) {
