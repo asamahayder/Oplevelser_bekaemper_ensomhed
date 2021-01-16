@@ -1,5 +1,6 @@
 package group24.oplevelserbekaemperensomhed;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -7,6 +8,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
+import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 
 
 public class FragmentEventInfo extends Fragment {
@@ -174,25 +177,37 @@ public class FragmentEventInfo extends Fragment {
             }
         });
 
-
-
     }
 
     private void insertParticipants(ArrayList<UserDTO> participants){
-        for (UserDTO user : participants) {
+        for (final UserDTO user : participants) {
             CardView cardView = new CardView(getActivity());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            int marginSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+            layoutParams.setMargins(marginSize, 0, marginSize, 0);
             cardView.setLayoutParams(layoutParams);
             cardView.setRadius(250);
             cardView.setPadding(10,0,10,0);
 
             ImageView imageView = new ImageView(getActivity());
-            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(20, 20);
+            int imageSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(imageSize, imageSize);
             imageView.setLayoutParams(imageParams);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Picasso.get().load(user.getProfilePictures().get(0)).into(imageView);
-
             cardView.addView(imageView);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ActivityFragmentHandler.class);
+                    intent.putExtra("profile", user);
+                    intent.putExtra("other", "other");
+                    getActivity().startActivity(intent);
+                }
+            });
             participantLayout.addView(cardView);
+
 
         }
 

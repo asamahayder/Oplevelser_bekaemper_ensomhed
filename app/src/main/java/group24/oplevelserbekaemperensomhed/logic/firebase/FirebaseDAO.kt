@@ -207,7 +207,7 @@ class FirebaseDAO{
                 }
 
                 for (pair in pairs){
-                    getUser(pair.userID, object : MyCallBack{
+                    getUser(pair.participant, object : MyCallBack{
                         override fun onCallBack(`object`: Any) {
                             val user = `object` as UserDTO
                             users.add(user)
