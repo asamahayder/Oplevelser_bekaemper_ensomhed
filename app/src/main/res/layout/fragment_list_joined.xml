@@ -29,7 +29,7 @@
         android:layout_height="match_parent"
         android:textColor="@android:color/white"
         android:textSize="30sp"
-        android:text="No created events"
+        android:text="No joined events"
         android:visibility="gone"
         android:gravity="center"/>
 
