@@ -24,7 +24,7 @@
             android:orientation="horizontal"
             android:clickable="true"
             android:weightSum="4"
-            android:background="@drawable/white_rounded_corner"
+            android:background="@drawable/rounded_corner_white"
             android:focusable="true">
 
             <SearchView

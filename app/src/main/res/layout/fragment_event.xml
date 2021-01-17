@@ -356,14 +356,6 @@
                             android:backgroundTint="@color/confirm_green"
 
                             >
-                            <ImageView
-                                android:id="@+id/event_info_submitButton_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_baseline_check_30"
-                                android:layout_gravity="center_vertical"
-                                android:paddingLeft="10dp"
-                                app:tint="@android:color/black"/>
 
                             <TextView
                                 android:id="@+id/event_info_submitButton_text"
@@ -371,8 +363,33 @@
                                 android:layout_height="wrap_content"
                                 android:minWidth="100dp"
                                 android:text="Join"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="20dp"
+                                android:paddingHorizontal="10dp"
+                                android:textSize="20sp"
+                                android:paddingVertical="5dp"
+                                android:textColor="#2E2E2E"
+                                android:gravity="center"
+                                android:layout_gravity="center_vertical"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/event_info_deleteButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/edit_text_rounded_white_background"
+                            android:backgroundTint="@color/alert"
+
+                            >
+
+                            <TextView
+                                android:id="@+id/event_info_deleteButton_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="100dp"
+                                android:text="Delete"
+                                android:paddingHorizontal="10dp"
                                 android:textSize="20sp"
                                 android:paddingVertical="5dp"
                                 android:textColor="#2E2E2E"

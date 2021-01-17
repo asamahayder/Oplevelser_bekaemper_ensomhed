@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,6 +31,7 @@ import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 public class FragmentListJoined extends Fragment {
 
     RecyclerView recyclerView;
+    ProgressBar progressBar;
 
     public FragmentListJoined() {
         // Required empty public constructor
@@ -39,8 +41,8 @@ public class FragmentListJoined extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toast.makeText(getActivity(), "Im resuming xD", Toast.LENGTH_SHORT).show();
         getJoinedEvents();
+
     }
 
     @Override
@@ -55,6 +57,7 @@ public class FragmentListJoined extends Fragment {
         View v = inflater.inflate(R.layout.fragment_list_joined, container, false);
 
         recyclerView = v.findViewById(R.id.fragment_list_joined_recyclerview);
+        progressBar = v.findViewById(R.id.fragment_list_joined_progressBar);
 
         getJoinedEvents();
 
@@ -70,6 +73,7 @@ public class FragmentListJoined extends Fragment {
                 FragmentListAdapter adapter = new FragmentListAdapter(getActivity(), events);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

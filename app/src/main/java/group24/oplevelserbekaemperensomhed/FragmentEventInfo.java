@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,8 +52,8 @@ public class FragmentEventInfo extends Fragment {
     private TextView timeEnd;
     private TextView eventOwnerName;
     private LinearLayout joinButton;
-    private ImageView joinButtonIcon;
     private TextView joinButtonText;
+    private LinearLayout deleteButton;
     private LinearLayout participantLayout;
     private boolean joined;
 
@@ -82,8 +83,8 @@ public class FragmentEventInfo extends Fragment {
         joinButton = v.findViewById(R.id.event_info_submitButton);
         eventOwnerName = v.findViewById(R.id.event_info_creator_name);
         participantLayout = v.findViewById(R.id.event_info_participants_list);
-        joinButtonIcon = v.findViewById(R.id.event_info_submitButton_icon);
         joinButtonText = v.findViewById(R.id.event_info_submitButton_text);
+        deleteButton = v.findViewById(R.id.event_info_deleteButton);
 
         progressDialog = new ProgressDialog(getActivity());
 
@@ -91,6 +92,13 @@ public class FragmentEventInfo extends Fragment {
             @Override
             public void onClick(View v) {
                 handleOnSubmit();
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDeleteEvent();
             }
         });
 
@@ -134,6 +142,8 @@ public class FragmentEventInfo extends Fragment {
 
         handleParticipants();
 
+        handleIsCreatorViewingEvent();
+
         return v;
     }
 
@@ -149,10 +159,22 @@ public class FragmentEventInfo extends Fragment {
 
         if (joined){
             joinButtonText.setText("Leave");
-            //joinButtonIcon.setVisibility(View.VISIBLE);
+            joinButtonText.setBackgroundResource(R.drawable.rounded_corner_orange);
+            joinButton.setBackgroundResource(R.drawable.rounded_corner_orange);
         }else{
             joinButtonText.setText("Join");
-            joinButtonIcon.setVisibility(View.GONE);
+            joinButtonText.setBackgroundResource(R.drawable.rounded_corner_green);
+            joinButton.setBackgroundResource(R.drawable.rounded_corner_green);
+        }
+    }
+
+    private void handleIsCreatorViewingEvent(){
+        LocalData localData = LocalData.INSTANCE;
+        if (event.getEventCreator().getName().equals(localData.getUserData().getName())){
+            joinButton.setVisibility(View.GONE);
+
+        }else{
+            deleteButton.setVisibility(View.GONE);
         }
     }
 
@@ -288,6 +310,26 @@ public class FragmentEventInfo extends Fragment {
 
 
         }
+
+    }
+
+    private void handleDeleteEvent(){
+        progressDialog.show();
+        FirebaseDAO firebaseDAO = new FirebaseDAO();
+        firebaseDAO.deleteEventByEventTitle(event.getEventTitle(), new MyCallBack() {
+            @Override
+            public void onCallBack(@NotNull Object object) {
+                String message = (String) object;
+                if (message.equals("success")){
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "Event successfully deleted", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }else {
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "Cannot delete event", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 

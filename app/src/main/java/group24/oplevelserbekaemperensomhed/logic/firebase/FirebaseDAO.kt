@@ -359,4 +359,87 @@ class FirebaseDAO{
         }
     }
 
+    fun deleteEventByEventTitle(eventTitle: String, callBack: MyCallBack){
+        Log.d("deleteEvent", "Starting delete")
+        var counter = 0
+        db.collection("events").whereEqualTo("eventTitle", eventTitle).get().addOnCompleteListener{
+            task ->
+            if (task.isSuccessful){
+                Log.d("deleteEvent", "Successfully fetched events with given eventTitle")
+                counter = task.result.size()
+                val batch = db.batch()
+                for (document in task.result!!){
+                    deleteAllParticipants(eventTitle, object: MyCallBack{
+                        override fun onCallBack(`object`: Any) {
+                            val message = `object` as String
+                            if (message.equals("success")){
+                                Log.d("deleteEvent", "Received success message from deleteAllParticipants")
+                                counter--
+                                Log.d("deleteEvent", "Adding to delete events batch")
+                                batch.delete(document.reference)
+                                if (counter == 0){
+                                    Log.d("deleteEvent", "Committing batch for delete events")
+                                    batch.commit().addOnCompleteListener{
+                                            task ->
+                                        if (task.isSuccessful){
+                                            Log.d("deleteEvent", "Successfully deleted all events")
+                                            callBack.onCallBack("success")
+                                        }else{
+                                            Log.d("deleteEvent", "Failed deleting all events")
+                                            Log.d("deleteEvent", task.exception.toString())
+                                            callBack.onCallBack("fail")
+                                        }
+                                    }
+                                }
+                            }else{
+                                Log.d("deleteEvent", "Received fail message from deleteAllParticipants")
+                                callBack.onCallBack("fail")
+                            }
+                        }
+                    })
+                }
+            }else{
+                Log.d("deleteEvent", "Failed fetching all events for given eventTitle")
+                callBack.onCallBack("fail")
+            }
+        }
+
+    }
+
+    fun deleteAllParticipants(eventTitle: String, callBack: MyCallBack){
+        Log.d("deleteEvent", "Started delete of all participants for given eventTitle")
+        val localData = LocalData
+        val userID = localData.id
+        db.collection("eventParticipants").whereEqualTo("eventName", eventTitle).get().addOnCompleteListener{
+                task ->
+            if (task.isSuccessful){
+                Log.d("deleteEvent", "successfully fetched all participants for given eventTitle")
+                if (!task.result.documents.isEmpty()){
+                    Log.d("deleteEvent", "result is Not empty")
+                    val batch = db.batch()
+                    for(document in task.result!!){
+                        batch.delete(document.reference)
+                    }
+                    Log.d("deleteEvent", "Committing delete batch for pairs")
+                    batch.commit().addOnCompleteListener{
+                            task ->
+                        if (task.isSuccessful){
+                            Log.d("deleteEvent", "Successfully deleted all participants for given eventTitle")
+                            callBack.onCallBack("success")
+                        }else{
+                            Log.d("deleteEvent", "Failed delete of all participants for given eventTitle")
+                            callBack.onCallBack("fail")
+                        }
+                    }
+                }else{
+                    Log.d("deleteEvent", "result is empty")
+                    callBack.onCallBack("success")
+                }
+            }else{
+                Log.d("deleteEvent", "Could not fetch all participants for given eventTitle")
+                callBack.onCallBack("fail")
+            }
+        }
+    }
+
 }
