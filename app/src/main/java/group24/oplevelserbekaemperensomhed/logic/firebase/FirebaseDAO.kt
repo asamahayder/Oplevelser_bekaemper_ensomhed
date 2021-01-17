@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.WriteBatch
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import group24.oplevelserbekaemperensomhed.data.DateDTO
@@ -120,15 +121,17 @@ class FirebaseDAO{
     fun createEvent(event: EventDTO, callBack: MyCallBack){
         val date: List<String> = listOf(event.eventDate.date, event.eventDate.startTime, event.eventDate.endTime)
         val pictures: List<String> = event.pictures
+
+        //TODO: we do not use this parameter, so remove it
         val participants: List<String> = listOf(event.participants?.get(0)?.name.toString())
 
         val localData = LocalData
         val userID = localData.id
 
-
-        //TODO instead of the 'testUser' placeholder, use a real user.
-        val dbEvent: DBEvent = DBEvent(address = event.address, category = event.category, eventCreator = userID, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
-        db.collection("events").add(dbEvent).addOnSuccessListener { callBack.onCallBack("success") }.addOnFailureListener{
+        val dbEvent = DBEvent(address = event.address, category = event.category, eventCreator = userID, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
+        db.collection("events").add(dbEvent).addOnSuccessListener {
+            createParticipantPair(dbEvent.eventTitle, callBack)
+        }.addOnFailureListener{
             println("*******************************************************************************************************************")
             Log.e("gg", it.stackTrace.toString())
             callBack.onCallBack("Failure")
@@ -193,6 +196,46 @@ class FirebaseDAO{
         }
     }
 
+    //Also known as 'Join event'
+    fun createParticipantPair(eventTitle: String, callBack: MyCallBack){
+        val localData = LocalData
+        val userID = localData.id
+        val pair = DBEventParticipantPair(eventTitle, userID)
+        db.collection("eventParticipants").add(pair).addOnCompleteListener{
+            task ->
+            if (task.isSuccessful){
+                callBack.onCallBack("success")
+            }else{
+                callBack.onCallBack("Fail")
+            }
+        }
+    }
+
+    //Also known as 'Leave event'
+    fun deleteParticipantPair(eventTitle: String, callBack: MyCallBack){
+        val localData = LocalData
+        val userID = localData.id
+        db.collection("eventParticipants").whereEqualTo("eventName", eventTitle).whereEqualTo("participant", userID).get().addOnCompleteListener{
+            task ->
+            if (task.isSuccessful){
+                val batch = db.batch()
+                for(document in task.result!!){
+                    batch.delete(document.reference)
+                }
+                batch.commit().addOnCompleteListener{
+                    task ->
+                    if (task.isSuccessful){
+                        callBack.onCallBack("success")
+                    }else{
+                        callBack.onCallBack("fail")
+                    }
+                }
+            }else{
+                callBack.onCallBack("fail")
+            }
+        }
+    }
+
     fun getParticipants(event: EventDTO, callBack: MyCallBack){
         val pairs: ArrayList<DBEventParticipantPair> = ArrayList()
         val users: ArrayList<UserDTO> = ArrayList()
@@ -206,18 +249,51 @@ class FirebaseDAO{
                     pairs.add(dbPair)
                 }
 
-                for (pair in pairs){
-                    getUser(pair.participant, object : MyCallBack{
-                        override fun onCallBack(`object`: Any) {
-                            val user = `object` as UserDTO
-                            users.add(user)
-                            counter--
-                            if (counter == 0){
-                                callBack.onCallBack(users)
+
+
+                if (pairs.isNotEmpty()){
+                    for (pair in pairs){
+                        getUser(pair.participant, object : MyCallBack{
+                            override fun onCallBack(`object`: Any) {
+                                val user = `object` as UserDTO
+                                users.add(user)
+                                counter--
+                                if (counter == 0){
+                                    callBack.onCallBack(users)
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
+                }else{
+                    callBack.onCallBack(users)
                 }
+
+            }
+        }
+    }
+
+    fun getCreatedEvents(callBack: MyCallBack){
+        val localData = LocalData
+        val events: ArrayList<EventDTO> = ArrayList()
+        val dbEvents: ArrayList<DBEvent> = ArrayList()
+        db.collection("events").whereEqualTo("eventCreator", localData.id).get().addOnCompleteListener {
+                task ->
+            if (task.isSuccessful){
+                for (document in task.result!!){
+                    val dbEvent = document.toObject(DBEvent::class.java)
+                    dbEvents.add(dbEvent)
+                }
+
+                for (dbEvent in dbEvents){
+                    val event = EventDTO(localData.userData,null,dbEvent.eventDescription,dbEvent.eventTitle,
+                        DateDTO(dbEvent.eventDate[0],dbEvent.eventDate[1],dbEvent.eventDate[2]),dbEvent.eventLikes,dbEvent.category,dbEvent.address,dbEvent.price,dbEvent.pictures.toCollection(ArrayList()))
+                    events.add(event)
+                }
+
+                callBack.onCallBack(events)
+
+            }else{
+                callBack.onCallBack(events)
             }
         }
     }

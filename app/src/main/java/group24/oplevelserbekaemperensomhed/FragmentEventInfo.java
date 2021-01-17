@@ -1,5 +1,6 @@
 package group24.oplevelserbekaemperensomhed;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,15 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.ktx.Firebase;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
+import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
@@ -51,7 +51,14 @@ public class FragmentEventInfo extends Fragment {
     private TextView timeEnd;
     private TextView eventOwnerName;
     private LinearLayout joinButton;
+    private ImageView joinButtonIcon;
+    private TextView joinButtonText;
     private LinearLayout participantLayout;
+    private boolean joined;
+
+    private ProgressDialog progressDialog;
+
+    private ArrayList<UserDTO> participants;
 
     public FragmentEventInfo() {
         // Required empty public constructor
@@ -75,11 +82,15 @@ public class FragmentEventInfo extends Fragment {
         joinButton = v.findViewById(R.id.event_info_submitButton);
         eventOwnerName = v.findViewById(R.id.event_info_creator_name);
         participantLayout = v.findViewById(R.id.event_info_participants_list);
+        joinButtonIcon = v.findViewById(R.id.event_info_submitButton_icon);
+        joinButtonText = v.findViewById(R.id.event_info_submitButton_text);
+
+        progressDialog = new ProgressDialog(getActivity());
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleOnSubmmit();
+                handleOnSubmit();
             }
         });
 
@@ -104,7 +115,6 @@ public class FragmentEventInfo extends Fragment {
         eventOwnerName.setText(event.getEventCreator().getName());
         handleCategories();
 
-        //TODO there is probably a better way to do this:
         //Setting date field
         String date = event.getEventDate().getDate();
 
@@ -127,6 +137,25 @@ public class FragmentEventInfo extends Fragment {
         return v;
     }
 
+    //Checks if joined and changes submit button based on result
+    private void updateParticipationStatus(ArrayList<UserDTO> participants){
+        joined = false;
+        LocalData localData = LocalData.INSTANCE;
+        for (UserDTO participant : participants) {
+            if (participant.getName().equals(localData.getUserData().getName())){
+                joined = true;
+            }
+        }
+
+        if (joined){
+            joinButtonText.setText("Leave");
+            //joinButtonIcon.setVisibility(View.VISIBLE);
+        }else{
+            joinButtonText.setText("Join");
+            joinButtonIcon.setVisibility(View.GONE);
+        }
+    }
+
     private void handlePictureSlider(View view){
         mPager = view.findViewById(R.id.event_info_viewpager);
         tabLayout = view.findViewById(R.id.event_info_tablayout);
@@ -145,6 +174,7 @@ public class FragmentEventInfo extends Fragment {
             p.setMargins(0,0,10,0);
             tab.requestLayout();
         }
+
     }
 
     private void handleCategories(){
@@ -162,24 +192,72 @@ public class FragmentEventInfo extends Fragment {
         this.categoryName.setText(categoryName);
     }
 
-    private void handleOnSubmmit(){
-        //TODO implement join event here
+    private void handleOnSubmit(){
+        LocalData localData = LocalData.INSTANCE;
+        progressDialog.setTitle("Please wait");
+        progressDialog.show();
+
+        FirebaseDAO firebaseDAO = new FirebaseDAO();
+        if (joined){
+            //TODO use delete pair here
+
+            if (!event.getEventCreator().getName().equals(localData.getUserData().getName())){ //An owner cannot un-join his own event
+                firebaseDAO.deleteParticipantPair(event.getEventTitle(), new MyCallBack() {
+                    @Override
+                    public void onCallBack(@NotNull Object object) {
+                        String resultMessage = (String) object;
+                        if (resultMessage.equals("success")){
+                            handleParticipants();
+                        }else{
+                            Toast.makeText(getActivity(), "Could not delete pair", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }else{
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(), "An owner has to participate in his own event", Toast.LENGTH_SHORT).show();
+            }
+
+        }else{
+            firebaseDAO.createParticipantPair(event.getEventTitle(), new MyCallBack(){
+                @Override
+                public void onCallBack(@NotNull Object object) {
+                    String message = (String)object;
+                    if (message.equals("success")){
+                        handleParticipants();
+                    }else{
+                        Toast.makeText(getActivity(), "Could not join", Toast.LENGTH_SHORT).show();
+                        if (progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                    }
+                }
+            });
+        }
+
+
     }
 
     private void handleParticipants(){
         FirebaseDAO firebaseDAO = new FirebaseDAO();
-        //final ArrayList<UserDTO> participants = new ArrayList<>();
         firebaseDAO.getParticipants(event, new MyCallBack() {
             @Override
             public void onCallBack(@NotNull Object object) {
                 ArrayList<UserDTO> participants = (ArrayList<UserDTO>) object;
+                setParticipants(participants);
                 insertParticipants(participants);
+                updateParticipationStatus(participants);
+
+                if (progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
             }
         });
 
     }
 
     private void insertParticipants(ArrayList<UserDTO> participants){
+        participantLayout.removeAllViews();
         for (final UserDTO user : participants) {
             CardView cardView = new CardView(getActivity());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -213,4 +291,7 @@ public class FragmentEventInfo extends Fragment {
 
     }
 
+    public void setParticipants(ArrayList<UserDTO> participants) {
+        this.participants = participants;
+    }
 }
