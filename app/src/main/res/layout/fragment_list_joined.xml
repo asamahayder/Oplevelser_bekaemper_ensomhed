@@ -23,5 +23,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
+    <TextView
+        android:id="@+id/fragment_list_joined_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:text="No created events"
+        android:visibility="gone"
+        android:gravity="center"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

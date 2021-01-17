@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,7 @@ public class FragmentListCreated extends Fragment {
 
     RecyclerView recyclerView;
     ProgressBar progressBar;
+    TextView textView;
 
     public FragmentListCreated() {
         // Required empty public constructor
@@ -53,6 +55,7 @@ public class FragmentListCreated extends Fragment {
 
         recyclerView = v.findViewById(R.id.fragment_list_created_recyclerview);
         progressBar = v.findViewById(R.id.fragment_list_created_progressBar);
+        textView = v.findViewById(R.id.fragment_list_created_text);
 
         getCreatedEvents();
 
@@ -65,6 +68,11 @@ public class FragmentListCreated extends Fragment {
             @Override
             public void onCallBack(@NotNull Object object) {
                 ArrayList<EventDTO> events = (ArrayList<EventDTO>) object;
+                if (events.isEmpty()){
+                    textView.setVisibility(View.VISIBLE);
+                }else{
+                    textView.setVisibility(View.GONE);
+                }
                 FragmentListAdapter adapter = new FragmentListAdapter(getActivity(), events);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
