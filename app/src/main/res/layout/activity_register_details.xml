@@ -126,6 +126,7 @@
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="5dp"
                     android:textSize="20sp"
+                    android:maxLength="12"
                     android:hint="@string/first_name"
                     android:background="@drawable/edit_text_rounded_white_background"
                     />
@@ -136,6 +137,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="text"
+                    android:maxLength="12"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginVertical="10dp"
                     android:paddingHorizontal="20dp"
@@ -334,6 +336,7 @@
                 android:paddingVertical="5dp"
                 android:textSize="20sp"
                 android:hint="@string/your_occupation"
+                android:maxLength="30"
                 android:layout_marginVertical="10dp"
                 android:background="@drawable/edit_text_rounded_white_background" />
 
@@ -365,6 +368,7 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="5dp"
                 android:textSize="20sp"
+                android:maxLength="30"
                 android:hint="@string/your_place_of_study"
                 android:layout_marginVertical="10dp"
                 android:background="@drawable/edit_text_rounded_white_background" />
@@ -398,6 +402,7 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="15dp"
                 android:textSize="20sp"
+                android:maxLength="500"
                 android:hint="@string/your_description"
                 android:gravity="top"
                 android:background="@drawable/edit_text_rounded_white_background"

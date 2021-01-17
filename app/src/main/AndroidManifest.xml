@@ -12,52 +12,56 @@
         android:label="@string/appName"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Material">
+        android:theme="@style/Material"
+        >
         <activity android:name=".settings.PopActivity"
             android:theme="@style/AppTheme.PopMe"
-            ></activity>
+            android:screenOrientation = "portrait"
+            />
         <activity android:name=".settings.PopActivityKont"
             android:theme="@style/AppTheme.PopMe"
-            ></activity>
+            android:screenOrientation = "portrait"
+            />
         <activity android:name=".settings.Settings"
             android:theme="@style/AppTheme"
+            android:screenOrientation = "portrait"
             />
-        <activity android:name=".view.login.ActivityRegister" />
-        <activity android:name=".view.login.ActivityForgotPassword" />
-        <activity android:name=".view.login.ActivityRegisterDetails" />
+        <activity android:name=".view.login.ActivityRegister" android:screenOrientation = "portrait"/>
+        <activity android:name=".view.login.ActivityForgotPassword" android:screenOrientation = "portrait"/>
+        <activity android:name=".view.login.ActivityRegisterDetails" android:screenOrientation = "portrait"/>
         <activity
             android:name=".view.ActivityFragmentHandler"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".view.search.ActivitySearch" />
-        <activity android:name=".ActivityCreateEvent" android:label="@string/title_activity_create_event" />
-        <activity android:name=".view.login.ActivityStart" android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" android:screenOrientation = "portrait"/>
+        <activity android:name=".view.search.ActivitySearch" android:screenOrientation = "portrait"/>
+        <activity android:name=".ActivityCreateEvent" android:label="@string/title_activity_create_event" android:screenOrientation = "portrait"/>
+        <activity android:name=".view.login.ActivityStart" android:theme="@style/AppTheme" android:screenOrientation = "portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.login.ActivityLogin" android:theme="@style/AppTheme" />
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".view.login.ActivityLogin" android:theme="@style/AppTheme" android:screenOrientation = "portrait"/>
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" android:screenOrientation = "portrait"/>
         <activity
-            android:name=".view.profile.ActivityEditProfile"/>
+            android:name=".view.profile.ActivityEditProfile" android:screenOrientation = "portrait"/>
         <activity
             android:name=".view.ActivitySettings"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme" android:screenOrientation = "portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:resource="@array/preloaded_fonts" android:screenOrientation = "portrait"/>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id" android:screenOrientation = "portrait"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/appName" />
+            android:label="@string/appName" android:screenOrientation = "portrait"/>
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
+            android:exported="true" android:screenOrientation = "portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

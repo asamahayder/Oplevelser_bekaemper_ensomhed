@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
         fragmentSearch = new FragmentSearchHome();
-        fragmentCreateEvent = new FragmentCreateEvent();
         fragmentList = new FragmentList();
 
         final Intent intent = new Intent(this, ActivityCreateEvent.class);
