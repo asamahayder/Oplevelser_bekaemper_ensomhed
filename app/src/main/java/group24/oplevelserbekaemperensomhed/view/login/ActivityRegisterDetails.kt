@@ -86,6 +86,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                                         "facebook user with this id is already created = ${auth.currentUser}"
                                     )
                                     localData.userData = `object`
+                                    localData.id = auth.uid.toString()
                                     val intent = Intent(applicationContext, MainActivity::class.java)
                                     startActivity(intent)
                                 } else {
