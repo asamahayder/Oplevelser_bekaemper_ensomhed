@@ -281,33 +281,35 @@ public class FragmentEventInfo extends Fragment {
     private void insertParticipants(ArrayList<UserDTO> participants){
         participantLayout.removeAllViews();
         for (final UserDTO user : participants) {
-            CardView cardView = new CardView(getActivity());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            int marginSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-            layoutParams.setMargins(marginSize, 0, marginSize, 0);
-            cardView.setLayoutParams(layoutParams);
-            cardView.setRadius(250);
-            cardView.setPadding(10,0,10,0);
+            if (getActivity() != null) {
 
-            ImageView imageView = new ImageView(getActivity());
-            int imageSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
-            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(imageSize, imageSize);
-            imageView.setLayoutParams(imageParams);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.get().load(user.getProfilePictures().get(0)).into(imageView);
-            cardView.addView(imageView);
+                CardView cardView = new CardView(getActivity());
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                int marginSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+                layoutParams.setMargins(marginSize, 0, marginSize, 0);
+                cardView.setLayoutParams(layoutParams);
+                cardView.setRadius(250);
+                cardView.setPadding(10, 0, 10, 0);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ActivityFragmentHandler.class);
-                    intent.putExtra("profile", user);
-                    intent.putExtra("other", "other");
-                    getActivity().startActivity(intent);
-                }
-            });
-            participantLayout.addView(cardView);
+                ImageView imageView = new ImageView(getActivity());
+                int imageSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()));
+                LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(imageSize, imageSize);
+                imageView.setLayoutParams(imageParams);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Picasso.get().load(user.getProfilePictures().get(0)).into(imageView);
+                cardView.addView(imageView);
 
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), ActivityFragmentHandler.class);
+                        intent.putExtra("profile", user);
+                        intent.putExtra("other", "other");
+                        getActivity().startActivity(intent);
+                    }
+                });
+                participantLayout.addView(cardView);
+            }
 
         }
 
