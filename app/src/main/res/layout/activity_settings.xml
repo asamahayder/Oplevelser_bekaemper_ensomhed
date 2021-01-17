@@ -5,18 +5,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#03346c"
+    android:background="@color/colorPrimary"
     tools:context="group24.oplevelserbekaemperensomhed.settings.Settings">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="55sp"
-        android:background="@color/colorPrimary"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="55sp">
 
         <ImageView
             android:id="@+id/back"
@@ -50,11 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="505dp"
         android:gravity="center"
-        android:orientation="vertical"
-
-
-        >
-
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/button1"
@@ -63,6 +54,7 @@
             android:layout_height="41dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            app:backgroundTint="@null"
             android:background="@drawable/rounded_buttom_indstillinger"
             android:text="Vilkår" />
 

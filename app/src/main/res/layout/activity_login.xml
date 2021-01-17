@@ -171,6 +171,7 @@
             android:paddingBottom="8dp"
             android:text="@string/forgot_password"
             android:textSize="15sp"
+            android:visibility="invisible"
             android:textColor="@color/colorAccent"
             android:textColorHint="@color/colorAccent"
             android:textStyle="italic"
