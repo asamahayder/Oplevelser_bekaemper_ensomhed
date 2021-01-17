@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_list_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -37,11 +38,48 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:paddingHorizontal="10dp"
+        android:minWidth="300dp"
+        android:textColor="@android:color/white"
+        android:gravity="start"
+
+        />
+
+    <TextView
+        android:id="@+id/fragment_list_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="11/11-2011"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toRightOf="@id/fragment_list_item_cardview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginHorizontal="10dp"
         android:minWidth="300dp"
         android:textColor="@android:color/white"
+        android:gravity="end"
+        android:layout_marginEnd="30dp"
 
         />
+
+    <TextView
+        android:id="@+id/fragment_list_item_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toRightOf="@id/fragment_list_item_cardview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:minWidth="300dp"
+        android:textColor="@android:color/white"
+        android:gravity="end"
+        android:layout_marginEnd="30dp"
+
+        />
+
+
 
 
 

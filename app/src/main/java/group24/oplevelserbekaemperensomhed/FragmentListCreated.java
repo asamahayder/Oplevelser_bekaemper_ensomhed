@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -54,22 +55,13 @@ public class FragmentListCreated extends Fragment {
 
     private void getCreatedEvents(){
         FirebaseDAO firebaseDAO = new FirebaseDAO();
-        final LocalData localData = LocalData.INSTANCE;
         firebaseDAO.getCreatedEvents(new MyCallBack() {
             @Override
             public void onCallBack(@NotNull Object object) {
                 ArrayList<EventDTO> events = (ArrayList<EventDTO>) object;
-                Toast.makeText(getActivity(), "events size: " + events.size(), Toast.LENGTH_SHORT).show();
-                FragmentListAdapter adapter = new FragmentListAdapter(events, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), ActivityFragmentHandler.class);
-                        intent.putExtra("profile", localData.getUserData());
-                        intent.putExtra("other", "other");
-                        getActivity().startActivity(intent);
-                    }
-                });
+                FragmentListAdapter adapter = new FragmentListAdapter(getActivity(), events);
                 recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         });
     }

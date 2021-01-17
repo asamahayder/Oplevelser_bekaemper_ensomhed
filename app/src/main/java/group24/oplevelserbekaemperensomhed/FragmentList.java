@@ -3,11 +3,14 @@ package group24.oplevelserbekaemperensomhed;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -16,7 +19,6 @@ import com.google.android.material.tabs.TabLayout;
 public class FragmentList extends Fragment {
 
     private TabLayout tabLayout;
-    private ViewPager viewPager;
     private TabAdapter tabAdapter;
 
 
@@ -25,12 +27,15 @@ public class FragmentList extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -39,17 +44,36 @@ public class FragmentList extends Fragment {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
 
         tabLayout = v.findViewById(R.id.fragment_list_tabLayout);
-        viewPager = v.findViewById(R.id.fragment_list_viewPager);
 
-        tabAdapter = new TabAdapter(getActivity().getSupportFragmentManager());
-        tabAdapter.addFragment(new FragmentListJoined(), "Joined");
-        tabAdapter.addFragment(new FragmentListCreated(), "Created");
+        tabLayout.addTab(tabLayout.newTab().setText("joined"));
+        tabLayout.addTab(tabLayout.newTab().setText("created"));
 
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_list_container, new FragmentListJoined()).commit();
 
-        viewPager.setAdapter(tabAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (position == 0){
+                    getChildFragmentManager().beginTransaction().replace(R.id.fragment_list_container, new FragmentListJoined()).commit();
+                }else{
+                    getChildFragmentManager().beginTransaction().replace(R.id.fragment_list_container, new FragmentListCreated()).commit();
+                }
 
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         return v;
     }
+
 }

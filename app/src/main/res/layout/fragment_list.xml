@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--from https://droidbyme.medium.com/android-material-design-tabs-tab-layout-with-swipe-884085ae80ff-->
+<!--inspired by following tutorial https://droidbyme.medium.com/android-material-design-tabs-tab-layout-with-swipe-884085ae80ff-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorPrimary">
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/fragment_list_tabLayout"
         android:layout_width="match_parent"
@@ -19,9 +20,14 @@
         app:tabMode="fixed">
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <!--<androidx.viewpager.widget.ViewPager
         android:id="@+id/fragment_list_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </androidx.viewpager.widget.ViewPager>
+    </androidx.viewpager.widget.ViewPager>-->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_list_container"/>
 </LinearLayout>

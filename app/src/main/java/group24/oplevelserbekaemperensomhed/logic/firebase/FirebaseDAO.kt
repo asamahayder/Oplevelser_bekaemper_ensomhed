@@ -1,12 +1,8 @@
 package group24.oplevelserbekaemperensomhed.logic.firebase
 
-import android.app.ProgressDialog
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.WriteBatch
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import group24.oplevelserbekaemperensomhed.data.DateDTO
@@ -294,6 +290,71 @@ class FirebaseDAO{
 
             }else{
                 callBack.onCallBack(events)
+            }
+        }
+    }
+
+    //TODO: remmeber to filter out a users own events by checking each events owner and comparing to the logged in user
+    fun getJoinedEvents(callBack: MyCallBack){
+        val localData = LocalData
+        val pairs: ArrayList<DBEventParticipantPair> = ArrayList()
+        val events: ArrayList<EventDTO> = ArrayList()
+        var counter = 0
+        db.collection("eventParticipants").whereEqualTo("participant", localData.id).get().addOnCompleteListener {
+                task ->
+            if (task.isSuccessful){
+                counter = task.result.size()
+                for (document in task.result!!){
+                    val dbPair = document.toObject(DBEventParticipantPair::class.java)
+                    pairs.add(dbPair)
+                }
+
+                if (pairs.isNotEmpty()){
+                    for (pair in pairs){
+                        getEventByEventName(pair.eventName, object: MyCallBack{
+                            override fun onCallBack(`object`: Any) {
+                                val event = `object` as EventDTO
+
+                                //filtering out a users own events
+                                if (!event.eventCreator!!.name.equals(localData.userData.name)){
+                                    events.add(event)
+                                }
+                                counter--
+                                if (counter == 0){
+                                    callBack.onCallBack(events)
+                                }
+                            }
+                        })
+                    }
+                }else{
+                    callBack.onCallBack(events)
+                }
+
+            }else{
+                callBack.onCallBack(events)
+            }
+        }
+    }
+
+    fun getEventByEventName(eventName: String, callBack: MyCallBack){
+        db.collection("events").whereEqualTo("eventTitle", eventName).get().addOnCompleteListener {
+            task ->
+            if (task.isSuccessful){
+                if (!task.result!!.isEmpty){
+                    val dbEvent = task.result.documents[0].toObject(DBEvent::class.java) //If there are multiple events with the same name, we choose the first one. This is not ideal, but we didn't have time to fix.
+                    getUser(dbEvent!!.eventCreator, object : MyCallBack {
+                        override fun onCallBack(`object`: Any) {
+                            val user = `object` as UserDTO
+                            val event = EventDTO(user, null, dbEvent.eventDescription, dbEvent.eventTitle,
+                                DateDTO(dbEvent.eventDate[0], dbEvent.eventDate[1], dbEvent.eventDate[2]),
+                                dbEvent.eventLikes, dbEvent.category, dbEvent.address, dbEvent.price, dbEvent.pictures.toCollection(ArrayList()))
+
+                            callBack.onCallBack(event)
+                        }
+                    })
+                }else{
+                    callBack.onCallBack("fail")
+                }
             }
         }
     }
