@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class FragmentHome extends Fragment implements ItemClickListener {
     private ViewPager2 viewPager;
     private EventsAdapter adapter = null;
     private ArrayList<EventDTO> events = new ArrayList<>();
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public FragmentHome() {
         // Required empty public constructor
@@ -38,21 +40,31 @@ public class FragmentHome extends Fragment implements ItemClickListener {
         viewPager = view.findViewById(R.id.view_pager_main);
         viewPager.setAdapter(adapter);
 
+        swipeRefreshLayout = view.findViewById(R.id.fragment_home_swipeLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                FirebaseDAO firebaseDAO = new FirebaseDAO();
+                firebaseDAO.getEvents(new MyCallBack() {
+                    @Override
+                    public void onCallBack(@NotNull Object object) {
+                        events = (ArrayList<EventDTO>)object;
+                        initializeAdapter();
+                        viewPager.setAdapter(adapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        FirebaseDAO firebaseDAO = new FirebaseDAO();
-        firebaseDAO.getEvents(new MyCallBack() {
-            @Override
-            public void onCallBack(@NotNull Object object) {
-                events = (ArrayList<EventDTO>)object;
-                initializeAdapter();
-                viewPager.setAdapter(adapter);
-            }
-        });
+
     }
 
     @Override
@@ -67,6 +79,7 @@ public class FragmentHome extends Fragment implements ItemClickListener {
             public void onCallBack(@NotNull Object object) {
                 events = (ArrayList<EventDTO>)object;
                 initializeAdapter();
+                viewPager.setAdapter(adapter);
             }
         });
 
