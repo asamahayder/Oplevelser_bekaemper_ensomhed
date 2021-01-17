@@ -182,14 +182,33 @@ class FirebaseDAO{
     }
 
     fun deleteUser(id: String,callBack: MyCallBack) {
-        db.collection("users").document(id).delete().addOnCompleteListener {task ->
-            if (task.isSuccessful) {
-                callBack.onCallBack(true)
+        deleteParticipantsByUser(object: MyCallBack{
+            override fun onCallBack(`object`: Any) {
+                val message = `object` as String
+                if (message.equals("success")){
+                    deleteAllCreatedEvents(object: MyCallBack{
+                        override fun onCallBack(`object`: Any) {
+                            val message2 = `object` as String
+                            if (message2.equals("success")){
+                                db.collection("users").document(id).delete().addOnCompleteListener {task ->
+                                    if (task.isSuccessful) {
+                                        callBack.onCallBack(true)
+                                    }
+                                    else {
+                                        callBack.onCallBack(false)
+                                    }
+                                }
+                            }else{
+                                callBack.onCallBack(false)
+                            }
+                        }
+                    })
+                }else{
+                    callBack.onCallBack(false)
+                }
             }
-            else {
-                callBack.onCallBack(false)
-            }
-        }
+        })
+
     }
 
     //Also known as 'Join event'
@@ -226,6 +245,62 @@ class FirebaseDAO{
                         callBack.onCallBack("fail")
                     }
                 }
+            }else{
+                callBack.onCallBack("fail")
+            }
+        }
+    }
+
+    fun deleteAllCreatedEvents(callBack: MyCallBack){
+        val localData = LocalData
+        val batch = db.batch()
+        db.collection("events").whereEqualTo("eventCreator", localData.id).get().addOnCompleteListener {
+            task ->
+            if (task.isSuccessful){
+                if (task.result.documents.isNotEmpty()){
+                    for (document in task.result){
+                        batch.delete(document.reference)
+                    }
+                    batch.commit().addOnCompleteListener {
+                            task ->
+                        if (task.isSuccessful){
+                            callBack.onCallBack("success")
+                        }else{
+                            callBack.onCallBack("fail")
+                        }
+                    }
+                }else{
+                    callBack.onCallBack("success")
+                }
+            }else{
+                callBack.onCallBack("fail")
+            }
+        }
+    }
+
+    fun deleteParticipantsByUser(callBack: MyCallBack){
+        val localData = LocalData
+        val batch = db.batch()
+        db.collection("eventParticipants").whereEqualTo("participant", localData.id).get().addOnCompleteListener {
+            task ->
+            if (task.isSuccessful){
+                if (!task.result.documents.isEmpty()){
+                    for (document in task.result){
+                        batch.delete(document.reference)
+                    }
+
+                    batch.commit().addOnCompleteListener {
+                            task ->
+                        if (task.isSuccessful){
+                            callBack.onCallBack("success")
+                        }else{
+                            callBack.onCallBack("fail")
+                        }
+                    }
+                }else{
+                    callBack.onCallBack("success")
+                }
+
             }else{
                 callBack.onCallBack("fail")
             }

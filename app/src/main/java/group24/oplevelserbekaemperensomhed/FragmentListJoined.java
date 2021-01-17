@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,6 +33,7 @@ public class FragmentListJoined extends Fragment {
 
     RecyclerView recyclerView;
     ProgressBar progressBar;
+    TextView textView;
 
     public FragmentListJoined() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class FragmentListJoined extends Fragment {
 
         recyclerView = v.findViewById(R.id.fragment_list_joined_recyclerview);
         progressBar = v.findViewById(R.id.fragment_list_joined_progressBar);
+        textView = v.findViewById(R.id.fragment_list_joined_text);
 
         getJoinedEvents();
 
@@ -70,6 +73,11 @@ public class FragmentListJoined extends Fragment {
             @Override
             public void onCallBack(@NotNull Object object) {
                 ArrayList<EventDTO> events = (ArrayList<EventDTO>)object;
+                if (events.isEmpty()){
+                    textView.setVisibility(View.VISIBLE);
+                }else{
+                    textView.setVisibility(View.GONE);
+                }
                 FragmentListAdapter adapter = new FragmentListAdapter(getActivity(), events);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
