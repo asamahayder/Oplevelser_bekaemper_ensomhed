@@ -88,7 +88,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     SwitchCompat switchOnline;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
-    ImageView submitButton;
     ImageView backButton;
     LinearLayout submitButton2;
     String address = "";
@@ -158,7 +157,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         editTextDate = findViewById(R.id.editTextDate);
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextAbout = findViewById(R.id.editAbout);
-        submitButton = findViewById(R.id.create_event_submitButton);
         submitButton2 = findViewById(R.id.create_event_submit2);
         backButton = findViewById(R.id.a_create_event_backButton);
 
@@ -198,18 +196,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
 
         handleTimeAndDateFields();
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    handleOnSubmit();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"Time Parser error",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         submitButton2.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -104,6 +104,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             }
         }
         void initializePicture(EventDTO eventItem){
+            Picasso.get().setLoggingEnabled(false);
             Picasso.get().load(eventItem.getPictures().get(0)).into(eventImage);
             Picasso.get().load(eventItem.getEventCreator().getProfilePictures().get(0)).into(eventOwnerProfilePicture);
         }

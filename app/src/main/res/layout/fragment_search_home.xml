@@ -79,7 +79,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@android:color/white"/>
+                        android:background="@color/colorAccent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/fsearch_recyclerview"

@@ -41,26 +41,21 @@ class ActivityRegister : AppCompatActivity() {
 
         // Initialize buttons
         val backButton: ImageView = activity_register_backButton
-        val submitButton1: ImageView = activity_register_submitButton1
         val submitButton2: LinearLayout = activity_register_submitButton2
 
         // initialize loading animation
         lottie = activity_register_loading
 
         // Handle onClickListener
-        onButtonClick(backButton, submitButton1, submitButton2)
+        onButtonClick(backButton, submitButton2)
     }
 
     private fun onButtonClick(
         backButton: ImageView,
-        submitButton1: ImageView,
         submitButton2: LinearLayout
     ) {
         backButton.setOnClickListener {
             finish()
-        }
-        submitButton1.setOnClickListener {
-            handleSubmitUserDetails()
         }
         submitButton2.setOnClickListener {
             handleSubmitUserDetails()
