@@ -29,6 +29,8 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
             parent,
             false
         )
+
+
         Log.d(TAG, "Search ViewHolder Initialization")
         return SearchAdapterViewHolder(itemView)
     }

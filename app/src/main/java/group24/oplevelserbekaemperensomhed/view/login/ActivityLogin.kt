@@ -44,11 +44,6 @@ class ActivityLogin : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         initializeView()
 
-        val testButton: Button = findViewById(R.id.activity_login_testbuutton)
-        testButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
         Log.d(TAG, "ALogin activity started")
     }
 
