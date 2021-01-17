@@ -24,6 +24,7 @@ import group24.oplevelserbekaemperensomhed.view.login.ActivityLogin;
 public class Settings extends AppCompatActivity {
 
     Button btn_terms;
+    Button btn_contact;
     Button btn_log_ud;
     Button btn_delete_acc;
     ImageView btn_back;
@@ -53,6 +54,15 @@ public class Settings extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
                 startActivity(i);
+            }
+        });
+
+        btn_contact = (Button) findViewById(R.id.button2);
+        btn_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),PopActivityKont.class);
+                startActivity(intent);
             }
         });
 

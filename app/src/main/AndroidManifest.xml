@@ -19,7 +19,9 @@
         <activity android:name=".settings.PopActivityKont"
             android:theme="@style/AppTheme.PopMe"
             ></activity>
-        <activity android:name=".settings.Settings" />
+        <activity android:name=".settings.Settings"
+            android:theme="@style/AppTheme"
+            />
         <activity android:name=".view.login.ActivityRegister" />
         <activity android:name=".view.login.ActivityForgotPassword" />
         <activity android:name=".view.login.ActivityRegisterDetails" />
