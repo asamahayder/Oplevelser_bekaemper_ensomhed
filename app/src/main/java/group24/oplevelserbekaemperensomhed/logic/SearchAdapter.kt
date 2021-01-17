@@ -40,9 +40,18 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
             imageGliderURLs(currentItem.pictures[0], holder.eventImage)
             imageGliderURLs(currentItem.eventCreator!!.profilePictures[0], holder.profilePic)
 
+            val locationText = if (currentItem.address != "Online") {
+                Log.d(SearchHomeAdapterHorizontal.TAG, "Split string ${currentItem.address}")
+                val stringArray = currentItem.address.split(",")
+                stringArray[0]
+            } else {
+                currentItem.address
+            }
+            holder.locText.text = locationText
+
             holder.eventTitle.text = currentItem.eventTitle
             holder.cateText.text = currentItem.category
-            holder.locText.text = currentItem.address
+            holder.locText.text = locationText
             holder.priceText.text = currentItem.price
 
             holder.eventImage.setOnClickListener {
@@ -99,7 +108,7 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
                 val filterPattern = constraint.toString().toLowerCase().trim()
                 Log.d(TAG, "Filtering for : $filterPattern")
                 for (item in searchResultFull) {
-                    if (item.category.toLowerCase().contains(filterPattern)){
+                    if (item.eventTitle.toLowerCase().contains(filterPattern)){
                         filteredList.add(item)
                     }
                 }
