@@ -9,23 +9,17 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -34,7 +28,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.util.Pair;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Parcel;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.View;
@@ -50,14 +43,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 
 import group24.oplevelserbekaemperensomhed.data.DateDTO;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
@@ -66,9 +56,6 @@ import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
-import group24.oplevelserbekaemperensomhed.logic.firebase.MyFailureListener;
-import group24.oplevelserbekaemperensomhed.logic.firebase.MyProgressListener;
-import group24.oplevelserbekaemperensomhed.logic.firebase.MySuccessListener;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListener;
 
 public class ActivityCreateEvent extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -134,7 +121,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_event2);
+        setContentView(R.layout.activity_create_event);
 
         firebaseDAO = new FirebaseDAO();
 
