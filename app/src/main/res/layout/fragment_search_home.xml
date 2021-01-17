@@ -32,7 +32,7 @@
                     android:orientation="horizontal"
                     android:clickable="true"
                     android:weightSum="4"
-                    android:background="@drawable/white_rounded_corner"
+                    android:background="@drawable/rounded_corner_white"
                     android:focusable="true">
 
                     <FrameLayout
@@ -79,7 +79,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@android:color/white"/>
+                        android:background="@color/colorAccent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/fsearch_recyclerview"

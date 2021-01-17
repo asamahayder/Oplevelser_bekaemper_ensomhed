@@ -33,6 +33,7 @@ class FragmentSearchHome : Fragment() {
 
     private var bannerPictures = ArrayList<String>()
     private var bannerURLs = ArrayList<String>()
+    private var bannerTitles = ArrayList<String>()
     private var sortedCategoriesList= ArrayList<SearchHomeItem>()
 
     override fun onCreateView(
@@ -89,6 +90,7 @@ class FragmentSearchHome : Fragment() {
                 for (banner in `object`) {
                     bannerPictures.add(banner.picture)
                     bannerURLs.add(banner.url)
+                    bannerTitles.add(banner.title)
                 }
                 if (viewPager.isAttachedToWindow) {
                     handleViewPager()
@@ -100,7 +102,10 @@ class FragmentSearchHome : Fragment() {
     }
 
     private fun handleViewPager() {
-        val pagerAdapter = ViewPagerAdapter(childFragmentManager, bannerPictures, R.layout.fragment_search_home_1_viewpager, bannerURLs)
+        val list = ArrayList<ArrayList<String>>()
+        list.add(bannerURLs)
+        list.add(bannerTitles)
+        val pagerAdapter = ViewPagerAdapter(childFragmentManager, bannerPictures, R.layout.fragment_search_home_1_viewpager, list)
         viewPager.adapter = pagerAdapter
     }
 

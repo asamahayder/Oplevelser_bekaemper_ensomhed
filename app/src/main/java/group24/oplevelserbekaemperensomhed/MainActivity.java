@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragmentProfile;
     Fragment fragmentSearch;
     Fragment fragmentCreateEvent;
+    Fragment fragmentList;
 
 
     @Override
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentProfile = new FragmentProfile();
         fragmentSearch = new FragmentSearchHome();
         fragmentCreateEvent = new FragmentCreateEvent();
+        fragmentList = new FragmentList();
 
         final Intent intent = new Intent(this, ActivityCreateEvent.class);
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 } else if(item.getItemId() == R.id.navlist){
+                    changeFragment(fragmentList, getString(R.string.fragment_list));
 
                 } else if (item.getItemId() == R.id.profile){
                     changeFragment(fragmentProfile, getString(R.string.fragment_profile));

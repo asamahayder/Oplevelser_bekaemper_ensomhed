@@ -18,6 +18,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,6 +34,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.util.Pair;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Parcel;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.View;
@@ -48,10 +50,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,7 +88,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     SwitchCompat switchOnline;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
-    ImageView submitButton;
     ImageView backButton;
     LinearLayout submitButton2;
     String address = "";
@@ -106,6 +109,9 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     Chip chipGaming;
     ArrayList<Chip> listOfChips = new ArrayList<>();
     String chosenCategory = "";
+
+    //To check if start date is before current date
+    Long startDate;
 
 
     //Image stuff
@@ -151,7 +157,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         editTextDate = findViewById(R.id.editTextDate);
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextAbout = findViewById(R.id.editAbout);
-        submitButton = findViewById(R.id.create_event_submitButton);
         submitButton2 = findViewById(R.id.create_event_submit2);
         backButton = findViewById(R.id.a_create_event_backButton);
 
@@ -191,18 +196,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
 
         handleTimeAndDateFields();
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    handleOnSubmit();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"Time Parser error",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         submitButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -355,13 +348,23 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
         materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
 
-        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long,Long>>() {
             @Override
-            public void onPositiveButtonClick(Object selection) {
+            public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                startDate = selection.first;
                 editText.setText(materialDatePicker.getHeaderText());
             }
         });
+
+        /*materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                editText.setText(materialDatePicker.getHeaderText());
+                startDate = selection.
+            }
+        });*/
     }
+
 
     //Checking if all requirements are fulfilled and submitting to database
     private void handleOnSubmit() throws ParseException {
@@ -378,17 +381,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }else if (editTextDate.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Need a date",Toast.LENGTH_SHORT).show();
             return;
-        } else if (!switchAllDay.isChecked()){ //checking if time is set correct, and only doing it if All-day is not checked
-            String startTime = editTextStart.getText().toString();
-            String endTime = editTextEnd.getText().toString();
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm");
-            Date startTimeAsDate = dateFormatter.parse(startTime);
-            Date endTimeAsDate = dateFormatter.parse(endTime);
-
-            if (endTimeAsDate.before(startTimeAsDate) || startTimeAsDate.equals(endTimeAsDate)){
-                Toast.makeText(getApplicationContext(),"Start time should be before end time",Toast.LENGTH_SHORT).show();
-                return;
-            }
         } else if (!switchOnline.isChecked() && findAddressEditText.getText().toString().equals("")) { //Checking address
             Toast.makeText(getApplicationContext(),"Need an Address",Toast.LENGTH_SHORT).show();
             return;
@@ -399,6 +391,36 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             Toast.makeText(getApplicationContext(),"Need a description",Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (!switchAllDay.isChecked()) { //checking if time is set correct, and only doing it if All-day is not checked
+            String startTime = editTextStart.getText().toString();
+            String endTime = editTextEnd.getText().toString();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm");
+            Date startTimeAsDate = dateFormatter.parse(startTime);
+            Date endTimeAsDate = dateFormatter.parse(endTime);
+
+            if (endTimeAsDate.before(startTimeAsDate) || startTimeAsDate.equals(endTimeAsDate)) {
+                Toast.makeText(getApplicationContext(), "Start time should be before end time", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if(!editTextDate.equals("")) { //Checking that the date range is before current date
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            long now = cal.getTimeInMillis();
+
+            long difference = now-startDate;
+            if (difference > 0){ //startDate is before now
+                Toast.makeText(this, "Date start time can not be in past", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+
 
 
         //Handling upload of pictures and getting their new urls

@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
@@ -63,6 +65,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
         TextView eventAddress;
         TextView eventPrice;
         TextView eventCategory;
+        TextView eventOwner;
         ImageView eventCategoryIcon;
         ImageView eventOwnerProfilePicture;
         ImageView eventImage;
@@ -76,6 +79,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             eventCategory = itemView.findViewById(R.id.eventCategory);
             eventCategoryIcon = itemView.findViewById(R.id.eventCategoryIcon);
             eventOwnerProfilePicture = itemView.findViewById(R.id.eventOwnerProfilePicture);
+            eventOwner = itemView.findViewById(R.id.eventOwnerName);
         }
         void setEventData(EventDTO eventItem){
             eventTitle.setText(eventItem.getEventTitle());
@@ -83,6 +87,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             eventPrice.setText(eventItem.getPrice());
             eventCategory.setText(eventItem.getCategory());
             handleCategories(eventItem.getCategory());
+            eventOwner.setText(eventItem.getEventCreator().getName());
 
         }
 
@@ -99,6 +104,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             }
         }
         void initializePicture(EventDTO eventItem){
+            Picasso.get().setLoggingEnabled(false);
             Picasso.get().load(eventItem.getPictures().get(0)).into(eventImage);
             Picasso.get().load(eventItem.getEventCreator().getProfilePictures().get(0)).into(eventOwnerProfilePicture);
         }

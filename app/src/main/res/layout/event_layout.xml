@@ -34,7 +34,6 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/roundimage"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="250dp"
@@ -66,6 +65,16 @@
                         android:textSize="32sp"
                         android:textStyle="bold"
                         tools:text="event title here"
+                        />
+
+                    <TextView
+                        android:id="@+id/eventOwnerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="Surname Lastname"
                         />
 
 
