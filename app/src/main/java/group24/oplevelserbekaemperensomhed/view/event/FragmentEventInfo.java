@@ -316,8 +316,6 @@ public class FragmentEventInfo extends Fragment {
         }
     }
 
-    }
-
     //Handles the deletion of the event. Only accessable by the creator of the event.
     private void handleDeleteEvent(){
         progressDialog.show();
