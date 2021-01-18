@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context=".view.profile.settings.PopActivity">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="16dp"
+                    android:text="@string/terms_and_conditions_these_terms_and_conditions_agreement_set_forth_the_general_terms_and_conditions_of_your_use_of_the_mobile_app_mobile_application_mobile_application_or_service_and_any_of_its_related_products_and_services_collectively_services_this_agreement_is_legally_binding_between_you_user_you_or_your_and_this_mobile_application_developer_operator_we_us_or_our_by_accessing_and_using_the_mobile_application_and_services_you_acknowledge_that_you_have_read_understood_and_agree_to_be_bound_by_the_terms_of_this_agreement_if_you_are_entering_into_this_agreement_on_behalf_of_a_business_or_other_legal_entity_you_represent_that_you_have_the_authority_to_bind_such_entity_to_this_agreement_in_which_case_the_terms_user_you_or_your_shall_refer_to_such_entity_if_you_do_not_have_such_authority_or_if_you_do_not_agree_with_the_terms_of_this_agreement_you_must_not_accept_this_agreement_and_may_not_access_and_use_the_mobile_application_and_services_you_acknowledge_that_this_agreement_is_a_contract_between_you_and_the_operator_even_though_it_is_electronic_and_is_not_physically_signed_by_you_and_it_governs_your_use_of_the_mobile_application_and_services_naccounts_and_membership_nyou_must_be_at_least_13_years_of_age_to_use_the_mobile_application_and_services_by_using_the_mobile_application_and_services_and_by_agreeing_to_this_agreement_you_warrant_and_represent_that_you_are_at_least_13_years_of_age_if_you_create_an_account_in_the_mobile_application_you_are_responsible_for_maintaining_the_security_of_your_account_and_you_are_fully_responsible_for_all_activities_that_occur_under_the_account_and_any_other_actions_taken_in_connection_with_it_we_may_but_have_no_obligation_to_monitor_and_review_new_accounts_before_you_may_sign_in_and_start_using_the_services_providing_false_contact_information_of_any_kind_may_result_in_the_termination_of_your_account_you_must_immediately_notify_us_of_any_unauthorized_uses_of_your_account_or_any_other_breaches_of_security_we_will_not_be_liable_for_any_acts_or_omissions_by_you_including_any_damages_of_any_kind_incurred_as_a_result_of_such_acts_or_omissions_we_may_suspend_disable_or_delete_your_account_or_any_part_thereof_if_we_determine_that_you_have_violated_any_provision_of_this_agreement_or_that_your_conduct_or_content_would_tend_to_damage_our_reputation_and_goodwill_if_we_delete_your_account_for_the_foregoing_reasons_you_may_not_re_register_for_our_services_we_may_block_your_email_address_and_internet_protocol_address_to_prevent_further_registration_nuser_content_nwe_do_not_own_any_data_information_or_material_collectively_content_that_you_submit_in_the_mobile_application_in_the_course_of_using_the_service_you_shall_have_sole_responsibility_for_the_accuracy_quality_integrity_legality_reliability_appropriateness_and_intellectual_property_ownership_or_right_to_use_of_all_submitted_content_we_may_but_have_no_obligation_to_monitor_and_review_the_content_in_the_mobile_application_submitted_or_created_using_our_services_by_you_you_grant_us_permission_to_access_copy_distribute_store_transmit_reformat_display_and_perform_the_content_of_your_user_account_solely_as_required_for_the_purpose_of_providing_the_services_to_you_unless_specifically_permitted_by_you_your_use_of_the_mobile_application_and_services_does_not_grant_us_the_license_to_use_reproduce_adapt_modify_publish_or_distribute_the_content_created_by_you_or_stored_in_your_user_account_for_commercial_marketing_or_any_similar_purpose_nbackups_nwe_are_not_responsible_for_the_content_residing_in_the_mobile_application_in_no_event_shall_we_be_held_liable_for_any_loss_of_any_content_it_is_your_sole_responsibility_to_maintain_appropriate_backup_of_your_content_notwithstanding_the_foregoing_on_some_occasions_and_in_certain_circumstances_with_absolutely_no_obligation_we_may_be_able_to_restore_some_or_all_of_your_data_that_has_been_deleted_as_of_a_certain_date_and_time_when_we_may_have_backed_up_data_for_our_own_purposes_we_make_no_guarantee_that_the_data_you_need_will_be_available_nlinks_to_other_resources_nalthough_the_mobile_application_and_services_may_link_to_other_resources_such_as_websites_mobile_applications_etc_we_are_not_directly_or_indirectly_implying_any_approval_association_sponsorship_endorsement_or_affiliation_with_any_linked_resource_unless_specifically_stated_herein_we_are_not_responsible_for_examining_or_evaluating_and_we_do_not_warrant_the_offerings_of_any_businesses_or_individuals_or_the_content_of_their_resources_we_do_not_assume_any_responsibility_or_liability_for_the_actions_products_services_and_content_of_any_other_third_parties_you_should_carefully_review_the_legal_statements_and_other_conditions_of_use_of_any_resource_which_you_access_through_a_link_in_the_mobile_application_and_services_your_linking_to_any_other_off_site_resources_is_at_your_own_risk_nintellectual_property_rights_nintellectual_property_rights_means_all_present_and_future_rights_conferred_by_statute_common_law_or_equity_in_or_in_relation_to_any_copyright_and_related_rights_trademarks_designs_patents_inventions_goodwill_and_the_right_to_sue_for_passing_off_rights_to_inventions_rights_to_use_and_all_other_intellectual_property_rights_in_each_case_whether_registered_or_unregistered_and_including_all_applications_and_rights_to_apply_for_and_be_granted_rights_to_claim_priority_from_such_rights_and_all_similar_or_equivalent_rights_or_forms_of_protection_and_any_other_results_of_intellectual_activity_which_subsist_or_will_subsist_now_or_in_the_future_in_any_part_of_the_world_this_agreement_does_not_transfer_to_you_any_intellectual_property_owned_by_the_operator_or_third_parties_and_all_rights_titles_and_interests_in_and_to_such_property_will_remain_as_between_the_parties_solely_with_the_operator_all_trademarks_service_marks_graphics_and_logos_used_in_connection_with_the_mobile_application_and_services_are_trademarks_or_registered_trademarks_of_the_operator_or_its_licensors_other_trademarks_service_marks_graphics_and_logos_used_in_connection_with_the_mobile_application_and_services_may_be_the_trademarks_of_other_third_parties_your_use_of_the_mobile_application_and_services_grants_you_no_right_or_license_to_reproduce_or_otherwise_use_any_of_the_operator_or_third_party_trademarks_nchanges_and_amendments_nwe_reserve_the_right_to_modify_this_agreement_or_its_terms_relating_to_the_mobile_application_and_services_at_any_time_effective_upon_posting_of_an_updated_version_of_this_agreement_in_the_mobile_application_when_we_do_we_will_revise_the_updated_date_at_the_bottom_of_this_page_continued_use_of_the_mobile_application_and_services_after_any_such_changes_shall_constitute_your_consent_to_such_changes_policy_was_created_with_https_www_websitepolicies_com_nacceptance_of_these_terms_nyou_acknowledge_that_you_have_read_this_agreement_and_agree_to_all_its_terms_and_conditions_by_accessing_and_using_the_mobile_application_and_services_you_agree_to_be_bound_by_this_agreement_if_you_do_not_agree_to_abide_by_the_terms_of_this_agreement_you_are_not_authorized_to_access_or_use_the_mobile_application_and_services"
+                    android:textColor="#000000"
+                    />
+
+                <Button
+                    android:id="@+id/btn_luk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Luk"
+                    android:background="@drawable/rounded_buttom_indstillinger"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/outline_border_under"
+            >
+
+        </View>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/outline_border_top"
+            >
+
+        </View>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/outline_border_right">
+
+        </View>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/outline_border_left">
+
+        </View>
+
+    </FrameLayout>
+
+
+</LinearLayout>

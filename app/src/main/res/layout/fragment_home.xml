@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/fragment_home_swipeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,14 +14,22 @@
     android:background="@color/colorPrimary"
     tools:context=".AEventSwiper">
 
+    <ProgressBar
+        android:id="@+id/fragment_home_progress_bar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No more events"
+        android:text="Please wait"
         android:textSize="30dp"
         android:textColor="@color/colorEditBackground"
-        android:layout_centerInParent="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/fragment_home_progress_bar"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_main"
@@ -25,3 +40,4 @@
         />
 
 </RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

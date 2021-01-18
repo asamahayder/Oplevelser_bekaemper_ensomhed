@@ -5,12 +5,10 @@ import kotlinx.android.parcel.Parcelize
 import kotlin.collections.ArrayList
 
 @Parcelize
-data class UserDTO     //mangler evt.
-//interests
-//Social media integration (Instagram, facebook_common friends)
+data class UserDTO
     (
     var name: String?,
-    var age: Int?,
+    var age: List<Int>,
     var address: String?,
     var occupation: String?,
     var education: String?,
