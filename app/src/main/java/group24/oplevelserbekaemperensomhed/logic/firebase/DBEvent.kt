@@ -1,5 +1,7 @@
 package group24.oplevelserbekaemperensomhed.logic.firebase
 
+// Data transfer object
+
 data class DBEvent (
     val address: String = "",
     val category: String = "",

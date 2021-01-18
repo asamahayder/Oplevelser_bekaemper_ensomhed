@@ -29,9 +29,6 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
             parent,
             false
         )
-
-
-        Log.d(TAG, "Search ViewHolder Initialization")
         return SearchAdapterViewHolder(itemView)
     }
 
@@ -39,9 +36,12 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
         if (searchResult.size != 0) {
             val currentItem = searchResult[position]
 
+            // Inserts images into the imageviews with use of Picasso and the URLs of the pictures
             imageGliderURLs(currentItem.pictures[0], holder.eventImage)
             imageGliderURLs(currentItem.eventCreator!!.profilePictures[0], holder.profilePic)
 
+            // Handles if the text is too long for the layout, to prevent layout changes the location needs
+            // to be handled that it doesn't get too big
             val locationText = if (currentItem.address != "Online") {
                 Log.d(SearchHomeAdapterHorizontal.TAG, "Split string ${currentItem.address}")
                 val stringArray = currentItem.address.split(",")
@@ -49,13 +49,15 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
             } else {
                 currentItem.address
             }
-            holder.locText.text = locationText
 
+            // Inserts all the text onto the layout
+            holder.locText.text = locationText
             holder.eventTitle.text = currentItem.eventTitle
             holder.cateText.text = currentItem.category
             holder.locText.text = locationText
             holder.priceText.text = currentItem.price
 
+            // Handles click listeners so that the user is able to click and open new activities
             holder.eventImage.setOnClickListener {
                 handleActivityToFragmentChange("event", currentItem)
             }
@@ -66,6 +68,9 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
     }
 
     private fun handleActivityToFragmentChange(bundleTag: String, currentItem: EventDTO) {
+        // Because the user has clicked on someone else's event/profile, a "other" tag is sent with
+        // to update the view accordingly
+        // ActivityFragmentHandler is used so that we can re use profile and event fragments
         val intent = Intent(context, ActivityFragmentHandler::class.java)
         if (bundleTag == "profile") {
             intent.putExtra(bundleTag, currentItem.eventCreator)
@@ -77,6 +82,7 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
         context.startActivity(intent)
     }
 
+    // loads an image URL into an imageview
     private fun imageGliderURLs(imageURL: String, imageView: ImageView) {
         Picasso.get()
             .load(imageURL)
@@ -96,32 +102,36 @@ class SearchAdapter(val searchResult: ArrayList<EventDTO>, val context: Activity
         val profilePic: ImageView = itemView.activity_search_1_recyclerview_firstPicProfilePic
     }
 
+    // Gets the current filter for the search bar
     override fun getFilter() = searchFilter
 
+    // Handles searching with the search bar, so that the adapter gets filtered
     private val searchFilter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults? {
             val filteredList = ArrayList<EventDTO>()
-
+            // If there is no filter text in the search bar, nothing happens and all events are added to the list to be shown
             if (constraint == null || constraint.isEmpty()){
-                Log.d(TAG, "Filtering for : Nothing as there is no constraint")
                 filteredList.addAll(searchResultFull)
             }
             else {
+                // The filter pattern is the text written into the search field
                 val filterPattern = constraint.toString().toLowerCase().trim()
-                Log.d(TAG, "Filtering for : $filterPattern")
+                // Iterates through the adapter to see which events fit the filter
                 for (item in searchResultFull) {
+                    // Filters for title of each event
                     if (item.eventTitle.toLowerCase().contains(filterPattern)){
+                        // Adds items that fit to the filtered list
                         filteredList.add(item)
                     }
                 }
-                Log.d(TAG,"All searchResults size = ${searchResultFull.size}")
-                Log.d(TAG,"All filteredResults size = ${filteredList.size}")
             }
+            // Updates the search results by clearing the searchResult list and adding the filtered list to the searchResult
             val results = FilterResults()
             results.values = filteredList
             return results
         }
 
+        // Updates the filtered list search results
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             searchResult.clear()

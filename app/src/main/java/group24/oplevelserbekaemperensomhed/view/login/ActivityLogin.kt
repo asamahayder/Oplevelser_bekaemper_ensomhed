@@ -19,6 +19,7 @@ import group24.oplevelserbekaemperensomhed.logic.FacebookAuthorization
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 
+// Activity that handles login
 
 class ActivityLogin : AppCompatActivity() {
 
@@ -43,8 +44,6 @@ class ActivityLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initializeView()
-
-        Log.d(TAG, "ALogin activity started")
     }
 
     private fun initializeView() {
@@ -57,7 +56,7 @@ class ActivityLogin : AppCompatActivity() {
         emailText = findViewById(R.id.activity_login_email)
         passText = findViewById(R.id.activity_login_password)
 
-        // Handles authorization via firebase
+        // Handles authorization via Firebase & Facebook
         firebaseAuth = FirebaseAuth.getInstance()
         facebookAuth = FacebookAuthorization(this, REGISTERACTIVITYDETAILS)
 
@@ -80,12 +79,14 @@ class ActivityLogin : AppCompatActivity() {
 
     }
 
+    // gets the information back from the facebook activity that was opened when clicking on login with Facebook
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "requestCode: $resultCode resultCode: $resultCode")
         facebookAuth.callBackManager.onActivityResult(requestCode, resultCode, data)
     }
 
+    // Handles touch animations
     @SuppressLint("ClickableViewAccessibility")
     private fun onTouchListenerAnimation(button: Any) {
         val tempButton: Any
@@ -99,25 +100,31 @@ class ActivityLogin : AppCompatActivity() {
         tempButton.setOnTouchListener { v, event ->
             if (event != null) {
                 if (event.action == MotionEvent.ACTION_DOWN)
+                    // Makes the buttons go dark
                     if (v != null) {
                         v.background.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP)
                         v.invalidate()
                     }
+                // Changes the color back to normal
                 if (event.action == MotionEvent.ACTION_UP) {
                     v.background.clearColorFilter()
                     v.invalidate()
+                    // Checks which button was pressed
                     if (tempButton == facebookLoginButton) {
-                        Log.d(TAG, "Clicking on Facebook Login")
+                        // Facebook button was pressed
                         facebookAuth.signIn()
                     } else if (tempButton == registerButton1 || tempButton == registerButton2) {
+                        // Animates the text with an blink effect
                         registerButton1.startAnimation(textBlink)
                         registerButton2.startAnimation(textBlink)
                         val intent = Intent(this, REGISTERACTIVITY)
                         startActivity(intent)
                     } else if (tempButton == forgotPassButton) {
+                        // Animates the text with an blink effect
                         forgotPassButton.startAnimation(textBlink)
                         val intent = Intent(this, FORGOTPASSWORDACTIVITY)
                         startActivity(intent)
+                    // if the user presses the normal login button
                     } else if (tempButton == loginButton) {
                         logInWithFirebase(emailText,passText)
                     }
@@ -127,8 +134,10 @@ class ActivityLogin : AppCompatActivity() {
         }
     }
 
+    // Handles checking firebase if the user exists or wrong password and so on
     private fun logInWithFirebase(emailText: EditText, passText: EditText) {
         val db = FirebaseDAO()
+        // Some extra checks for the user to see
         if (emailText.text.toString().isEmpty() || !emailText.text.toString().contains("@")) {
             Toast.makeText(applicationContext,"Please enter a valid email",Toast.LENGTH_SHORT).show()
             return
@@ -139,11 +148,11 @@ class ActivityLogin : AppCompatActivity() {
             Toast.makeText(applicationContext,"Please enter a password that's at least 8 characters",Toast.LENGTH_SHORT).show()
             return
         } else {
+            // Connects to firebase to log in
             firebaseAuth.signInWithEmailAndPassword(emailText.text.toString(),passText.text.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val currentUser = firebaseAuth.currentUser
-                        Log.d(TAG,"Login success")
                         db.getUser(currentUser!!.uid, object : MyCallBack {
                             override fun onCallBack(`object`: Any) {
                                 localData.userData = `object` as UserDTO
@@ -153,7 +162,6 @@ class ActivityLogin : AppCompatActivity() {
                             }
                         })
                     } else {
-                        Log.d(TAG, "Login failure")
                         Toast.makeText(applicationContext, "Authentication failed", Toast.LENGTH_SHORT).show()
                     }
                 }

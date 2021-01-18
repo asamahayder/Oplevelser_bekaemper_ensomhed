@@ -12,6 +12,8 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import group24.oplevelserbekaemperensomhed.R
 
+// Handles updating the layout for the banner- and profile picture
+
 class FragmentViewPager(
     val pictureURL: String?,
     val layout: Int,
@@ -33,11 +35,14 @@ class FragmentViewPager(
     }
 
     private fun initializeView(view: View) {
+        // Checks if the layout to be created was a banner or profile one
         pictureImageView = if (layout == R.layout.fragment_search_home_1_viewpager) {
             view.findViewById(R.id.fsearch_viewpager_bannerimage)
         } else{
             view.findViewById(R.id.fprofile_pfp)
         }
+
+        // Updates the images for profile
         if (pictureURL != null) {
             Picasso.get()
                 .load(pictureURL)
@@ -45,6 +50,8 @@ class FragmentViewPager(
                 .centerCrop()
                 .into(pictureImageView)
         }
+
+        // Updates the images for the banners
         if (listOfBannerThings != null) {
             bannerText = view.findViewById(R.id.fsearch_viewpager_bannertext)
             bannerText.text = listOfBannerThings[1][position]

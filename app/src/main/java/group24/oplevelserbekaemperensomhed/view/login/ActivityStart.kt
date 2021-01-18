@@ -14,6 +14,8 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.DBUser
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack
 
+// Start screen when opening the app
+
 class ActivityStart : AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
@@ -27,6 +29,7 @@ class ActivityStart : AppCompatActivity() {
         checkIfLoggedIn()
     }
 
+    // Checks to see if the activity is root, if it is not, call finish on it
     override fun onStart() {
         super.onStart()
         if (!isTaskRoot) {
@@ -35,24 +38,25 @@ class ActivityStart : AppCompatActivity() {
         }
     }
 
+    // Checks if the user is logged in when opening the app
     private fun checkIfLoggedIn() {
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUser = firebaseAuth.currentUser
 
+        // call an handler to run whilst checking and playing the animation
         Handler().postDelayed( {
             if (currentUser != null) {
-                Log.d(TAG, "User authenticated")
                 db.getUser(currentUser.uid, object : MyCallBack {
                     override fun onCallBack(`object`: Any) {
                         if (`object` is UserDTO) {
-                            Log.d(TAG, "User authenticated")
+                            // If user is authenticated and a user exists on the database, go straight to the MainActivity
                             val intent = Intent(applicationContext, MainActivity::class.java)
                             localData.userData = `object` as UserDTO
                             localData.id = currentUser.uid
                             startActivity(intent)
                             finish()
                         } else {
-                            Log.d(TAG, "User not authenticated")
+                            // If he's authenticated but no user exists on the database move to the login activity
                             val intent = Intent(applicationContext, ActivityLogin::class.java)
                             startActivity(intent)
                             finish()
@@ -60,7 +64,7 @@ class ActivityStart : AppCompatActivity() {
                     }
                 })
             } else {
-                Log.d(TAG, "User not authenticated")
+                // User was not authenticated and is moved over to login activity
                 val intent = Intent(applicationContext, ActivityLogin::class.java)
                 startActivity(intent)
                 finish()

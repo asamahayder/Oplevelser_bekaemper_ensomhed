@@ -20,16 +20,18 @@ import group24.oplevelserbekaemperensomhed.view.search.ActivitySearch
 import kotlinx.android.synthetic.main.fragment_search_home_1_recyclerview.view.*
 import java.lang.reflect.Type
 
+// The Vertical adapter that handles all the categories for the recyclerview from ActivitySearchHome
+
 class SearchHomeAdapterVertical(
     private val context: FragmentSearchHome,
     private val itemList: MutableList<SearchHomeItem>
 ) : RecyclerView.Adapter<SearchHomeAdapterVertical.SearchHomeViewHolderRow>() {
 
     init {
-        Log.d(TAG, "Vertical Adapter Initialization")
         setHasStableIds(true)
     }
 
+    // Opens the searchActivity and defines which category needs to loaded depending on what section was clicked on
     private fun handleActivityToFragmentChange(bundleTag: String, currentItem: ArrayList<EventDTO>) {
         val intent = Intent(context.activity, ActivitySearch::class.java)
         intent.putExtra(bundleTag, currentItem)
@@ -42,16 +44,16 @@ class SearchHomeAdapterVertical(
             parent,
             false
         )
-        Log.d(TAG, "Vertical ViewHolder Initialization")
         return SearchHomeViewHolderRow(itemView, context)
     }
 
     override fun onBindViewHolder(holder: SearchHomeViewHolderRow, position: Int) {
         val currentItem = itemList[position]
         holder.categoryText.text = currentItem.category
+
+        // If a category section is clicked, open the searchActivity for re-use and only load the relevant events with that category
         holder.categoryButton.setOnClickListener {
             handleActivityToFragmentChange("eventList", currentItem.searchItemHorizontal as ArrayList<EventDTO>)
-
         }
         holder.horizontalAdapter.setItemList(currentItem.searchItemHorizontal)
     }
@@ -64,8 +66,8 @@ class SearchHomeAdapterVertical(
         private val recyclerView: RecyclerView = itemView.fsearch_recyclerview_home1_recyclerview
         val horizontalAdapter: SearchHomeAdapterHorizontal
 
+        // creates the horizontal recyclerview which holds all the events
         init {
-            Log.d(TAG, "Horizontal Adapter/recyclerview Initialization")
             recyclerView.layoutManager = LinearLayoutManager(
                 itemView.context,
                 LinearLayoutManager.HORIZONTAL,

@@ -1,5 +1,7 @@
 package group24.oplevelserbekaemperensomhed.logic.firebase
 
+// Data transfer object
+
 data class DBUser(
     val name: String = "",
     val age: List<Int> = emptyList(),

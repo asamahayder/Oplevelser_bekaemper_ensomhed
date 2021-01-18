@@ -30,6 +30,7 @@ import group24.oplevelserbekaemperensomhed.logic.Logic;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
 import group24.oplevelserbekaemperensomhed.settings.Settings;
 
+// Handles profile details of every user
 
 public class FragmentProfile extends Fragment {
 
@@ -47,29 +48,26 @@ public class FragmentProfile extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
-
         profileTextViews = new ArrayList<>();
-
         initializeView(v);
-
         return v;
     }
 
     private void initializeView(final View view){
-        Log.d(TAG, "InitializeView created");
         linearLayout = view.findViewById(R.id.fragment_profile_infoLinearLayout);
         ImageView editProfileButton = view.findViewById(R.id.fragment_profile_editButton);
         profileTextViews.add((TextView) view.findViewById(R.id.fragment_profile_nameAge));
         ImageView backButton = view.findViewById(R.id.fragment_profile_backButton);
 
         Bundle bundle = getArguments();
+        // If there is a bundle, then it will contain a user object
         if (bundle != null) {
             userData = bundle.getParcelable("profile");
+            // Checks if this is another user and not ones self
             if (bundle.getString("other") != null) {
                 editProfileButton.setVisibility(View.GONE);
                 backButton.setVisibility(View.VISIBLE);
@@ -80,9 +78,12 @@ public class FragmentProfile extends Fragment {
                     }
                 });
             }
+        // Else it must be the current user profile that was clicked, therefore get the singleton user object
         } else {
             LocalData localData = LocalData.INSTANCE;
             userData = localData.getUserData();
+            // Sets the backbutton to be the settings button (this is used when profile is a
+            // fragment of the mainactivity, else it will be a normal backbutton)
             backButton.setVisibility(View.VISIBLE);
             backButton.setImageResource(R.drawable.ic_baseline_settings_24);
             backButton.setOnClickListener(new View.OnClickListener() {
@@ -93,13 +94,14 @@ public class FragmentProfile extends Fragment {
                 }
             });
         }
-
         linearLayout.removeAllViews();
 
+        // Updates the profile and the layout
         updateProfile();
         handlePfpSlider(view);
         handleAboutSection();
 
+        // Handles the edit profile button (Is gone for when "other" bundle is passed)
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,19 +112,27 @@ public class FragmentProfile extends Fragment {
 
     }
 
+    // Handles the profile picture viewpager and the bar beneath the images
     private void handlePfpSlider(View view){
         ViewPager mPager = view.findViewById(R.id.fragment_profile_viewpager);
+
+        // Creates the tablayout beneath the profile pictures
         TabLayout tabLayout = view.findViewById(R.id.fragment_profile_tabLayout);
         tabLayout.setupWithViewPager(mPager, true);
         tabLayout.setTabTextColors(Color.RED, Color.WHITE);
         assert getFragmentManager() != null;
+
+        // Instantiates the viewpager adapter
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), userData.getProfilePictures(), R.layout.fragment_profile_event_1_viewpager, null);
         mPager.setAdapter(pagerAdapter);
 
+        // Sets the current picture's tablayout line to be visible
         if (tabLayout.getTabCount() == 1){
             tabLayout.setVisibility(View.INVISIBLE);
         }
 
+        // Programmatically defines how the lines beneath the images will look like
+        // depending on how many there are of profile pictures
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             View tab = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(i);
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
@@ -131,6 +141,7 @@ public class FragmentProfile extends Fragment {
         }
     }
 
+    // Updates the view when leaving the fragment and coming back
     @Override
     public void onResume() {
         super.onResume();
@@ -139,27 +150,33 @@ public class FragmentProfile extends Fragment {
         }
     }
 
+    // Handles updating profile
     private void updateProfile(){
-        Log.d(TAG, "LocalDataUserData = " + userData);
+        // Sets the user object to be localdata, if it's null
         if (userData == null){
             LocalData localData = LocalData.INSTANCE;
             userData = localData.getUserData();
         }
+        // Updates the text fields and icons
         handleProfileInfo();
         handleProfileIcons();
     }
 
+    // Sets all the text onto the fields
     @SuppressLint("SetTextI18n")
     private void handleProfileInfo(){
         if (userData.getName() != null){
             profileTextViews.get(0).setText(userData.getName());
             userData.getAge();
+
+            // Calculates the age of the user based on the current date
             Logic logic = new Logic();
             String text = userData.getName() + ", " + logic.getAge(userData.getAge().get(0),userData.getAge().get(1),userData.getAge().get(2));
             profileTextViews.get(0).setText(text);
         }
     }
 
+    // Programmatically updates the icons and locations depending on if there is an attribute or not
     private void handleProfileIcons(){
         if (userData.getAddress() != null){
             this.linearLayout.addView(createSmallInfoRow(R.drawable.ic_baseline_location_on_15, userData.getAddress()));
@@ -175,6 +192,7 @@ public class FragmentProfile extends Fragment {
 
     }
 
+    // Creates the about section
     private void handleAboutSection(){
         if (userData.getAbout() != null){
             View view = new View(getActivity());
@@ -200,6 +218,7 @@ public class FragmentProfile extends Fragment {
         }
     }
 
+    // Handles the info rows and which ones come before each other
     private View createSmallInfoRow(int iconAddress, String txt){
         LinearLayout linearLayout = new LinearLayout(getActivity());
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);

@@ -37,6 +37,7 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListen
 import kotlinx.android.synthetic.main.activity_register_details.*
 import kotlin.collections.ArrayList
 
+// Handles Registering user details
 
 class ActivityRegisterDetails : AppCompatActivity() {
 
@@ -64,6 +65,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
         checkWhatLoginType()
     }
 
+    // Handles going back to login page
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(applicationContext, LOGINACTIVITY)
@@ -71,26 +73,25 @@ class ActivityRegisterDetails : AppCompatActivity() {
         finish()
     }
 
+    // To handle if the user got here from the Facebook signup or Email/Password signup
     private fun checkWhatLoginType() {
+        // Checks if there exists an facebook credential
         if (intent.extras?.get("facebook") is AuthCredential) {
             facebookCredential = intent.extras!!["facebook"] as AuthCredential
-
+            // Signs in
             auth.signInWithCredential(facebookCredential!!)
                 .addOnCompleteListener {task ->
                     if (task.isSuccessful) {
                         db.getUser(auth.currentUser!!.uid, object : MyCallBack {
                             override fun onCallBack(`object`: Any) {
+                                // If the user already exists in the database, open up the mainActivity
                                 if (`object` is UserDTO) {
-                                    Log.d(
-                                        TAG,
-                                        "facebook user with this id is already created = ${auth.currentUser}"
-                                    )
                                     localData.userData = `object`
                                     localData.id = auth.uid.toString()
                                     val intent = Intent(applicationContext, MainActivity::class.java)
                                     startActivity(intent)
+                                // Else start registering user details
                                 } else {
-                                    Log.d(TAG, "No facebook user with this id created")
                                     auth.currentUser!!.delete()
                                     setContentView(R.layout.activity_register_details)
                                     initializeViews()
@@ -100,6 +101,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     }
 
                 }
+            // Else the user got here from email/password signup
         } else {
             setContentView(R.layout.activity_register_details)
             initializeViews()
@@ -152,6 +154,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
     }
 
+    // Handles all buttons on the layout
     private fun handleOnClickViews() {
         val backButton: ImageView = buttonViews[0] as ImageView
         backButton.setOnClickListener {
@@ -177,14 +180,13 @@ class ActivityRegisterDetails : AppCompatActivity() {
 
         // Saves the data in the text fields to the user object
         if(saveUserDetailsToLocalData()) {
-            //FIXME LOADING ANIMATION MAYBE?
-
             //Handling upload of pictures and getting their new urls
             //Showing progress dialog
             val progressDialog = ProgressDialog(this)
             progressDialog.setTitle("Uploading...")
             progressDialog.show()
 
+            // Uploads pictures to the database
             db.uploadImages(picturesAsURIs, object : MyUploadPicturesListener {
                 override fun onSuccess(`object`: Any) {
                     val pictureDownloadLinks =
@@ -193,11 +195,13 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     createUser(pictureDownloadLinks)
                 }
 
+                // Shows progress loading
                 override fun onProgress(`object`: Any) {
                     val counter = `object` as Int
                     progressDialog.setMessage("$counter images left")
                 }
 
+                // Handles failure message
                 override fun onFailure(`object`: Any) {
                     progressDialog.dismiss()
                     Toast.makeText(
@@ -210,6 +214,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
         }
     }
 
+    // Handles all the different types of errors the user may do when typing into the text fields
     private fun checkTextFieldsForMistakes(): Boolean {
         for (textView in editTextViews) {
             val text = textView.text.toString()
@@ -280,29 +285,34 @@ class ActivityRegisterDetails : AppCompatActivity() {
         return false
     }
 
+    // Authenticates the user
     private fun createUser(pictureDownloadLinks: ArrayList<String>) {
         if (facebookCredential == null) {
+            // Facebook authentication
             auth.createUserWithEmailAndPassword(localData.userEmail, localData.userPassword)
                 .addOnCompleteListener { task ->
+                    // Uploads the user data to the database
                     uploadUserDetailsToDatabase(task, pictureDownloadLinks)
                 }
         } else {
+            // Facebook authentication
             auth.signInWithCredential(facebookCredential!!)
                 .addOnCompleteListener { task ->
-                    Log.d(TAG, "FacebookAuthorization: firebase auth succeeded")
+                    // Uploads the user data to the database
                     uploadUserDetailsToDatabase(task, pictureDownloadLinks)
                 }
         }
     }
 
+    // Uploads the user data to the database
     private fun uploadUserDetailsToDatabase(
         task: Task<AuthResult>,
         pictureDownloadLinks: ArrayList<String>
     ) {
         if (task.isSuccessful) {
-            Log.d(TAG, "create firebase firestore user success")
             val firebaseUser = auth.currentUser
             if (firebaseUser != null) {
+                // inserts the typed data into the data object for ease of uploading to firestore
                 val user = localData.userData
                 val dbUser = DBUser(
                     user.name!!,
@@ -315,24 +325,26 @@ class ActivityRegisterDetails : AppCompatActivity() {
                     ArrayList<String>(),
                     pictureDownloadLinks
                 )
+                // Saves the id to the singleton for access later on in the app's usage
                 localData.id = firebaseUser.uid
                 db.createUser(dbUser, localData.id, object : MyCallBack {
                     override fun onCallBack(`object`: Any) {
                         // Opens the mainactivity now that the user has been created
                         val intent = Intent(this@ActivityRegisterDetails, HOMEACTIVITY)
                         startActivity(intent)
+                        // Deletes the password and email because it's not needed anymore
                         localData.userPassword = ""
                         localData.userEmail = ""
                     }
                 })
             }
         } else {
-            Log.d(TAG, "create firebase firestore user failed")
             Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT)
                 .show()
         }
     }
 
+    // Creates a local user object and saves it to the singleton object
     private fun saveUserDetailsToLocalData(): Boolean {
         val logic = Logic()
         val localData = LocalData
@@ -346,12 +358,14 @@ class ActivityRegisterDetails : AppCompatActivity() {
             Toast.makeText(applicationContext, "Please enter a valid age", Toast.LENGTH_SHORT).show()
             return false
         }
+        // appends first-/last name, if there is a last name
         nameBuilder = nameBuilder.append(editTextViews[0].text.toString())
         if (editTextViews[1].text.toString().isNotEmpty()) {
             nameBuilder = nameBuilder.append(" ").append(
                 editTextViews[1].text.toString()
             )
         }
+        // creates the user object
         val user = UserDTO(
             nameBuilder.toString(),
             listOf(editTextViews[4].text.toString().toInt(), editTextViews[3].text.toString().toInt(), editTextViews[2].text.toString().toInt()),
@@ -363,23 +377,22 @@ class ActivityRegisterDetails : AppCompatActivity() {
             ArrayList<EventDTO>(),
             profilePictures
         )
-        Log.d(TAG, "User object = $user")
-
+        // saves the user object to the singleton
         localData.userData = user
-        Log.d(TAG, "userdata = $user")
         return true
     }
 
+    // Auto completes address text whilst searching
     private fun searchForAddressWithAutoComplete() {
         val fields = listOf(Place.Field.NAME, Place.Field.ADDRESS)
         val intent = Autocomplete.IntentBuilder(
-            AutocompleteActivityMode.FULLSCREEN, fields
-        )
+            AutocompleteActivityMode.FULLSCREEN, fields)
             .setCountry("DK") //Denmark
             .build(this)
         startActivityForResult(intent, 1)
     }
 
+    // Opens the phone storage so that the user may be able to choose a picture to upload
     private fun openPhoneStorage() {
         val gallery =
             Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -388,9 +401,11 @@ class ActivityRegisterDetails : AppCompatActivity() {
         startActivityForResult(gallery, REQUEST_CODE)
     }
 
+    // When leaving the address activity or phone storage the respective fields get updated
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
+            // Updates the address
             when (resultCode) {
                 RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
@@ -410,6 +425,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
                 }
             }
         }
+        // Updates the profile picture list
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             profilePictures.clear()
             picturesAsURIs.clear()
@@ -435,10 +451,12 @@ class ActivityRegisterDetails : AppCompatActivity() {
             if (viewPager != null) {
                 choosePicturesLayout.removeView(viewPager)
             }
+            // Updates the viewpager with profile pictures
             createViewPager()
         }
     }
 
+    // creates the viewpager which holds all the images
     private fun createViewPager(){
         viewPager = ViewPager(this)
         viewPager!!.id = View.generateViewId()
@@ -446,8 +464,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             0
         )
-        (viewPager!!.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio =
-            "1:1"
+        (viewPager!!.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio = "1:1"
         viewPager!!.adapter = ViewPagerAdapter(supportFragmentManager, profilePictures, R.layout.fragment_profile_event_1_viewpager, null);
         choosePicturesLayout.addView(viewPager)
 
@@ -471,6 +488,7 @@ class ActivityRegisterDetails : AppCompatActivity() {
         auth.currentUser?.delete()
     }
 
+    // Handles the gender radiobuttons
     fun onRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             checked = view.isChecked

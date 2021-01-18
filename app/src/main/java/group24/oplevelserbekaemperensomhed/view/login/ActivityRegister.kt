@@ -18,6 +18,7 @@ import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.LocalData
 import kotlinx.android.synthetic.main.activity_register.*
 
+// Handles Registering with Email & Password
 
 class ActivityRegister : AppCompatActivity() {
 
@@ -50,6 +51,7 @@ class ActivityRegister : AppCompatActivity() {
         onButtonClick(backButton, submitButton2)
     }
 
+    // Handles button clicks
     private fun onButtonClick(
         backButton: ImageView,
         submitButton2: LinearLayout
@@ -62,6 +64,7 @@ class ActivityRegister : AppCompatActivity() {
         }
     }
 
+    // Some messages for the user if something goes wrong
     private fun handleSubmitUserDetails() {
         if (editTextViews[1].text.toString() != editTextViews[2].text.toString()) {
             Toast.makeText(
@@ -78,10 +81,12 @@ class ActivityRegister : AppCompatActivity() {
             ).show()
             return
         }
+        // Calls the loading animation and checks if the email exists or not
         callLoadingAnimation(true)
         checkEmailExistsOrNot(editTextViews[0].text.toString())
     }
 
+    // Updates Lottie animation
     private fun callLoadingAnimation(playAnimation: Boolean) {
         if (playAnimation) {
             lottie.visibility = View.VISIBLE
@@ -90,29 +95,33 @@ class ActivityRegister : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val TAG = "ActivityRegister"
-        private val REGISTERDETAILSACTIVITY = ActivityRegisterDetails::class.java
-    }
-
+    // Connects to Firebase and see's if there exists an email or not with the given information
     private fun checkEmailExistsOrNot(email: String) {
         val firebaseauth = FirebaseAuth.getInstance()
         firebaseauth.fetchSignInMethodsForEmail(email).addOnCompleteListener(
             OnCompleteListener<SignInMethodQueryResult> { task ->
                 Log.d(TAG, "" + task.result.signInMethods!!.size)
+                // If logging in was a success
                 if (task.result.signInMethods!!.size == 0) {
+                    // Cancels the loading animation and opens up registerUserDetails activity
                     callLoadingAnimation(false)
-                    //Toast.makeText(applicationContext,"EMAIL DOES NOT EXIST!",Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, REGISTERDETAILSACTIVITY)
                     startActivity(intent)
                     finish()
+                    // To save CPU usage, set the lottie animation to be GONE after we leave the activity
                     lottie.visibility = View.GONE
                     localData.userEmail = editTextViews[0].text.toString()
                     localData.userPassword = editTextViews[1].text.toString()
                 } else {
+                    // Updates the animation and notifies the user that something went wrong
                     callLoadingAnimation(false)
                     Toast.makeText(applicationContext,"The email entered is already in use",Toast.LENGTH_SHORT).show()
                 }
             }).addOnFailureListener(OnFailureListener { e -> e.printStackTrace() })
+    }
+
+    companion object {
+        private const val TAG = "ActivityRegister"
+        private val REGISTERDETAILSACTIVITY = ActivityRegisterDetails::class.java
     }
 }

@@ -6,8 +6,6 @@ import kotlin.collections.ArrayList
 
 @Parcelize
 data class UserDTO
-//interests
-//Social media integration (Instagram, facebook_common friends)
     (
     var name: String?,
     var age: List<Int>,

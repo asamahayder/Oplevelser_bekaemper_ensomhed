@@ -13,10 +13,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.data.*
+import group24.oplevelserbekaemperensomhed.logic.Logic
 import group24.oplevelserbekaemperensomhed.logic.SearchHomeAdapterVertical
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter
 import group24.oplevelserbekaemperensomhed.logic.firebase.*
 
+// Handles the categorized search activity over events
 
 class FragmentSearchHome : Fragment() {
 
@@ -53,28 +55,37 @@ class FragmentSearchHome : Fragment() {
         viewPager = requireView().findViewById(R.id.fsearch_viewpager)
         recyclerView = requireView().findViewById(R.id.fsearch_recyclerview)
         swipeRefresh = requireView().findViewById(R.id.fsearch_refresh)
+
+        // Opens the search activity
         searchActivityButton.setOnClickListener {
-            Log.d(TAG, "Search Activity clicked")
             val intent = Intent(activity, ActivitySearch::class.java)
+            // Disables the animation to make it look like we're still on the same activity
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
         }
+
+        // handles swipe to refresh events via the database
         swipeRefresh.setOnRefreshListener {
             events.clear()
             bannerURLs.clear()
             bannerPictures.clear()
+
+            // Updates the banners and events
             firebaseQueryBanners()
             firebaseQueryEvents()
+
+            // Removes the loading bar after refreshing
             swipeRefresh.isRefreshing = false
         }
-        Log.d(TAG, "searchResultsEvents = ${localData.searchResultsEvents}")
-        Log.d(TAG, "searchResultsBanners = ${localData.searchResultsBanners}")
-        Log.d(TAG, "eventsSortedByCategories = $sortedCategoriesList")
+
+        // Fetches events if the list is empty else updates the recyclerview
         if (sortedCategoriesList.size == 0) {
             firebaseQueryEvents()
         } else {
             handleRecyclerView()
         }
+
+        // Fetches banners if the list is empty else updates the recyclerview
         if (sortedCategoriesList.size == 0) {
             firebaseQueryBanners()
         } else {
@@ -82,11 +93,12 @@ class FragmentSearchHome : Fragment() {
         }
     }
 
+    // Queries the database for banners
     private fun firebaseQueryBanners() {
-        Log.d(TAG, "Querying firebase for banners")
         db.getAllBanners(object : MyCallBack {
             override fun onCallBack(`object`: Any) {
                 val bannerDataList = `object` as ArrayList<DBBanner>
+                // Checks if it's an banner we're working with or nothing and adds it to the list
                 for (banner in `object`) {
                     bannerPictures.add(banner.picture)
                     bannerURLs.add(banner.url)
@@ -95,33 +107,38 @@ class FragmentSearchHome : Fragment() {
                 if (viewPager.isAttachedToWindow) {
                     handleViewPager()
                 }
+                // Updates the banners in the local search results
                 localData.searchResultsBanners = bannerDataList
-                Log.d(TAG, "Firebase query for banners complete")
             }
         })
     }
 
+    // Handles the viewpager which shows the banners
     private fun handleViewPager() {
         val list = ArrayList<ArrayList<String>>()
         list.add(bannerURLs)
         list.add(bannerTitles)
+
+        // Creates an adapter with the banner layout and handles the pictures and text from the banners
         val pagerAdapter = ViewPagerAdapter(childFragmentManager, bannerPictures, R.layout.fragment_search_home_1_viewpager, list)
         viewPager.adapter = pagerAdapter
     }
 
+    // Queries the firebase for events
     private fun firebaseQueryEvents(){
-        Log.d(TAG, "Querying firebase for events")
         db.getEvents(object: MyCallBack{
             override fun onCallBack(`object`: Any) {
                 val list:ArrayList<EventDTO> = `object` as ArrayList<EventDTO>
-                sortedCategoriesList = sortEventsByCategory(list)
+                // Sorts the events gotten from the database
+                val logic = Logic()
+                sortedCategoriesList = logic.sortEventsByCategory(list)
                 localData.searchResultsEvents = list
                 handleRecyclerView()
-                Log.d(TAG, "Firebase query for events complete")
             }
         })
     }
 
+    // Updates the recyclerview
     private fun handleRecyclerView() {
         adapter = SearchHomeAdapterVertical(this@FragmentSearchHome, sortedCategoriesList)
         recyclerView.adapter = adapter
@@ -129,44 +146,6 @@ class FragmentSearchHome : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.recycledViewPool.setMaxRecycledViews(0, 0)
         events = localData.searchResultsEvents
-    }
-
-    private fun sortEventsByCategory(eventList: ArrayList<EventDTO>): ArrayList<SearchHomeItem> {
-        val searchHomeListVertical = ArrayList<SearchHomeItem>()
-        for (i in eventList.indices) {
-            val searchHomeListHorizontal: MutableList<EventDTO> = java.util.ArrayList()
-            val category: String = eventList[i].category
-            var isANewCategory = false
-            for (j in eventList.indices) {
-                val nextCategory: String = eventList[j].category
-                val (eventCreator, participants, eventDescription, eventTitle, eventDate, eventLikes, category1, address, price, pictures) = eventList[j]
-                val item = EventDTO(
-                    eventCreator,
-                    participants,
-                    eventDescription,
-                    eventTitle,
-                    eventDate, eventLikes, category1, address, price, pictures
-                )
-                if (category == nextCategory) {
-                    var isItemInSortedList = true
-                    for (k in searchHomeListVertical.indices) {
-                        if (searchHomeListVertical[k].category == category) {
-                            isItemInSortedList = false
-                            break
-                        }
-                    }
-                    if (isItemInSortedList || searchHomeListVertical.size == 0) {
-                        isANewCategory = true
-                        searchHomeListHorizontal.add(item)
-                    }
-                }
-            }
-            if (isANewCategory) {
-                val items = SearchHomeItem(category, searchHomeListHorizontal)
-                searchHomeListVertical.add(items)
-            }
-        }
-        return searchHomeListVertical
     }
 
     companion object {

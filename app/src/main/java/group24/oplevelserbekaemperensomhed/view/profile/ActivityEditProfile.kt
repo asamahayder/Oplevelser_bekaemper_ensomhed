@@ -32,6 +32,8 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.MyUploadPicturesListen
 import kotlinx.android.synthetic.main.activity_register_details.*
 import kotlin.collections.ArrayList
 
+// Handles editing the profile
+
 class ActivityEditProfile : AppCompatActivity() {
 
 
@@ -75,6 +77,7 @@ class ActivityEditProfile : AppCompatActivity() {
             addressButton,
             choosePicturesButton
         )
+        // Gender radio buttons
         val radioButton1: RadioButton = activity_register_male
         val radioButton2: RadioButton = activity_register_female
         val radioButton3: RadioButton = activity_register_other
@@ -127,8 +130,8 @@ class ActivityEditProfile : AppCompatActivity() {
                 radioButton3.isChecked = true
             }
         }
-        var firstNameText: String
-        var lastNameText: String
+        val firstNameText: String
+        val lastNameText: String
         if (localData.userData.name?.contains(" ")!!) {
             val splitString = localData.userData.name!!.split(" ")
             firstNameText = splitString[0]
@@ -139,7 +142,6 @@ class ActivityEditProfile : AppCompatActivity() {
             editTextViews[0].setText(localData.userData.name)
             editTextViews[1].setText("")
         }
-        Log.d(TAG, "Age = ${localData.userData.age}")
         editTextViews[2].setText(localData.userData.age[2].toString())
         editTextViews[3].setText(localData.userData.age[1].toString())
         editTextViews[4].setText(localData.userData.age[0].toString())
@@ -219,6 +221,7 @@ class ActivityEditProfile : AppCompatActivity() {
         }
     }
 
+    // Handles user errors
     private fun checkTextFieldsForMistakes(): Boolean {
         for (textView in editTextViews) {
             val text = textView.text.toString()
@@ -289,6 +292,7 @@ class ActivityEditProfile : AppCompatActivity() {
         return false
     }
 
+    // Uploads details to the firestore database
     private fun uploadUserDetailsToDatabase(pictureDownloadLinks: ArrayList<String>
     ) {
         val firebaseUser = auth.currentUser
@@ -305,6 +309,7 @@ class ActivityEditProfile : AppCompatActivity() {
                 ArrayList<String>(),
                 pictureDownloadLinks
             )
+            // Updates the singleton
             localData.id = firebaseUser.uid
             db.createUser(dbUser, localData.id, object : MyCallBack {
                 override fun onCallBack(`object`: Any) {
@@ -314,6 +319,7 @@ class ActivityEditProfile : AppCompatActivity() {
         }
     }
 
+    // Saves the user object to the local singleton
     private fun saveUserDetailsToLocalData(): Boolean {
         val logic = Logic()
         val localData = LocalData
@@ -327,12 +333,14 @@ class ActivityEditProfile : AppCompatActivity() {
             Toast.makeText(applicationContext, "Please enter a valid age", Toast.LENGTH_SHORT).show()
             return false
         }
+        // Appends name depening on if there's a last name or not
         nameBuilder = nameBuilder.append(editTextViews[0].text.toString())
         if (editTextViews[1].text.toString().isNotEmpty()) {
             nameBuilder = nameBuilder.append(" ").append(
                 editTextViews[1].text.toString()
             )
         }
+        // Adds all the information to the user object
         val user = UserDTO(
             nameBuilder.toString(),
             listOf(editTextViews[4].text.toString().toInt(), editTextViews[3].text.toString().toInt(), editTextViews[2].text.toString().toInt()),
@@ -344,13 +352,12 @@ class ActivityEditProfile : AppCompatActivity() {
             localData.userData.eventsCreatedByUser,
             profilePictures
         )
-        Log.d(TAG, "User object = $user")
-
+        // saves the user object to the singleton
         localData.userData = user
-        Log.d(TAG, "userdata = $user")
         return true
     }
 
+    // Handles gender radiobuttons
     fun onRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             checked = view.isChecked
@@ -371,6 +378,7 @@ class ActivityEditProfile : AppCompatActivity() {
         }
     }
 
+    // Searches for address and auto completes for whatever is typed
     private fun searchForAddressWithAutoComplete() {
         val fields = listOf(Place.Field.NAME, Place.Field.ADDRESS)
         val intent = Autocomplete.IntentBuilder(
@@ -381,6 +389,7 @@ class ActivityEditProfile : AppCompatActivity() {
         startActivityForResult(intent, 1)
     }
 
+    // Handles opening storage on the phone
     private fun openPhoneStorage() {
         val gallery =
             Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -389,11 +398,14 @@ class ActivityEditProfile : AppCompatActivity() {
         startActivityForResult(gallery, REQUEST_CODE)
     }
 
+    // Handles getting results back from address & storage
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        // If iit's the address activity that was opened
         if (requestCode == 1) {
             when (resultCode) {
                 RESULT_OK -> {
+                    // save address
                     val place = Autocomplete.getPlaceFromIntent(data!!)
                     val addressEditText: EditText = buttonViews[2] as EditText
                     address = place.address!!
@@ -411,16 +423,17 @@ class ActivityEditProfile : AppCompatActivity() {
                 }
             }
         }
+        // If it was the storage that was opened
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             profilePictures.clear()
             picturesAsURIs.clear()
-            Log.d(TAG, "localDataPictures = ${localData.userData.profilePictures} currentProfilePictures = $profilePictures")
             val clipData = data!!.clipData
             if (clipData != null) {
                 if (clipData.itemCount > 8) {
                     Toast.makeText(this, "Error: Max 8 pictures", Toast.LENGTH_LONG).show()
                     return
                 } else {
+                    // Adds the profile pictures to the profile picture list
                     for (i in 0 until clipData.itemCount) {
                         val imageUri = clipData.getItemAt(i).uri
                         profilePictures.add(imageUri.toString())
@@ -437,6 +450,7 @@ class ActivityEditProfile : AppCompatActivity() {
             if (viewPager != null) {
                 choosePicturesLayout.removeView(viewPager)
             }
+            // creates the viewpager for holding the profile pictures
             createViewPager()
         }
     }
