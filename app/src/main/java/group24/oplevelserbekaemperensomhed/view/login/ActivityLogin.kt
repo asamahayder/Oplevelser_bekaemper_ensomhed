@@ -56,6 +56,10 @@ class ActivityLogin : AppCompatActivity() {
         emailText = findViewById(R.id.activity_login_email)
         passText = findViewById(R.id.activity_login_password)
 
+        // Only for test login purposes
+        emailText.setText("test@test.com")
+        passText.setText("12345678")
+
         // Handles authorization via Firebase & Facebook
         firebaseAuth = FirebaseAuth.getInstance()
         facebookAuth = FacebookAuthorization(this, REGISTERACTIVITYDETAILS)

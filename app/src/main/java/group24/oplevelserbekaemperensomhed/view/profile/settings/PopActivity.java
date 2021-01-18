@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed.settings;
+package group24.oplevelserbekaemperensomhed.view.profile.settings;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import group24.oplevelserbekaemperensomhed.R;
 
-public class PopActivityKont extends Activity {
+public class PopActivity extends Activity {
 
 
     Button but_luk;
@@ -18,7 +18,7 @@ public class PopActivityKont extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pop_kontakt);
+        setContentView(R.layout.activity_pop);
 
         but_luk = (Button) findViewById(R.id.btn_luk);
         but_luk.setOnClickListener(new View.OnClickListener() {

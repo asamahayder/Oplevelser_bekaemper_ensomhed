@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed;
+package group24.oplevelserbekaemperensomhed.view.event;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,6 +19,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
+
+import group24.oplevelserbekaemperensomhed.R;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;

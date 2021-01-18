@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed;
+package group24.oplevelserbekaemperensomhed.view.event;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -48,6 +48,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import group24.oplevelserbekaemperensomhed.R;
 import group24.oplevelserbekaemperensomhed.data.DateDTO;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.LocalData;

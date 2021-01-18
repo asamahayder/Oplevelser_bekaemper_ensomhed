@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
+import group24.oplevelserbekaemperensomhed.logic.EventsAdapter;
+import group24.oplevelserbekaemperensomhed.logic.ItemClickListener;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;

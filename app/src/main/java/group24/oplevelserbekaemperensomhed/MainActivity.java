@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import group24.oplevelserbekaemperensomhed.view.collection.FragmentList;
+import group24.oplevelserbekaemperensomhed.view.event.ActivityCreateEvent;
 import group24.oplevelserbekaemperensomhed.view.profile.FragmentProfile;
 import group24.oplevelserbekaemperensomhed.view.search.FragmentSearchHome;
 

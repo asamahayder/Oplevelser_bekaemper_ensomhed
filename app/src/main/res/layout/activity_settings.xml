@@ -8,7 +8,7 @@
     android:background="@color/colorPrimary"
 
 
-    tools:context="group24.oplevelserbekaemperensomhed.settings.Settings">
+    tools:context="group24.oplevelserbekaemperensomhed.view.profile.settings.Settings">
 
     <LinearLayout
         android:id="@+id/linearLayout4"

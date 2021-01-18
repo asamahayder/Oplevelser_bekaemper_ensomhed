@@ -14,15 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/Material"
         >
-        <activity android:name=".settings.PopActivity"
+        <activity android:name=".view.profile.settings.PopActivity"
             android:theme="@style/AppTheme.PopMe"
             android:screenOrientation = "portrait"
             />
-        <activity android:name=".settings.PopActivityKont"
+        <activity android:name=".view.profile.settings.PopActivityKont"
             android:theme="@style/AppTheme.PopMe"
             android:screenOrientation = "portrait"
             />
-        <activity android:name=".settings.Settings"
+        <activity android:name=".view.profile.settings.Settings"
             android:theme="@style/AppTheme"
             android:screenOrientation = "portrait"
             />
@@ -33,7 +33,7 @@
             android:name=".view.ActivityFragmentHandler"
             android:theme="@style/AppTheme" android:screenOrientation = "portrait"/>
         <activity android:name=".view.search.ActivitySearch" android:screenOrientation = "portrait"/>
-        <activity android:name=".ActivityCreateEvent" android:label="@string/title_activity_create_event" android:screenOrientation = "portrait"/>
+        <activity android:name=".view.event.ActivityCreateEvent" android:label="@string/title_activity_create_event" android:screenOrientation = "portrait"/>
         <activity android:name=".view.login.ActivityStart" android:theme="@style/AppTheme" android:screenOrientation = "portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,9 +44,6 @@
         <activity android:name=".MainActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" android:screenOrientation = "portrait"/>
         <activity
             android:name=".view.profile.ActivityEditProfile" android:screenOrientation = "portrait"/>
-        <activity
-            android:name=".view.ActivitySettings"
-            android:theme="@style/AppTheme" android:screenOrientation = "portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -64,14 +61,10 @@
             android:exported="true" android:screenOrientation = "portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <service android:name=".view.login.ActivityRegisterDetails$StickyService" />
     </application>
-
 </manifest>

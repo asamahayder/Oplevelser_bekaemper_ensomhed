@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,7 +27,7 @@ import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.Logic;
 import group24.oplevelserbekaemperensomhed.logic.ViewPagerAdapter;
-import group24.oplevelserbekaemperensomhed.settings.Settings;
+import group24.oplevelserbekaemperensomhed.view.profile.settings.Settings;
 
 // Handles profile details of every user
 

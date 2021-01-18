@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed;
+package group24.oplevelserbekaemperensomhed.logic;
 
 import android.view.View;
 

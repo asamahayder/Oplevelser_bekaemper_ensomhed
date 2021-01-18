@@ -1,17 +1,14 @@
-package group24.oplevelserbekaemperensomhed;
+package group24.oplevelserbekaemperensomhed.logic;
 
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,8 +16,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import group24.oplevelserbekaemperensomhed.R;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
-import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 

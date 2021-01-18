@@ -1,4 +1,4 @@
-package group24.oplevelserbekaemperensomhed;
+package group24.oplevelserbekaemperensomhed.logic;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import java.util.List;
+
+import group24.oplevelserbekaemperensomhed.R;
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 
 

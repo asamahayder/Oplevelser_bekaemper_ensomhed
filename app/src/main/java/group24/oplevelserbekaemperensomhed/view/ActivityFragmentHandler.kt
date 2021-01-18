@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import group24.oplevelserbekaemperensomhed.FragmentEventInfo
+import group24.oplevelserbekaemperensomhed.view.event.FragmentEventInfo
 import group24.oplevelserbekaemperensomhed.R
 import group24.oplevelserbekaemperensomhed.view.profile.FragmentProfile
 
@@ -30,7 +30,8 @@ class ActivityFragmentHandler : AppCompatActivity() {
         val bundle = Bundle()
         if (intent.extras!!["event"] != null) {
             // Opens a event fragment from this activity and passes the information on
-            fragment = FragmentEventInfo()
+            fragment =
+                FragmentEventInfo()
             bundle.putParcelable("event", intent.extras!!["event"] as Parcelable?)
             bundle.putString("other","other")
             fragment.arguments = bundle

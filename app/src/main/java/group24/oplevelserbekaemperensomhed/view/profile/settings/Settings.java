@@ -1,16 +1,14 @@
-package group24.oplevelserbekaemperensomhed.settings;
+package group24.oplevelserbekaemperensomhed.view.profile.settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.facebook.appevents.suggestedevents.ViewOnClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
