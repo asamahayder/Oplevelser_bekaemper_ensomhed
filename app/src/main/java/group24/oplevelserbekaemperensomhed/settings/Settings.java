@@ -67,7 +67,7 @@ public class Settings extends AppCompatActivity {
         });
 
 
-
+        //Log out
         btn_log_ud = (Button) findViewById(R.id.button3);
         btn_log_ud.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +83,7 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        // Delete an account
         btn_delete_acc = (Button) findViewById(R.id.button4);
         btn_delete_acc.setOnClickListener(new View.OnClickListener() {
             @Override
