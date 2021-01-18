@@ -13,16 +13,15 @@ import group24.oplevelserbekaemperensomhed.view.search.ActivitySearch
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class FirebaseDAO{
 
-    private var uploadImageCounter = 0;
-
+    private var uploadImageCounter = 0
     private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var storageReference: StorageReference = firebaseStorage.reference
 
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
+    //Fetches all events from the database and returns them as a list of DBEvents
     private fun getAllEventsFromDB(callBack: MyCallBack) {
         val dbEvents = ArrayList<DBEvent>()
         db.collection("events")
@@ -38,30 +37,15 @@ class FirebaseDAO{
             }
     }
 
-    fun getAllUsers(callBack: MyCallBack) {
-        val dbUsers = ArrayList<DBUser>()
-        db.collection("users")
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result!!){
-                        val dbUser = document.toObject(DBUser::class.java)
-                        dbUsers.add(dbUser)
-                    }
-                    callBack.onCallBack(dbUsers)
-                }
-            }
-    }
-
+    //Gets a single user from database based on a user id
     fun getUser(id: String, callBack: MyCallBack) {
         db.collection("users").document(id)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val dbUser = task.result!!.toObject(DBUser::class.java)
-                    Log.d("TESSSST", "id = $id user = $dbUser")
                     if (dbUser != null) {
-                        val user: UserDTO = UserDTO(dbUser.name,dbUser.age,dbUser.address,dbUser.occupation,dbUser.education,dbUser.about,dbUser.gender,ArrayList(),dbUser.profilePictures.toCollection(ArrayList<String>()))
+                        val user = UserDTO(dbUser.name,dbUser.age,dbUser.address,dbUser.occupation,dbUser.education,dbUser.about,dbUser.gender,ArrayList(),dbUser.profilePictures.toCollection(ArrayList<String>()))
                         callBack.onCallBack(user)
                     } else {
                         callBack.onCallBack("failure")
@@ -72,6 +56,8 @@ class FirebaseDAO{
             }
     }
 
+
+    //Fetches all current promotional banners from database
     fun getAllBanners(callBack: MyCallBack) {
         val dbBanners = ArrayList<DBBanner>()
         db.collection("banners")
@@ -87,12 +73,13 @@ class FirebaseDAO{
             }
     }
 
+
+    //Fetches all events from database and returns them as a list of EventDTO
     fun getEvents(callBack: MyCallBack){
         val list : ArrayList<EventDTO> = ArrayList()
         getAllEventsFromDB(object : MyCallBack {
             override fun onCallBack(`object`: Any) {
                 val eventDataList = `object` as ArrayList<DBEvent>
-                Log.d(ActivitySearch.TAG, "Getting all eventCreators")
                 for (dbEvent in eventDataList) {
                     getUser(dbEvent.eventCreator, object : MyCallBack {
                         override fun onCallBack(`object`: Any) {
@@ -105,8 +92,6 @@ class FirebaseDAO{
                             }catch (e: ClassCastException){
                                 return
                             }
-
-
                         }
                     })
                 }
@@ -114,11 +99,12 @@ class FirebaseDAO{
         })
     }
 
+
+    //Creates an event inside the database
     fun createEvent(event: EventDTO, callBack: MyCallBack){
         val date: List<String> = listOf(event.eventDate.date, event.eventDate.startTime, event.eventDate.endTime)
         val pictures: List<String> = event.pictures
 
-        //TODO: we do not use this parameter, so remove it
         val participants: List<String> = listOf(event.participants?.get(0)?.name.toString())
 
         val localData = LocalData
@@ -126,15 +112,14 @@ class FirebaseDAO{
 
         val dbEvent = DBEvent(address = event.address, category = event.category, eventCreator = userID, eventDate = date, eventDescription = event.eventDescription, eventLikes = event.eventLikes, eventTitle = event.eventTitle, price = event.price, pictures = pictures, participants = participants)
         db.collection("events").add(dbEvent).addOnSuccessListener {
-            createParticipantPair(dbEvent.eventTitle, callBack)
+            createParticipantPair(dbEvent.eventTitle, callBack) //we add the owner as a participant to his own event
         }.addOnFailureListener{
-            println("*******************************************************************************************************************")
-            Log.e("gg", it.stackTrace.toString())
             callBack.onCallBack("Failure")
         }
     }
 
 
+    //Create a user in the database
     fun createUser(dbUser: DBUser, uid: String, callBack: MyCallBack) {
         db.collection("users").document(uid).set(dbUser)
             .addOnCompleteListener {task ->
@@ -147,11 +132,13 @@ class FirebaseDAO{
             }
     }
 
+
+    //Upload images to the database
     fun uploadImages(imageList: ArrayList<Uri>, myListener: MyUploadPicturesListener) {
         val pictureDownloadLinks: ArrayList<String> = ArrayList()
         //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
 
-        uploadImageCounter = imageList.size
+        uploadImageCounter = imageList.size //The counter is used to check if all threads are finished.
         for (imageUri in imageList) {
             val ref: StorageReference = storageReference.child("images/" + UUID.randomUUID().toString())
             val uploadTask = ref.putFile(imageUri)
@@ -166,10 +153,11 @@ class FirebaseDAO{
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     pictureDownloadLinks.add(downloadUri.toString())
-
-                    //handle progress dialog
+                    //Every thread decrements counter and checks if 0. This is to ensure that only the last thread that finishes continues.
+                    //This is a mechanism that we have implemented to sync threads.
                     uploadImageCounter--
                     if (uploadImageCounter == 0) {
+                        //The database creates a download url for each picture after it is uploaded. We save this in the event so we can download later.
                         myListener.onSuccess(pictureDownloadLinks)
                     } else {
                         myListener.onProgress(uploadImageCounter)
@@ -181,15 +169,18 @@ class FirebaseDAO{
         }
     }
 
+
+    //Deletes user from database
     fun deleteUser(id: String,callBack: MyCallBack) {
-        deleteParticipantsByUser(object: MyCallBack{
+        deleteParticipantsByUser(object: MyCallBack{ //First we delete all the user's participations
             override fun onCallBack(`object`: Any) {
                 val message = `object` as String
                 if (message.equals("success")){
-                    deleteAllCreatedEvents(object: MyCallBack{
+                    deleteAllCreatedEvents(object: MyCallBack{ //Then we delete all the user's created events
                         override fun onCallBack(`object`: Any) {
                             val message2 = `object` as String
                             if (message2.equals("success")){
+                                //Then we delete the user
                                 db.collection("users").document(id).delete().addOnCompleteListener {task ->
                                     if (task.isSuccessful) {
                                         callBack.onCallBack(true)
@@ -211,7 +202,9 @@ class FirebaseDAO{
 
     }
 
-    //Also known as 'Join event'
+    //This handles when a user joins an event. A Participation pair is a data object consisting of 2 fields: eventName and userID.
+    //Everytime someone joins an event, a pair is created.
+    //By fetching pairs, we can easily determine an event's participants
     fun createParticipantPair(eventTitle: String, callBack: MyCallBack){
         val localData = LocalData
         val userID = localData.id
@@ -226,7 +219,7 @@ class FirebaseDAO{
         }
     }
 
-    //Also known as 'Leave event'
+    //Handles leaving an event.
     fun deleteParticipantPair(eventTitle: String, callBack: MyCallBack){
         val localData = LocalData
         val userID = localData.id
@@ -251,6 +244,8 @@ class FirebaseDAO{
         }
     }
 
+
+    //Deletes all created events
     fun deleteAllCreatedEvents(callBack: MyCallBack){
         val localData = LocalData
         val batch = db.batch()
@@ -278,8 +273,12 @@ class FirebaseDAO{
         }
     }
 
+
+    //Deletes all participantion pairs for current user. Used to delete a user completely from database
     fun deleteParticipantsByUser(callBack: MyCallBack){
         val localData = LocalData
+
+        //The batch lets us perform multiple operations simultaneously.
         val batch = db.batch()
         db.collection("eventParticipants").whereEqualTo("participant", localData.id).get().addOnCompleteListener {
             task ->
@@ -307,9 +306,13 @@ class FirebaseDAO{
         }
     }
 
+
+    //Fetches all participants for a given event
     fun getParticipants(event: EventDTO, callBack: MyCallBack){
         val pairs: ArrayList<DBEventParticipantPair> = ArrayList()
         val users: ArrayList<UserDTO> = ArrayList()
+
+        //The counter mechanism is explained in the method: uploadImages
         var counter = 0
         db.collection("eventParticipants").whereEqualTo("eventName", event.eventTitle).get().addOnCompleteListener {
             task ->
@@ -319,8 +322,6 @@ class FirebaseDAO{
                     val dbPair = document.toObject(DBEventParticipantPair::class.java)
                     pairs.add(dbPair)
                 }
-
-
 
                 if (pairs.isNotEmpty()){
                     for (pair in pairs){
@@ -343,6 +344,8 @@ class FirebaseDAO{
         }
     }
 
+
+    //Fetches all the events that the current user has created
     fun getCreatedEvents(callBack: MyCallBack){
         val localData = LocalData
         val events: ArrayList<EventDTO> = ArrayList()
@@ -369,7 +372,8 @@ class FirebaseDAO{
         }
     }
 
-    //TODO: remmeber to filter out a users own events by checking each events owner and comparing to the logged in user
+
+    //Fetching all the events the current user has joined
     fun getJoinedEvents(callBack: MyCallBack){
         val localData = LocalData
         val pairs: ArrayList<DBEventParticipantPair> = ArrayList()
@@ -411,6 +415,8 @@ class FirebaseDAO{
         }
     }
 
+
+    //Gets a single event by searching for it using the eventName parameter
     fun getEventByEventName(eventName: String, callBack: MyCallBack){
         db.collection("events").whereEqualTo("eventTitle", eventName).get().addOnCompleteListener {
             task ->
@@ -434,84 +440,68 @@ class FirebaseDAO{
         }
     }
 
+
+    //Deletes an event by getting it using it's name
     fun deleteEventByEventTitle(eventTitle: String, callBack: MyCallBack){
-        Log.d("deleteEvent", "Starting delete")
         var counter = 0
         db.collection("events").whereEqualTo("eventTitle", eventTitle).get().addOnCompleteListener{
             task ->
             if (task.isSuccessful){
-                Log.d("deleteEvent", "Successfully fetched events with given eventTitle")
                 counter = task.result.size()
                 val batch = db.batch()
                 for (document in task.result!!){
-                    deleteAllParticipants(eventTitle, object: MyCallBack{
+                    deleteAllParticipants(eventTitle, object: MyCallBack{ //Deletes all the participation pairs for the event
                         override fun onCallBack(`object`: Any) {
                             val message = `object` as String
                             if (message.equals("success")){
-                                Log.d("deleteEvent", "Received success message from deleteAllParticipants")
                                 counter--
-                                Log.d("deleteEvent", "Adding to delete events batch")
                                 batch.delete(document.reference)
                                 if (counter == 0){
-                                    Log.d("deleteEvent", "Committing batch for delete events")
                                     batch.commit().addOnCompleteListener{
                                             task ->
                                         if (task.isSuccessful){
-                                            Log.d("deleteEvent", "Successfully deleted all events")
                                             callBack.onCallBack("success")
                                         }else{
-                                            Log.d("deleteEvent", "Failed deleting all events")
-                                            Log.d("deleteEvent", task.exception.toString())
                                             callBack.onCallBack("fail")
                                         }
                                     }
                                 }
                             }else{
-                                Log.d("deleteEvent", "Received fail message from deleteAllParticipants")
                                 callBack.onCallBack("fail")
                             }
                         }
                     })
                 }
             }else{
-                Log.d("deleteEvent", "Failed fetching all events for given eventTitle")
                 callBack.onCallBack("fail")
             }
         }
 
     }
 
+
+    //Deleting all participants for a given eventTitle
     fun deleteAllParticipants(eventTitle: String, callBack: MyCallBack){
-        Log.d("deleteEvent", "Started delete of all participants for given eventTitle")
-        val localData = LocalData
-        val userID = localData.id
         db.collection("eventParticipants").whereEqualTo("eventName", eventTitle).get().addOnCompleteListener{
                 task ->
             if (task.isSuccessful){
-                Log.d("deleteEvent", "successfully fetched all participants for given eventTitle")
                 if (!task.result.documents.isEmpty()){
-                    Log.d("deleteEvent", "result is Not empty")
                     val batch = db.batch()
                     for(document in task.result!!){
                         batch.delete(document.reference)
                     }
-                    Log.d("deleteEvent", "Committing delete batch for pairs")
                     batch.commit().addOnCompleteListener{
                             task ->
                         if (task.isSuccessful){
-                            Log.d("deleteEvent", "Successfully deleted all participants for given eventTitle")
                             callBack.onCallBack("success")
                         }else{
-                            Log.d("deleteEvent", "Failed delete of all participants for given eventTitle")
                             callBack.onCallBack("fail")
                         }
                     }
                 }else{
-                    Log.d("deleteEvent", "result is empty")
                     callBack.onCallBack("success")
                 }
             }else{
-                Log.d("deleteEvent", "Could not fetch all participants for given eventTitle")
                 callBack.onCallBack("fail")
             }
         }
