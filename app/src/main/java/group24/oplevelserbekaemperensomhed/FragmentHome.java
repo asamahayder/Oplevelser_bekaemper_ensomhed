@@ -2,20 +2,15 @@ package group24.oplevelserbekaemperensomhed;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
@@ -23,7 +18,6 @@ import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
 import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 
 public class FragmentHome extends Fragment implements ItemClickListener {
-
     private ViewPager2 viewPager;
     private EventsAdapter adapter = null;
     private ArrayList<EventDTO> events = new ArrayList<>();
@@ -42,6 +36,8 @@ public class FragmentHome extends Fragment implements ItemClickListener {
 
         swipeRefreshLayout = view.findViewById(R.id.fragment_home_swipeLayout);
 
+
+        //handling refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -87,20 +83,23 @@ public class FragmentHome extends Fragment implements ItemClickListener {
 
     }
 
+    //Creates the adapter
     private void initializeAdapter(){
         adapter = new EventsAdapter(events, this);
     }
 
 
+    //Handling event clicked. Opening event info activity.
     @Override
     public void onEventItemClick(int position, EventDTO event, View title) {
         Intent intent = new Intent(getContext(), ActivityFragmentHandler.class);
         intent.putExtra("event", event);
         intent.putExtra("other", "other");
         startActivity(intent);
-
     }
 
+
+    //Handling on profile clicked. Opens the profile activity for clicked profile.
     @Override
     public void onProfileItemClick(int position, UserDTO user, View title) {
         Intent intent = new Intent(getContext(), ActivityFragmentHandler.class);

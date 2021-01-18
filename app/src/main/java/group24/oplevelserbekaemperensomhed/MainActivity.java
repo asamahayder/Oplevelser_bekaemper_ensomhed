@@ -4,13 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import group24.oplevelserbekaemperensomhed.view.profile.FragmentProfile;
 import group24.oplevelserbekaemperensomhed.view.search.FragmentSearchHome;
 
@@ -20,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragmentHome;
     Fragment fragmentProfile;
     Fragment fragmentSearch;
-    Fragment fragmentCreateEvent;
     Fragment fragmentList;
     int currentFragment;
 
@@ -31,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        //Creating the different fragments
         fragmentHome = new FragmentHome();
         fragmentProfile = new FragmentProfile();
         fragmentSearch = new FragmentSearchHome();
         fragmentList = new FragmentList();
 
+        //The CreateEvent menu is an activity and not a fragment.
         final Intent intent = new Intent(this, ActivityCreateEvent.class);
 
         //This sets the first active fragment
@@ -68,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //This sets the clicked item to be the active one, and gives it another color to stand out.
+                //We wont change menu item color if createEvent was the one chosen. This is to avoid a visual bug when returning from createEvent.
                 if (currentFragment != 2){
                     item.setChecked(true);
                 }
-
 
                 return false;
             }
@@ -87,20 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeFragment (Fragment fragment, String tag){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //transaction.setCustomAnimations();
         transaction.replace(R.id.mainFragment, fragment, tag);
-        //if (addToBackStack) {
-        //    transaction.addToBackStack(tag);
-        //}
         transaction.commit();
     }
-
-    public void slideActivityInto(){
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
-
-    public void slideActivityOut(){
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
 }

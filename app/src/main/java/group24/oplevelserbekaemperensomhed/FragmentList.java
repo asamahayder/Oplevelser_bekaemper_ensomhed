@@ -16,12 +16,11 @@ import com.google.android.material.tabs.TabLayout;
 
 //Inspired by https://droidbyme.medium.com/android-material-design-tabs-tab-layout-with-swipe-884085ae80ff
 
+
+//This class is the main class for the List menu item in the nav bar. It holds the two different created/joined fragments and puts them inside a tablayout.
 public class FragmentList extends Fragment {
 
     private TabLayout tabLayout;
-    private TabAdapter tabAdapter;
-
-
 
     public FragmentList() {
         // Required empty public constructor
@@ -45,9 +44,11 @@ public class FragmentList extends Fragment {
 
         tabLayout = v.findViewById(R.id.fragment_list_tabLayout);
 
+        //Creating tabs
         tabLayout.addTab(tabLayout.newTab().setText("joined"));
         tabLayout.addTab(tabLayout.newTab().setText("created"));
 
+        //starts on fragmentListJoined by default
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_list_container, new FragmentListJoined()).commit();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

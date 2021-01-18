@@ -24,6 +24,8 @@ import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
 import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 
+
+//The adpater for the recyclerview that holds the lists inside the List menu.
 public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapter.ViewHolder> {
 
     private ArrayList<EventDTO> events;
@@ -39,7 +41,6 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
 
         public ViewHolder(View view) {
             super(view);
-            // Define click listener for the ViewHolder's View
             itemName = view.findViewById(R.id.fragment_list_item_name);
             imageView = view.findViewById(R.id.fragment_list_item_picture);
             itemCategory = view.findViewById(R.id.fragment_list_item_category);
@@ -83,16 +84,13 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
         this.context = context;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_list_item, viewGroup, false);
 
         return new ViewHolder(view);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         viewHolder.getItemName().setText(events.get(position).getEventTitle());
@@ -112,7 +110,6 @@ public class FragmentListAdapter extends RecyclerView.Adapter<FragmentListAdapte
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return events.size();

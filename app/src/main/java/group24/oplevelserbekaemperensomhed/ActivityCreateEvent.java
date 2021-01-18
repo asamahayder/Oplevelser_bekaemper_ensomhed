@@ -1,6 +1,5 @@
 package group24.oplevelserbekaemperensomhed;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
@@ -73,7 +72,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     SwitchCompat switchAllDay;
     SwitchCompat switchPrice;
     SwitchCompat switchOnline;
-    DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     ImageView backButton;
     LinearLayout submitButton2;
@@ -102,21 +100,17 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
 
     //Image stuff
-    //Activity result codes
     int getImageResultCode = 100;
     Uri imageUri;
     Chip getImageButton;
     ArrayList<String> pictures = new ArrayList<>();
     ArrayList<Uri> picturesAsUris = new ArrayList<>();
-    final ArrayList<String> pictureDownloadLinks = new ArrayList<>();
     ViewPager viewPager = null;
 
     //For uploading image
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     FirebaseDAO firebaseDAO;
-
-    int uploadImageCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +140,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         editTextAbout = findViewById(R.id.editAbout);
         submitButton2 = findViewById(R.id.create_event_submit2);
         backButton = findViewById(R.id.a_create_event_backButton);
+        getImageButton = findViewById(R.id.create_event_choose_pictures_button);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +174,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         chipGaming.setOnCheckedChangeListener(this);
         chipMusicNightlife.setOnCheckedChangeListener(this);
 
-        getImageButton = findViewById(R.id.create_event_choose_pictures_button);
+
 
 
         handleTimeAndDateFields();
@@ -197,8 +192,8 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         });
 
         //Handling address field and google places
-        String key = getString(R.string.api_key);
-        if (!Places.isInitialized()) {
+        String key = getString(R.string.api_key); //Our Google API Key
+        if (!Places.isInitialized()) { //Places is an API that enables us to autocomplete addresses
             Places.initialize(getApplicationContext(), key);
         }
 
@@ -210,6 +205,8 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             }
         });
 
+
+        //Handling online as address
         switchOnline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,23 +240,28 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             }
         });
 
+
         getImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent gallery = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                gallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                gallery.setType("image/*");
+                gallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); //Alowing the selection of multiple files
+                gallery.setType("image/*"); //specifying we only want image files
                 startActivityForResult(gallery, getImageResultCode);
+                //Activity for result, is an activity that returns something when finished.
+                // Later we receive data in onActivityResult
             }
         });
 
     }
 
+    //This method lets the user choose a date, and start/end time, in  a user friendly way, instead of typing it all themself.
     private void handleTimeAndDateFields(){
         editTextDate.setInputType(InputType.TYPE_NULL);
         editTextStart.setInputType(InputType.TYPE_NULL);
         editTextEnd.setInputType(InputType.TYPE_NULL);
 
+        //Handles if 'All-day' is chosen
         switchAllDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,8 +309,10 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         });
     }
 
+
+    //This opens an interactive clock where you can choose a time
+    //Inspired by tutorial example from this site: https://www.tutlane.com/tutorial/android/android-timepicker-with-examples
     private void handleTimePickerDialog(final EditText editText){
-        //This code was inspired by an example from this site: https://www.tutlane.com/tutorial/android/android-timepicker-with-examples
         final Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
@@ -327,9 +331,10 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         timePickerDialog.show();
     }
 
+
+    //This opens an interactive date interface where you can choose a range of dates.
+    //This code was inspired by an example from this site: https://www.geeksforgeeks.org/material-design-date-picker-in-android/
     private void handleDateRangePickerDialog(final EditText editText){
-        //This code was inspired by an example from this site: https://www.geeksforgeeks.org/material-design-date-picker-in-android/
-        // date picker dialog
         MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
         materialDateBuilder.setTitleText("SELECT A DATE RANGE");
         final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
@@ -342,14 +347,6 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 editText.setText(materialDatePicker.getHeaderText());
             }
         });
-
-        /*materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                editText.setText(materialDatePicker.getHeaderText());
-                startDate = selection.
-            }
-        });*/
     }
 
 
@@ -368,13 +365,13 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }else if (editTextDate.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Need a date",Toast.LENGTH_SHORT).show();
             return;
-        } else if (!switchOnline.isChecked() && findAddressEditText.getText().toString().equals("")) { //Checking address
+        } else if (!switchOnline.isChecked() && findAddressEditText.getText().toString().equals("")) {
             Toast.makeText(getApplicationContext(),"Need an Address",Toast.LENGTH_SHORT).show();
             return;
-        } else if (!switchPrice.isChecked() && editTextAmount.getText().toString().equals("")){ //Checking price requirement
+        } else if (!switchPrice.isChecked() && editTextAmount.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Need a price",Toast.LENGTH_SHORT).show();
             return;
-        } else if (editTextAbout.getText().toString().equals("")){ //Checking about
+        } else if (editTextAbout.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Need a description",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -408,14 +405,15 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         }
 
 
-
-
         //Handling upload of pictures and getting their new urls
         //Showing progress dialog
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
 
+
+        //Here we are using callbacks to handle state change in objects from another thread. It enables us to keep the UI thread working, while
+        //work in the firebase threads also is happening. It also minimizes a tight couple between the classes.
         firebaseDAO.uploadImages(picturesAsUris, new MyUploadPicturesListener() {
                     @Override
                     public void onSuccess(@NotNull Object object) {
@@ -439,6 +437,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
     }
 
+    //This creates the event inside the database
     private void createEvent(ArrayList<String> pictureDownloadLinks){
         //CREATING EVENT OBJECT
         LocalData data = LocalData.INSTANCE;
@@ -463,7 +462,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
 
     }
 
-
+    //This is handling the result of creating event
     private void onEventCreated(String message){
         if(message.equals("success")){
             finish();
@@ -484,7 +483,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         startActivityForResult(intent, 1);
     }
 
-    //Handling chosen category, and only allowing one
+    //Handling category selection, and only allowing a single category to be selected.
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked){
@@ -500,7 +499,7 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //Modified version of https://medium.com/skillhive/android-google-places-autocomplete-feature-bb3064308f05
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == 1) { //This is for the address result activity
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 Toast.makeText(ActivityCreateEvent.this,"address:" + place.getAddress() + "Name:" + place.getName(), Toast.LENGTH_LONG).show();
@@ -508,17 +507,16 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
                 String name = place.getName();
                 System.out.println("Name: " + name + ", Address: " + address);
                 findAddressEditText.setText(address);
-                // do query with address
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Toast.makeText(ActivityCreateEvent.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+
             }
         }
 
-        if (resultCode == RESULT_OK && requestCode == getImageResultCode) {
+        if (resultCode == RESULT_OK && requestCode == getImageResultCode) { //this is for the select images from gallery activity
             pictures.clear();
             picturesAsUris.clear();
             ClipData clipData = data.getClipData();
@@ -541,19 +539,15 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
             }
 
 
-            //Showing pictures on viewpager
+            //Showing pictures on viewpager, and resetting viewpager if already existing
             if (viewPager != null) {
                 constraintLayout.removeView(viewPager);
-                //Toast.makeText(this, "Im here" + pictures, Toast.LENGTH_SHORT).show();
-                //ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), pictures, R.layout.fragment_profile_event_1_viewpager,null);
-                //viewPager.setAdapter(adapter);
             }
             createViewPager();
         }
-
-
     }
 
+    //Handling the creation for the viewpager that enables pictures to slide
     private void createViewPager(){
         viewPager = new ViewPager(this);
         viewPager.setId(View.generateViewId());
@@ -570,56 +564,4 @@ public class ActivityCreateEvent extends AppCompatActivity implements CompoundBu
         constraintSet.connect(getImageButton.getId(), ConstraintSet.TOP, viewPager.getId(), ConstraintSet.BOTTOM, 20);
         constraintSet.applyTo(constraintLayout);
     }
-
-    /*private void uploadImages(){
-        //Inspired by code from following site: https://www.geeksforgeeks.org/android-how-to-upload-an-image-on-firebase-storage/
-        //Showing progress dialog
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading...");
-        progressDialog.show();
-
-        uploadImageCounter = picturesAsUris.size();
-
-        for (Uri imageUri : picturesAsUris) {
-            final StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
-
-            UploadTask uploadTask = ref.putFile(imageUri);
-
-            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-
-                        Uri downloadUri = task.getResult();
-                        pictureDownloadLinks.add(downloadUri.toString());
-
-                        //handle progress dialog
-                        uploadImageCounter--;
-                        if (uploadImageCounter == 0){
-                            progressDialog.dismiss();
-                            createEvent();
-                        }else{
-                            progressDialog.setMessage(uploadImageCounter + " Images left");
-                        }
-
-                    } else {
-                        progressDialog.dismiss();
-                        Toast.makeText(ActivityCreateEvent.this, "Failed upload", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-
-    }*/
-
 }
