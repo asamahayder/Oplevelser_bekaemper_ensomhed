@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.data.UserDTO;
@@ -54,10 +49,7 @@ public class FragmentEventInfo extends Fragment {
     private LinearLayout deleteButton;
     private LinearLayout participantLayout;
     private boolean joined;
-
     private ProgressDialog progressDialog;
-
-    private ArrayList<UserDTO> participants;
 
     public FragmentEventInfo() {
         // Required empty public constructor
@@ -166,6 +158,8 @@ public class FragmentEventInfo extends Fragment {
         }
     }
 
+
+    //Checks if the current user is the creator, and displays different buttons based on result
     private void handleIsCreatorViewingEvent(){
         LocalData localData = LocalData.INSTANCE;
         if (event.getEventCreator().getName().equals(localData.getUserData().getName())){
@@ -176,6 +170,8 @@ public class FragmentEventInfo extends Fragment {
         }
     }
 
+
+    //Handles the creation of the picture slider
     private void handlePictureSlider(View view){
         mPager = view.findViewById(R.id.event_info_viewpager);
         tabLayout = view.findViewById(R.id.event_info_tablayout);
@@ -184,6 +180,7 @@ public class FragmentEventInfo extends Fragment {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), event.getPictures(), R.layout.fragment_profile_event_1_viewpager, null);
         mPager.setAdapter(pagerAdapter);
 
+        //wont show indicator lines when only 1 picture is inserted
         if (tabLayout.getTabCount() == 1){
             tabLayout.setVisibility(View.INVISIBLE);
         }
@@ -197,6 +194,7 @@ public class FragmentEventInfo extends Fragment {
 
     }
 
+    //showing different icons based on category and seting text
     private void handleCategories(){
         String categoryName = event.getCategory();
         switch (categoryName){
@@ -212,6 +210,8 @@ public class FragmentEventInfo extends Fragment {
         this.categoryName.setText(categoryName);
     }
 
+
+    //Handles join of event
     private void handleOnSubmit(){
         LocalData localData = LocalData.INSTANCE;
         progressDialog.setTitle("Please wait");
@@ -219,9 +219,8 @@ public class FragmentEventInfo extends Fragment {
 
         FirebaseDAO firebaseDAO = new FirebaseDAO();
         if (joined){
-            //TODO use delete pair here
-
             if (!event.getEventCreator().getName().equals(localData.getUserData().getName())){ //An owner cannot un-join his own event
+                //leaving event
                 firebaseDAO.deleteParticipantPair(event.getEventTitle(), new MyCallBack() {
                     @Override
                     public void onCallBack(@NotNull Object object) {
@@ -235,10 +234,10 @@ public class FragmentEventInfo extends Fragment {
                 });
             }else{
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), "An owner has to participate in his own event", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "An owner cannot leave his own event", Toast.LENGTH_SHORT).show();
             }
-
         }else{
+            //Joining event
             firebaseDAO.createParticipantPair(event.getEventTitle(), new MyCallBack(){
                 @Override
                 public void onCallBack(@NotNull Object object) {
@@ -258,13 +257,14 @@ public class FragmentEventInfo extends Fragment {
 
     }
 
+
+    //Fetching the current participants of the event from the database
     private void handleParticipants(){
         FirebaseDAO firebaseDAO = new FirebaseDAO();
         firebaseDAO.getParticipants(event, new MyCallBack() {
             @Override
             public void onCallBack(@NotNull Object object) {
                 ArrayList<UserDTO> participants = (ArrayList<UserDTO>) object;
-                setParticipants(participants);
                 insertParticipants(participants);
                 updateParticipationStatus(participants);
 
@@ -276,11 +276,13 @@ public class FragmentEventInfo extends Fragment {
 
     }
 
+
+    //Displays the participants
     private void insertParticipants(ArrayList<UserDTO> participants){
-        participantLayout.removeAllViews();
+        participantLayout.removeAllViews(); //resetting
+
         for (final UserDTO user : participants) {
             if (getActivity() != null) {
-
                 CardView cardView = new CardView(getActivity());
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 int marginSize = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
@@ -297,6 +299,7 @@ public class FragmentEventInfo extends Fragment {
                 Picasso.get().load(user.getProfilePictures().get(0)).into(imageView);
                 cardView.addView(imageView);
 
+                //When participant clicked, his profile will open up:
                 cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -308,11 +311,12 @@ public class FragmentEventInfo extends Fragment {
                 });
                 participantLayout.addView(cardView);
             }
-
         }
+    }
 
     }
 
+    //Handles the deletion of the event. Only accessable by the creator of the event.
     private void handleDeleteEvent(){
         progressDialog.show();
         FirebaseDAO firebaseDAO = new FirebaseDAO();
@@ -333,7 +337,5 @@ public class FragmentEventInfo extends Fragment {
 
     }
 
-    public void setParticipants(ArrayList<UserDTO> participants) {
-        this.participants = participants;
-    }
+
 }

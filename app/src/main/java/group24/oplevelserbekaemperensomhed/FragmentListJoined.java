@@ -1,34 +1,22 @@
 package group24.oplevelserbekaemperensomhed;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.database.FirebaseDatabase;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.Objects;
-
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
-import group24.oplevelserbekaemperensomhed.data.LocalData;
 import group24.oplevelserbekaemperensomhed.logic.firebase.FirebaseDAO;
 import group24.oplevelserbekaemperensomhed.logic.firebase.MyCallBack;
-import group24.oplevelserbekaemperensomhed.view.ActivityFragmentHandler;
 
 
+//The fragment for the Joined Events -part of the List menu
 public class FragmentListJoined extends Fragment {
 
     RecyclerView recyclerView;
@@ -67,6 +55,7 @@ public class FragmentListJoined extends Fragment {
         return v;
     }
 
+    //Fetches joined events from the database
     private void getJoinedEvents(){
         FirebaseDAO firebaseDAO = new FirebaseDAO();
         firebaseDAO.getJoinedEvents(new MyCallBack() {

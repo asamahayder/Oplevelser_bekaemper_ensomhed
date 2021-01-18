@@ -5,18 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
-
 import java.util.List;
-
 import group24.oplevelserbekaemperensomhed.data.EventDTO;
 
+
+//This is the adapter that is used for the vertical viewpager in home page
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder>{
 
     private List<EventDTO> eventItems;
